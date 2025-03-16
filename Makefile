@@ -5,7 +5,7 @@ CFLAGS = -I/usr/include/readline -Wextra -Wall -Werror
 SRC_DIR		= src
 OBJ_DIR		= obj
 
-SRC			= $(SRC_DIR)/test.c
+SRC			= $(SRC_DIR)/main.c $(SRC_DIR)/utils/helper.c $(SRC_DIR)/parsing/interactive_ms.c
 OBJ			= $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 all: $(NAME)
