@@ -1,13 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exe.c                                              :+:      :+:    :+:   */
+/*   ft_lstsize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/14 20:06:50 by xueyang           #+#    #+#             */
-/*   Updated: 2025/03/19 21:19:07 by xueyang          ###   ########.fr       */
+/*   Created: 2024/10/20 20:16:18 by xueyang           #+#    #+#             */
+/*   Updated: 2024/10/20 20:41:45 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "libft.h"
+
+int	ft_lstsize(t_list *lst)
+{
+	int		count;
+	t_list	*temp;
+
+	if (lst)
+	{
+		count = 1;
+		temp = lst->next;
+		while (temp != NULL)
+		{
+			temp = temp->next;
+			count++;
+		}
+		return (count);
+	}
+	return (0);
+}

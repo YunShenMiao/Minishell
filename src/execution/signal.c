@@ -6,8 +6,8 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 20:43:58 by xueyang           #+#    #+#             */
-/*   Updated: 2025/03/14 20:44:00 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/03/19 21:20:01 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"

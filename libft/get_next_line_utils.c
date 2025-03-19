@@ -1,13 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exe.c                                              :+:      :+:    :+:   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/14 20:06:50 by xueyang           #+#    #+#             */
-/*   Updated: 2025/03/19 21:19:07 by xueyang          ###   ########.fr       */
+/*   Created: 2024/10/24 17:10:37 by xueyang           #+#    #+#             */
+/*   Updated: 2025/02/05 19:58:29 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "get_next_line.h"
+
+int	find_new(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (-1);
+	while (str[i] != '\0')
+	{
+		if (str[i] == '\n')
+			return (i);
+		i++;
+	}
+	return (-1);
+}

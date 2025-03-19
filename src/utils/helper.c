@@ -1,4 +1,4 @@
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 void start_message(void)
 {
@@ -10,4 +10,17 @@ void start_message(void)
     printf("\\____|__  /__|___|  /__/____  >___|  /\\___  >____/____/  |_|_| |_|_|\n");
     printf("        \\/        \\/        \\/     \\/     \\/           [by xueyang & jwardeng]\n");
     printf("______________________________________________________________________________\n");
+}
+
+void	free_array(char **arr)
+{
+	int	i;
+
+	i = 0;
+	while (arr[i] != NULL)
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
 }

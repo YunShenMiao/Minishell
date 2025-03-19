@@ -1,13 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exe.c                                              :+:      :+:    :+:   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/14 20:06:50 by xueyang           #+#    #+#             */
-/*   Updated: 2025/03/19 21:19:07 by xueyang          ###   ########.fr       */
+/*   Created: 2024/10/13 16:13:27 by xueyang           #+#    #+#             */
+/*   Updated: 2024/10/13 16:55:35 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "libft.h"
+
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+{
+	size_t	count;
+	size_t	strlen;
+
+	count = 0;
+	strlen = ft_strlen(src);
+	if (dstsize > 0)
+	{
+		while (count < dstsize - 1 && src[count] != '\0')
+		{
+			dst[count] = src[count];
+			count++;
+		}
+		dst[count] = '\0';
+	}
+	return (strlen);
+}

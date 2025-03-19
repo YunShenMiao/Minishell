@@ -1,13 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exe.c                                              :+:      :+:    :+:   */
+/*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/14 20:06:50 by xueyang           #+#    #+#             */
-/*   Updated: 2025/03/19 21:19:07 by xueyang          ###   ########.fr       */
+/*   Created: 2024/10/13 14:33:15 by xueyang           #+#    #+#             */
+/*   Updated: 2024/10/13 16:10:31 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "libft.h"
+
+void	*ft_memset(void *ptr, int value, size_t len)
+{
+	unsigned char	*p;
+	size_t			count;
+
+	p = ptr;
+	count = 0;
+	while (count < len)
+	{
+		p[count] = value;
+		count++;
+	}
+	return (ptr);
+}
