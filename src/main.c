@@ -1,7 +1,4 @@
-#include "include/minishell.h"
-#include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+#include "../include/minishell.h"
 
 // next: go deeper on terminal functions
 // error strings for perror function
@@ -19,40 +16,48 @@ Non-Interactive Mode:
 - Handle input/output redirection (>, <, >>, <<) and pipes (|) the same way you would for interactive mode. */
 
 
-int is_interactive()
-{
-    printf("%d\n", isatty(STDIN_FILENO));
-    return(isatty(STDIN_FILENO));
-}
+#define GREEN "\033[1;32m"
+#define BLUE "\033[1;34m"
+#define RESET "\033[0m"
 
-void interactive_shell()
+/* int main(void)
 {
-    char *line;
-    int status;
+	char *input;
+	char *prompt = GREEN "minishell" BLUE ">" RESET " ";
 
-    status = 1;
-    while(status)
-    {
-    line = readline("minishell$ ");
-    if (line == NULL)
-    break;
-    add_history(line);
-    /* split_line(line); */
-    printf("%s\n", line);
-    }
-}
-
-void non_interactive_shell()
-{
-    printf("not interactive\n");
-}
+	start_message();
+	while (1)
+	{
+		input = readline(prompt);
+		if (!input)
+		{
+			printf("\n");
+			break;
+		}
+		if (*input)
+			add_history(input);
+		free(input);
+	}
+	return (0);
+} */
 
 int main()
 {
-    start_message();
-    if (is_interactive())
-    interactive_shell();
-    else
-    non_interactive_shell();
+	char *input;
+	char *prompt = GREEN "minishell" BLUE ">" RESET " ";
+
+	start_message();
+	while (1)
+	{
+		input = readline(prompt);
+		if (!input)
+		{
+			printf("\n");
+			break;
+		}
+		if (*input)
+			add_history(input);
+        split_input(input);
+	}
     return(0);
 }
