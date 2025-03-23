@@ -1,38 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   prompt_waiting.c                                   :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/19 20:34:37 by xueyang           #+#    #+#             */
-/*   Updated: 2025/03/19 21:17:46 by xueyang          ###   ########.fr       */
+/*   Created: 2025/03/23 16:21:43 by xueyang           #+#    #+#             */
+/*   Updated: 2025/03/23 21:19:09 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-#define GREEN "\033[1;32m"
-#define BLUE "\033[1;34m"
-#define RESET "\033[0m"
-
-int main(void)
+void	print_export(t_env	**top_env)
 {
-	char *input;
-	char *prompt = GREEN "minishell" BLUE ">" RESET " ";
 
-	start_message();
-	while (1)
+}
+
+int	ft_export(t_env	**top_env, t_token *current)
+{
+	char	*assign;
+
+	if (!current->next)
+		print_export(top_env);
+	else if (current->next->next)
 	{
-		input = readline(prompt);
-		if (!input)
-		{
-			printf("\n");
-			break;
-		}
-		if (*input)
-			add_history(input);
-		free(input);
+		perror("export: bad assign");
+		return (1);
 	}
-	return (0);
+	else
+	{
+		assign = current->next;
+		
+	}
 }
