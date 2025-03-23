@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:51:05 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/03/23 16:27:06 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/03/23 19:07:41 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	edit_spaces(char *input, char **edited, int *count, int *count2)
 	{
 		(*count)++;
 		(*edited)[*count] = ' ';
-	}
+	}	
 }
 
 char	*edit_input(char *input)
