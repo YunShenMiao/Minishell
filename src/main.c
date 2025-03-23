@@ -57,7 +57,7 @@ int main()
 		}
 		if (*input)
 			add_history(input);
-        split_input(input);
+        modify_input(input);
 	}
     return(0);
 }
