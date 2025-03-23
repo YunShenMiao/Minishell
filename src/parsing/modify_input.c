@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:51:05 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/03/22 15:22:53 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/03/23 16:27:06 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,13 @@ void	merge_echo_n(char *input, char **edited, int *count, int *count2)
 		(*edited)[*count + 5] = 'n';
 		(*count) += 6;
 		(*count2) += 7;
+		while(input[*count2] != '\0')
+		{
+		if (input[*count2] == ' ' && ft_strncmp(&input[*count2], " -n ", 4) == 0)
+		(*count2) += 3;
+		else
+		break;
+		}
 	}
 }
 
@@ -94,22 +101,23 @@ char	*edit_input(char *input)
 	return (edited);
 }
 
-int	modify_input(char *input)
+int	modify_input(char *input, t_token **head)
 {
 	char	*newinput;
 	char	**value;
 	int		i;
 	int		words;
-	t_token	*head;
 
 	if ((newinput = edit_input(input)) == NULL)
-		return (free(input), -1);
+		return (free(input), 1);
 	free(input);
 	value = ft_split(newinput, ' ');
 	i = 0;
 	words = count_words(newinput, ' ');
-	if (tokenize(value, newinput, words) == -1)
-		return (-1);
+	if (tokenize(value, newinput, words, head) == 1)
+		return (1);
+/* 	if (parsing_error(head) == -1)
+	return(-1); */
 	free(newinput);
-	return (1);
+	return (0);
 }

@@ -45,7 +45,8 @@ typedef struct s_memory_track
 void				start_message(void);
 void				free_array(char **arr);
 // parsing
-int					modify_input(char *input);
-int					tokenize(char **value, char *newinput, int words);
+int					modify_input(char *input, t_token **head);
+int					tokenize(char **value, char *newinput, int words, t_token **head);
+int					parsing_error(t_token **token_list);
 
 #endif
