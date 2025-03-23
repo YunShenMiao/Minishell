@@ -45,10 +45,12 @@ int main()
 {
 	char *input;
 	char *prompt = GREEN "minishell" BLUE ">" RESET " ";
+	t_token	*token_list;
 
 	start_message();
 	while (1)
 	{
+		token_list = NULL;
 		input = readline(prompt);
 		if (!input)
 		{
@@ -57,7 +59,7 @@ int main()
 		}
 		if (*input)
 			add_history(input);
-        modify_input(input);
+        modify_input(input, &token_list);
 	}
     return(0);
 }

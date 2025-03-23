@@ -67,8 +67,9 @@ t_env	*ft_env_last(t_env *lst);
 void	ft_env_add_back(t_env **lst, t_env *new);
 
 // parsing
-int		modify_input(char *input);
-int		tokenize(char **value, char *newinput, int words);
+int		modify_input(char *input, t_token **head);
+int		tokenize(char **value, char *newinput, int words, t_token **head);
+int		parsing_error(t_token **token_list);
 
 // builtins
 int		ft_echo(t_token *current);
