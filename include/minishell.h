@@ -24,7 +24,8 @@ typedef enum s_tok_type
 	TOK_HEREDOC,
 	TOK_OTHER,
 	TOK_WORD_DQ,
-	TOK_WORD,
+	TOK_WORD_SQ,
+	TOK_WORD_NQ,
 	TOK_COMMAND,
 	TOK_END
 	// TOK_ENV
@@ -32,6 +33,17 @@ typedef enum s_tok_type
 	// TOK_AND,
 	// TOK_OR
 }					t_tok_type;
+
+typedef struct s_token_data
+{
+	char		*input;
+	t_token		*token_list;
+	int			in_SQ;
+	int			in_DQ;
+	int			start;
+	int			end;
+	int			first;
+}				t_token_data;
 
 typedef struct s_token
 {
