@@ -22,17 +22,23 @@ typedef enum s_tok_type
 	TOK_REDIRECT_OUT,
 	TOK_APPEND,
 	TOK_HEREDOC,
-	TOK_OTHER,
 	TOK_WORD_DQ,
 	TOK_WORD_SQ,
 	TOK_WORD_NQ,
 	TOK_COMMAND,
 	TOK_END
 	// TOK_ENV
-	// TOK_QUOTE,
 	// TOK_AND,
 	// TOK_OR
 }					t_tok_type;
+
+typedef struct s_token
+{
+	char			*value;
+	t_tok_type		type;
+	struct s_token	*prev;
+	struct s_token	*next;
+}					t_token;
 
 typedef struct s_token_data
 {
@@ -44,14 +50,6 @@ typedef struct s_token_data
 	int			end;
 	int			first;
 }				t_token_data;
-
-typedef struct s_token
-{
-	char			*value;
-	t_tok_type		type;
-	struct s_token	*prev;
-	struct s_token	*next;
-}					t_token;
 
 typedef struct s_env
 {
@@ -88,9 +86,11 @@ char	*search_name_val(t_env **lst, char *name);
 int		update_env_var(t_env **lst, char *name, char *new_val);
 
 // parsing
-int		modify_input(char *input, t_token **head);
-int		tokenize(char **value, char *newinput, int words, t_token **head);
+int		modify_input(char *input, char **modified_input);
+int 	tokenize(t_token_data **token_data);
 int		parsing_error(t_token **token_list);
+int 	init_token_data(char *input, t_token_data **token_data);
+int		add_token(t_token_data **token_data);
 
 // builtins
 int		ft_echo(t_token *current);
