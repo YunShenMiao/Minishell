@@ -63,6 +63,7 @@ typedef struct s_env
 typedef struct s_data
 {
 	t_token	*head;
+	t_token	*cur_token;
 	t_env	*top_env;
 }			t_data;
 
@@ -77,6 +78,14 @@ int		ft_put_to_fd(char *str, int fd);
 t_env	*create_env(char *name, char *value);
 t_env	*ft_env_last(t_env *lst);
 void	ft_env_add_back(t_env **lst, t_env *new);
+int		error_general(char *msg);
+int		error_free(char *msg, t_data *shell);
+int		count_arr_row(char **arr);
+int		find_equal(char *str);
+int		init_env(char **envp);
+t_env	*search_name_node(t_env **lst, char *name);
+char	*search_name_val(t_env **lst, char *name);
+int		update_env_var(t_env **lst, char *name, char *new_val);
 
 // parsing
 int		modify_input(char *input, t_token **head);
