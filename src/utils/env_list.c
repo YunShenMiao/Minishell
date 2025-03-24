@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 18:10:25 by xueyang           #+#    #+#             */
-/*   Updated: 2025/03/23 18:39:13 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/03/24 15:37:09 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,16 @@ t_env	*create_env(char *name, char *value)
 
 t_env	*ft_env_last(t_env *lst)
 {
+	t_env	*temp;
+
 	if (!lst)
 		return (NULL);
-	while (lst->next)
+	temp = lst;
+	while (temp->next)
 	{
-		lst = lst->next;
+		temp = temp->next;
 	}
-	return (lst);
+	return (temp);
 }
 
 void	ft_env_add_back(t_env **lst, t_env *new)
@@ -49,4 +52,54 @@ void	ft_env_add_back(t_env **lst, t_env *new)
 		last_node = ft_lstlast(*lst);
 		last_node->next = new;
 	}
+}
+
+t_env	*search_name_node(t_env **lst, char *name)
+{
+	t_env	*temp;
+
+	temp = *lst;
+	while (temp->next)
+	{
+		if (ft_strncmp(temp->name, name, ft_strlen(name)) == 0)
+			return (temp);
+		temp = temp->next;
+	}
+	return (NULL);
+}
+
+char	*search_name_val(t_env **lst, char *name)
+{
+	t_env	*temp;
+
+	temp = *lst;
+	while (temp->next)
+	{
+		if (ft_strncmp(temp->name, name, ft_strlen(name)) == 0)
+			return (temp->val);
+		temp = temp->next;
+	}
+	return (NULL);
+}
+
+int	update_env_var(t_env **lst, char *name, char *new_val)
+{
+	t_env	*temp;
+	char	*old_val;
+
+	if (!search_name_node(lst, name))
+	{
+		temp = create_env(name, new_val);
+		if (!temp)
+			return (error_general("malloc: fail to create new env var"));
+		ft_env_add_back(lst, temp);
+	}
+	else
+	{
+		temp = search_name_node(lst, name);
+		old_val = temp->val;
+		temp->val = new_val;
+		free(old_val);
+	}
+	return (0);
 }
