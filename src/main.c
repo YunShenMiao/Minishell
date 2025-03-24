@@ -1,24 +1,11 @@
 #include "../include/minishell.h"
 
-// next: go deeper on terminal functions
 // error strings for perror function
-//builtins: echo with option -n -- cd with only a relative or absolute path
-// pwd -- export -- unset -- env -- exit with no options
-
-/* Interactive Mode:
-- Display a prompt when the shell is waiting for commands.
-- Signal Handling: need to catch SIGINT (for Ctrl-C), SIGQUIT (for Ctrl-\), but handle them in a way that only affects the prompt and process flow
-- Implement a history feature where the user can press the up and down arrow keys to cycle through previously entered commands.
-Non-Interactive Mode:
-- The shell should execute commands from a file or input stream without prompting the user.
-- no prompts should be displayed.
-- Exit Status: Return the exit status of the last foreground process, using $?
-- Handle input/output redirection (>, <, >>, <<) and pipes (|) the same way you would for interactive mode. */
-
 
 #define GREEN "\033[1;32m"
 #define BLUE "\033[1;34m"
 #define RESET "\033[0m"
+
 
 /* int main(void)
 {
@@ -32,7 +19,7 @@ Non-Interactive Mode:
 		if (!input)
 		{
 			printf("\n");
-			break;
+			break ;
 		}
 		if (*input)
 			add_history(input);
@@ -41,25 +28,57 @@ Non-Interactive Mode:
 	return (0);
 } */
 
-int main()
+// just to check tokenization
+void	print_list(t_token *head)
+{
+	t_token	*current;
+	int		i;
+
+	current = head;
+	i = 1;
+	printf("Doubly Linked List: \n");
+	while (current != NULL)
+	{
+		printf("%d: %s, type: %u\n", i, current->value, current->type);
+		current = current->next;
+		i++;
+	}
+}
+
+//general structure function for parsing
+int	parse_main(char *input, t_token_data **token_data)
+{
+	char *modified_input;
+
+	if (modify_input(input, &modified_input) == 1)
+		return (printf("Allocation Error\n"), 1);
+	if (init_token_data(modified_input, token_data) == 1)
+		return (printf("Allocation Error\n"), 1);
+	if (tokenize(token_data) == 1)
+		return (1);
+	print_list((*token_data)->token_list);
+	return (0);
+}
+
+int	main(void)
 {
 	char *input;
 	char *prompt = GREEN "minishell" BLUE ">" RESET " ";
-	t_token	*token_list;
+	t_token_data *token_data;
 
 	start_message();
 	while (1)
 	{
-		token_list = NULL;
+		token_data = NULL;
 		input = readline(prompt);
 		if (!input)
 		{
 			printf("\n");
-			break;
+			break ;
 		}
 		if (*input)
 			add_history(input);
-        modify_input(input, &token_list);
+		parse_main(input, &token_data);
 	}
-    return(0);
+	return (0);
 }
