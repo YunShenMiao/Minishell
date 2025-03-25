@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:51:05 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/03/25 12:47:46 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/03/25 14:12:42 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int	edit_input(char *input, char **modified_input)
 		count++;
 		count2++;
 	}
-	(*modified_input)[count + 1] = '\0';
+	(*modified_input)[count] = '\0';
 	return (0);
 }
 

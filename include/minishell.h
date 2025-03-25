@@ -34,6 +34,22 @@ typedef enum s_tok_type
 	// TOK_OR
 }					t_tok_type;
 
+// starting structure for garbage collector
+// typedef enum s_mem_location
+// {
+// 	TOKEN,
+// 	PARSING,
+// 	BUILT_IN,
+// 	EXECUTION
+// }					t_mem_location;
+
+// typedef struct s_garbage
+// {
+// 	void				*ptr;
+// 	t_mem_location 		loc;
+// 	struct s_garbage	*next;
+// }					t_garbage;
+
 typedef struct s_token
 {
 	char			*value;
@@ -51,6 +67,7 @@ typedef struct s_token_data
 	int			start;
 	int			end;
 	int			first;
+	// t_garbage	*gc;
 }				t_token_data;
 
 typedef struct s_env
@@ -66,10 +83,6 @@ typedef struct s_data
 	t_token	*cur_token;
 	t_env	*top_env;
 }			t_data;
-
-typedef struct s_memory_track
-{
-}					t_memory_track;
 
 // helper
 void	start_message(void);

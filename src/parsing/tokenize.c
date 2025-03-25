@@ -6,14 +6,13 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 09:41:57 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/03/25 12:48:49 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/03/25 14:58:40 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-// echo echo/exit/export etc. not command
-// exit hello works
+// still need to handle echo "" ""hello"" ("" is empty arg which is right but ""hello"" is also giving two emtpy args which needs to be fixed")
 // export hello=$hello -> unset hello hello hello (unsets ignores rest)
 
 void	quote_status(t_token_data **token_data, char input)
@@ -42,8 +41,17 @@ int	end_quote(t_token_data **token_data)
 		quote = '\'';
 	else if ((*token_data)->in_DQ == 1)
 		quote = '\"';
+/* 	while(1)
+	{ */
 	while ((*token_data)->input[i] && (*token_data)->input[i] != quote)
 		i++;
+/* 	printf("i %d start %d\n", i, (*token_data)->start);
+	if(i == (*token_data)->start && (*token_data)->input[i] != '\0' 
+		&& (*token_data)->input[i + 1] != ' ')
+		(*token_data)->start++;
+		else
+		break;
+	} */
 	if ((*token_data)->input[i] == '\0')
 		return (printf("Error: unclosed quotes\n"), -1);
 	return (i);
@@ -51,11 +59,18 @@ int	end_quote(t_token_data **token_data)
 
 int	in_quote_token(t_token_data **token_data, int *i)
 {
+	char quote;
+
+	if ((*token_data)->in_SQ ==1)
+	quote = '\'';
+	else if ((*token_data)->in_DQ == 1)
+	quote = '\"';
 	(*i)++;
 	(*token_data)->start = (*i);
 	(*token_data)->end = end_quote(token_data);
 	if ((*token_data)->end == -1)
 		return (1);
+
 	if (add_token(token_data) == 1)
 		return (1);
 	quote_status(token_data, (*token_data)->input[(*token_data)->end]);
@@ -68,8 +83,8 @@ int	in_quote_token(t_token_data **token_data, int *i)
 int	in_token(t_token_data **token_data, int *i)
 {
 	(*token_data)->start = (*i);
-	while ((*token_data)->input[(*i)] != ' '
-		&& (*token_data)->input[(*i)] != '\0')
+	while ((*token_data)->input[(*i)] != ' ' && (*token_data)->input[(*i)] != '\"'
+		&& (*token_data)->input[(*i)] != '\0' && (*token_data)->input[(*i)] != '\0')
 		(*i)++;
 	(*token_data)->end = (*i);
 	if (add_token(token_data) == 1)
