@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:10:15 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/03/24 19:43:48 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/03/25 10:39:02 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ t_token	*create_token(t_token_data **token_data)
 	token->prev = NULL;
 	token->next = NULL;
 	token->type = token_type(token_data, token);
-	if (token->type == -1)
+	if (token->type == TOK_INVALID)
 	return(NULL);
 	return (token);
 }

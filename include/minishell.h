@@ -17,6 +17,7 @@
 
 typedef enum s_tok_type
 {
+	TOK_INVALID = -1,
 	TOK_PIPE,
 	TOK_REDIRECT_IN,
 	TOK_REDIRECT_OUT,

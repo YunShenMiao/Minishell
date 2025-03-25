@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:51:05 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/03/24 18:53:48 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/03/25 10:36:08 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,6 @@ int	edit_input(char *input, char **modified_input)
 
 int	modify_input(char *input, char **modified_input)
 {
-	char	**value;
-	int		i;
-	int		words;
-
 	if ((edit_input(input, modified_input)) == 1)
 		return (free(input), 1);
 	free(input);

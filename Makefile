@@ -1,31 +1,48 @@
 NAME	= minishell
-LDFLAGS = -L/lib/x86_64-linux-gnu -lreadline
-CFLAGS = -I/usr/include/readline -Wextra -Wall -Werror 
+LDFLAGS = -lreadline -Llibft -lft
+CFLAGS = -I/usr/include/readline -Ilibft -Wextra -Wall -Werror 
 
 SRC_DIR		= src
 OBJ_DIR		= obj
 
-SRC			= $(SRC_DIR)/main.c $(SRC_DIR)/utils/helper.c $(SRC_DIR)/parsing/interactive_ms.c
-OBJ			= $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+SRC			= 	$(SRC_DIR)/main.c \
+				$(SRC_DIR)/utils/helper.c \
+				$(SRC_DIR)/parsing/init_token_data.c $(SRC_DIR)/parsing/modify_input.c \
+				$(SRC_DIR)/parsing/token_list.c $(SRC_DIR)/parsing/tokenize.c \
+				$(SRC_DIR)/parsing/parsing_error.c $(SRC_DIR)/parsing/rdp.c
+OBJ			= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 
-all: $(NAME)
-# bonus
+# $(SRC_DIR)/builtins/cd.c $(SRC_DIR)/builtins/echo.c $(SRC_DIR)/builtins/env.c \
+# $(SRC_DIR)/builtins/exit.c $(SRC_DIR)/builtins/export.c $(SRC_DIR)/builtins/pwd.c \
+# $(SRC_DIR)/builtins/unset.c \
+# $(SRC_DIR)/execution/exe.c $(SRC_DIR)/execution/path.c $(SRC_DIR)/execution/pipe.c \
+# $(SRC_DIR)/execution/redirection.c $(SRC_DIR)/execution/signal.c
+
+
+all: $(OBJ_DiR) libft $(NAME)
 
 $(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
+	@mkdir -p $(OBJ_DIR)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) -o $@ -c $<
 
+$(OBJ): $(SRC)
+
 $(NAME): $(OBJ)
-	@$(CC) $(OBJ) -o $(NAME) $(LDFLAGS) 
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LDFLAGS) 
+
+libft:
+	@make -C libft
 
 clean:
-	rm -f $(OBJ)
+	rm -rf $(OBJ_DIR)
 
 fclean: clean
 	@rm -f $(NAME)
+	@make -C libft fclean
 
-re: clean all
+re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re libft
