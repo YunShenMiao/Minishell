@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:51:05 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/03/25 10:36:08 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/03/25 12:47:46 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,27 @@ void	edit_spaces(char *input, char **edited, int *count, int *count2)
 	}
 }
 
+void	trim_quotes(char *input, int *count2)
+{
+	int count2cp;
+
+	count2cp = 0;
+	if (input[count2cp + *count2] == '\"')
+	{
+	while (input[count2cp + *count2] == '\"')
+	count2cp++;
+	}
+	else if(input[*count2] == '\'')
+	{
+		while (input[count2cp] == '\'')
+		count2cp++;
+	}
+	if (count2cp % 2 == 0 && count2cp > 1)
+	(*count2) += (count2cp - 2);
+	else if (count2cp > 2)
+	(*count2) += (count2cp - 3);
+}
+
 int	edit_input(char *input, char **modified_input)
 {
 	int	count;
@@ -70,6 +91,7 @@ int	edit_input(char *input, char **modified_input)
 	while (input[count2] != '\0')
 	{
 		merge_echo_n(input, modified_input, &count, &count2);
+		trim_quotes(input, &count2);
 		edit_spaces(input, modified_input, &count, &count2);
 		count++;
 		count2++;

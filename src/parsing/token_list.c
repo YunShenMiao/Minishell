@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:10:15 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/03/25 10:39:02 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/03/25 12:37:01 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ t_tok_type	token_type(t_token_data **token_data, t_token *token)
 	int len;
 
 	len = ft_strlen(token->value);
+	if(len == 0)
+		return (TOK_EMPTY_WORD);
 	if (ft_strncmp(token->value, ">", len) == 0)
 		return (TOK_REDIRECT_OUT);
 	else if (ft_strncmp(token->value, "<", len) == 0)

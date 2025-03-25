@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 09:41:57 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/03/24 19:43:25 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/03/25 12:48:49 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ int	in_token(t_token_data **token_data, int *i)
 		&& (*token_data)->input[(*i)] != '\0')
 		(*i)++;
 	(*token_data)->end = (*i);
-	printf("first: %d", (*token_data)->first);
 	if (add_token(token_data) == 1)
 		return (1);
 	if ((*token_data)->input[(*i) - 1] != '|')
