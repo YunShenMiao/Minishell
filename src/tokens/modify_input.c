@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:51:05 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/03/25 14:12:42 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/03/26 18:02:52 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,12 +78,12 @@ void	trim_quotes(char *input, int *count2)
 	(*count2) += (count2cp - 3);
 }
 
-int	edit_input(char *input, char **modified_input)
+int	edit_input(char *input, char **modified_input, t_gc *gc)
 {
 	int	count;
 	int	count2;
 
-	(*modified_input) = malloc(ft_strlen(input) * 2 + 1);
+	(*modified_input) = gc_malloc(gc, TOKENS, ft_strlen(input) * 2 + 1);
 	if (!(*modified_input))
 		return (1);
 	count = 0;
@@ -100,9 +100,9 @@ int	edit_input(char *input, char **modified_input)
 	return (0);
 }
 
-int	modify_input(char *input, char **modified_input)
+int	modify_input(char *input, char **modified_input, t_gc *gc)
 {
-	if ((edit_input(input, modified_input)) == 1)
+	if ((edit_input(input, modified_input, gc)) == 1)
 		return (free(input), 1);
 	free(input);
 	/* 	if (parsing_error(head) == -1)

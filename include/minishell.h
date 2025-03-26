@@ -15,6 +15,34 @@
 # define BLUE "\033[1;34m"
 # define RESET "\033[0m"
 
+/****************************************************************************************************/
+/*									GARBAGE_COLLECTOR_STRUCTS										*/
+/****************************************************************************************************/
+
+typedef enum s_mem_location
+{
+	TOKENS,
+	PARSING,
+	BUILT_IN,
+	EXECUTION,
+	MEM_CAT
+}					t_mem_location;
+
+typedef struct s_garbage
+{
+	void				*ptr;
+	struct s_garbage	*next;
+}					t_garbage;
+
+typedef struct s_gc
+{
+	t_garbage *gc_list[MEM_CAT];
+}						t_gc;
+
+/****************************************************************************************************/
+/*											TOKEN_STRUCTS											*/
+/****************************************************************************************************/
+
 typedef enum s_tok_type
 {
 	TOK_INVALID = -1,
@@ -34,22 +62,6 @@ typedef enum s_tok_type
 	// TOK_OR
 }					t_tok_type;
 
-// starting structure for garbage collector
-// typedef enum s_mem_location
-// {
-// 	TOKEN,
-// 	PARSING,
-// 	BUILT_IN,
-// 	EXECUTION
-// }					t_mem_location;
-
-// typedef struct s_garbage
-// {
-// 	void				*ptr;
-// 	t_mem_location 		loc;
-// 	struct s_garbage	*next;
-// }					t_garbage;
-
 typedef struct s_token
 {
 	char			*value;
@@ -67,8 +79,12 @@ typedef struct s_token_data
 	int			start;
 	int			end;
 	int			first;
-	// t_garbage	*gc;
+	t_gc		*gc;
 }				t_token_data;
+
+/****************************************************************************************************/
+/*																									*/
+/****************************************************************************************************/
 
 typedef struct s_env
 {
@@ -100,11 +116,17 @@ t_env	*search_name_node(t_env **lst, char *name);
 char	*search_name_val(t_env **lst, char *name);
 int		update_env_var(t_env **lst, char *name, char *new_val);
 
+// garbage collector
+t_gc    *init_gc(void);
+void 	*gc_malloc(t_gc *gc, t_mem_location category, unsigned long size);
+void	gc_free_category(t_gc *gc, t_mem_location category);
+void	gc_free_all(t_gc *gc);
+
 // parsing
-int		modify_input(char *input, char **modified_input);
+int		modify_input(char *input, char **modified_input, t_gc *gc);
 int 	tokenize(t_token_data **token_data);
 int		parsing_error(t_token **token_list);
-int 	init_token_data(char *input, t_token_data **token_data);
+int 	init_token_data(char *input, t_token_data **token_data, t_gc *gc);
 int		add_token(t_token_data **token_data);
 
 // builtins

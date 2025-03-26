@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:10:15 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/03/25 12:37:01 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/03/26 18:08:34 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,12 @@ t_tok_type	token_type(t_token_data **token_data, t_token *token)
 		return (TOK_WORD_NQ); 
 }
 
-char *ft_strndup(const char *src, int start, int end)
+char *ft_strndup(t_gc *gc, const char *src, int start, int end)
 {
 	char	*address;
 	char	*old_dest;
 
-	address = malloc(end - start + 1);
+	address = gc_malloc(gc, TOKENS, end - start + 1);
 	old_dest = address;
 	if (address == NULL)
 		return (NULL);
@@ -84,10 +84,10 @@ t_token	*create_token(t_token_data **token_data)
 {
 	t_token	*token;
 
-	token = malloc(sizeof(t_token));
+	token = gc_malloc((*token_data)->gc, TOKENS, sizeof(t_token));
 	if (!token)
 		return (NULL);
-	token->value = ft_strndup((*token_data)->input, (*token_data)->start, (*token_data)->end);
+	token->value = ft_strndup((*token_data)->gc, (*token_data)->input, (*token_data)->start, (*token_data)->end);
 	token->prev = NULL;
 	token->next = NULL;
 	token->type = token_type(token_data, token);

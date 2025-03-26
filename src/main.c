@@ -46,17 +46,18 @@ void	print_list(t_token *head)
 }
 
 //general structure function for parsing
-int	parse_main(char *input, t_token_data **token_data)
+int	parse_main(char *input, t_token_data **token_data, t_gc *gc)
 {
 	char *modified_input;
 
-	if (modify_input(input, &modified_input) == 1)
+	if (modify_input(input, &modified_input, gc) == 1)
 		return (printf("Allocation Error\n"), 1);
-	if (init_token_data(modified_input, token_data) == 1)
+	if (init_token_data(modified_input, token_data, gc) == 1)
 		return (printf("Allocation Error\n"), 1);
 	if (tokenize(token_data) == 1)
 		return (1);
 	print_list((*token_data)->token_list);
+	gc_free_all(gc);
 	return (0);
 }
 
@@ -65,6 +66,7 @@ int	main(void)
 	char *input;
 	char *prompt = GREEN "minishell" BLUE ">" RESET " ";
 	t_token_data *token_data;
+	t_gc *gc;
 
 	start_message();
 	while (1)
@@ -78,7 +80,13 @@ int	main(void)
 		}
 		if (*input)
 			add_history(input);
-		parse_main(input, &token_data);
+		gc = init_gc();
+		if (ft_strncmp(input, "exit", 4) == 0)
+		{
+		gc_free_all(gc);
+		break;
+		}
+		parse_main(input, &token_data, gc);
 	}
 	return (0);
 }
