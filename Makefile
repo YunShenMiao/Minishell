@@ -7,8 +7,8 @@ OBJ_DIR		= obj
 
 SRC			= 	$(SRC_DIR)/main.c \
 				$(SRC_DIR)/utils/helper.c \
-				$(SRC_DIR)/parsing/init_token_data.c $(SRC_DIR)/parsing/modify_input.c \
-				$(SRC_DIR)/parsing/token_list.c $(SRC_DIR)/parsing/tokenize.c \
+				$(SRC_DIR)/tokens/init_token_data.c $(SRC_DIR)/tokens/modify_input.c \
+				$(SRC_DIR)/tokens/token_list.c $(SRC_DIR)/tokens/tokenize.c \
 				$(SRC_DIR)/parsing/parsing_error.c $(SRC_DIR)/parsing/rdp.c
 OBJ			= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 
