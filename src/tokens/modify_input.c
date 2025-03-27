@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:51:05 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/03/26 18:02:52 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/03/27 14:31:15 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	edit_input(char *input, char **modified_input, t_gc *gc)
 	int	count;
 	int	count2;
 
-	(*modified_input) = gc_malloc(gc, TOKENS, ft_strlen(input) * 2 + 1);
+	(*modified_input) = (char *)gc_malloc(gc, TOKENS, ft_strlen(input) * 3 + 1);
 	if (!(*modified_input))
 		return (1);
 	count = 0;

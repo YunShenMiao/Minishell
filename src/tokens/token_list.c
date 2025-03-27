@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:10:15 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/03/26 18:08:34 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/03/27 14:06:48 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,9 @@ char *ft_strndup(t_gc *gc, const char *src, int start, int end)
 	char	*address;
 	char	*old_dest;
 
-	address = gc_malloc(gc, TOKENS, end - start + 1);
+	if (end - start <= 0)
+	return(NULL);
+	address = (char *)gc_malloc(gc, TOKENS, end - start + 1);
 	old_dest = address;
 	if (address == NULL)
 		return (NULL);
@@ -84,10 +86,15 @@ t_token	*create_token(t_token_data **token_data)
 {
 	t_token	*token;
 
-	token = gc_malloc((*token_data)->gc, TOKENS, sizeof(t_token));
+	token = (t_token *)gc_malloc((*token_data)->gc, TOKENS, sizeof(t_token));
 	if (!token)
 		return (NULL);
 	token->value = ft_strndup((*token_data)->gc, (*token_data)->input, (*token_data)->start, (*token_data)->end);
+	if(!token->value)
+	{
+		free(token);
+		return NULL;
+	}
 	token->prev = NULL;
 	token->next = NULL;
 	token->type = token_type(token_data, token);

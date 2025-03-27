@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:14:39 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/03/26 17:47:14 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/03/27 14:07:12 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	init_token_data(char *input, t_token_data **token_data, t_gc *gc)
 {
-	(*token_data) = gc_malloc(gc, TOKENS, sizeof(t_token_data));
+	(*token_data) = (t_token_data *)gc_malloc(gc, TOKENS, sizeof(t_token_data));
 	if (!(*token_data))
 		return (1);
 	(*token_data)->input = input;

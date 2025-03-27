@@ -1,6 +1,8 @@
 NAME	= minishell
 LDFLAGS = -lreadline -Llibft -lft
-CFLAGS = -I/usr/include/readline -Ilibft -Wextra -Wall -Werror 
+
+CFLAGS = -I/usr/include/readline -Ilibft -Wextra -Wall -Werror
+
 
 SRC_DIR		= src
 OBJ_DIR		= obj

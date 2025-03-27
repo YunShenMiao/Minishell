@@ -83,10 +83,12 @@ int	main(void)
 		gc = init_gc();
 		if (ft_strncmp(input, "exit", 4) == 0)
 		{
-		gc_free_all(gc);
+			free(input);
+			gc_free_all(gc);
 		break;
 		}
-		parse_main(input, &token_data, gc);
+		if (parse_main(input, &token_data, gc) == 1)
+		return(1);
 	}
 	return (0);
 }
