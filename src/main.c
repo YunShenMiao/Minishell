@@ -56,6 +56,8 @@ int	parse_main(char *input, t_token_data **token_data, t_gc *gc)
 		return (printf("Allocation Error\n"), 1);
 	if (tokenize(token_data) == 1)
 		return (1);
+	if (syntax_error(token_data) == 1)
+		return(1);
 	print_list((*token_data)->token_list);
 	gc_free_all(gc);
 	return (0);
@@ -88,7 +90,7 @@ int	main(void)
 		break;
 		}
 		if (parse_main(input, &token_data, gc) == 1)
-		return(1);
+		gc_free_all(gc);
 	}
 	return (0);
 }

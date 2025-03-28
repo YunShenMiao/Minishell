@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 09:41:57 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/03/27 14:39:40 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/03/28 13:51:41 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	end_quote(t_token_data **token_data)
 		break;
 	} */
 	if ((*token_data)->input[i] == '\0')
-		return (printf("Error: unclosed quotes\n"), -1);
+		return (ft_perror_parsing(UNCLOSED_QUOTES, "unclosed quotes"), -1);
 	return (i);
 }
 

@@ -15,6 +15,8 @@
 # define BLUE "\033[1;34m"
 # define RESET "\033[0m"
 
+
+
 /****************************************************************************************************/
 /*									GARBAGE_COLLECTOR_STRUCTS										*/
 /****************************************************************************************************/
@@ -42,6 +44,14 @@ typedef struct s_gc
 /****************************************************************************************************/
 /*											TOKEN_STRUCTS											*/
 /****************************************************************************************************/
+
+typedef enum s_error
+{
+	INVALID_COMMAND,
+	SYNTAX_ERROR,
+	UNCLOSED_QUOTES
+
+}				t_error;
 
 typedef enum s_tok_type
 {
@@ -125,9 +135,10 @@ void	gc_free_all(t_gc *gc);
 // parsing
 int		modify_input(char *input, char **modified_input, t_gc *gc);
 int 	tokenize(t_token_data **token_data);
-int		parsing_error(t_token **token_list);
+int 	syntax_error(t_token_data **token_data);
 int 	init_token_data(char *input, t_token_data **token_data, t_gc *gc);
 int		add_token(t_token_data **token_data);
+void ft_perror_parsing(int error_id, char* error_info);
 
 // builtins
 int		ft_echo(t_token *current);

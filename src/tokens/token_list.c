@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:10:15 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/03/27 14:06:48 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/03/27 15:37:25 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ t_tok_type	token_type(t_token_data **token_data, t_token *token)
 		return (TOK_WORD_NQ); 
 }
 
+// modified strndup to use gc_malloc & have starting and end position for allocating 
 char *ft_strndup(t_gc *gc, const char *src, int start, int end)
 {
 	char	*address;

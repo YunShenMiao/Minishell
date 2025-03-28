@@ -6,12 +6,13 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:51:05 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/03/27 14:31:15 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/03/27 15:37:42 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+//recognises each corresponding -n after echo command and merges to one without space
 void	merge_echo_n(char *input, char **edited, int *count, int *count2)
 {
 	if (input[*count2] == 'e' && ft_strncmp(&input[*count2], "echo -n", 7) == 0)
@@ -35,6 +36,7 @@ void	merge_echo_n(char *input, char **edited, int *count, int *count2)
 	}
 }
 
+//adds extra spaces for redirections, heredoc and pipes which can be inputted without space as delimiter
 void	edit_spaces(char *input, char **edited, int *count, int *count2)
 {
 	if (input[*count2] == '>' || input[*count2] == '<' || input[*count2] == '|')
@@ -57,6 +59,7 @@ void	edit_spaces(char *input, char **edited, int *count, int *count2)
 	}
 }
 
+// trims extra quotes that bash ignores
 void	trim_quotes(char *input, int *count2)
 {
 	int count2cp;
@@ -78,6 +81,9 @@ void	trim_quotes(char *input, int *count2)
 	(*count2) += (count2cp - 3);
 }
 
+// edits input string to pre-handle some cases and simplify tokenization and parsing
+// cases being handled: "echo -n"/"echo -n -n -n" | missing spaces: eg "miao>>output.txt"
+// | quotes to ignore: eg """""" -> ""
 int	edit_input(char *input, char **modified_input, t_gc *gc)
 {
 	int	count;
