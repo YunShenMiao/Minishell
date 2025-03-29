@@ -61,11 +61,11 @@ typedef enum s_tok_type
 	TOK_REDIRECT_OUT,
 	TOK_APPEND,
 	TOK_HEREDOC,
-	TOK_EMPTY_WORD,
+	TOK_COMMAND,
 	TOK_WORD_DQ,
 	TOK_WORD_SQ,
 	TOK_WORD_NQ,
-	TOK_COMMAND,
+	TOK_EMPTY_WORD,
 	TOK_END
 	// TOK_ENV
 	// TOK_AND,
@@ -89,6 +89,7 @@ typedef struct s_token_data
 	int			start;
 	int			end;
 	int			first;
+	int			finish;
 	t_gc		*gc;
 }				t_token_data;
 
@@ -139,6 +140,8 @@ int 	syntax_error(t_token_data **token_data);
 int 	init_token_data(char *input, t_token_data **token_data, t_gc *gc);
 int		add_token(t_token_data **token_data);
 void ft_perror_parsing(int error_id, char* error_info);
+int	token_command(char *value, size_t len);
+int validate_syntax(t_token *token_list);
 
 // builtins
 int		ft_echo(t_token *current);
