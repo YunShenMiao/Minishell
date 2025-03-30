@@ -80,16 +80,28 @@ typedef struct s_token
 	struct s_token	*next;
 }					t_token;
 
+typedef struct s_ast
+{
+	t_tok_type		type;
+	char			**args;
+	char			*file_name;
+	int				fd;
+	struct s_ast	*left;
+	struct s_ast	*right;
+}					t_ast;
+
 typedef struct s_token_data
 {
 	char		*input;
 	t_token		*token_list;
+	t_ast		*ast;
 	int			in_SQ;
 	int			in_DQ;
 	int			start;
 	int			end;
 	int			first;
 	int			finish;
+	int			syntax_error;
 	t_gc		*gc;
 }				t_token_data;
 
@@ -133,15 +145,18 @@ void 	*gc_malloc(t_gc *gc, t_mem_location category, unsigned long size);
 void	gc_free_category(t_gc *gc, t_mem_location category);
 void	gc_free_all(t_gc *gc);
 
-// parsing
+// tokens
 int		modify_input(char *input, char **modified_input, t_gc *gc);
 int 	tokenize(t_token_data **token_data);
-int 	syntax_error(t_token_data **token_data);
 int 	init_token_data(char *input, t_token_data **token_data, t_gc *gc);
 int		add_token(t_token_data **token_data);
-void ft_perror_parsing(int error_id, char* error_info);
-int	token_command(char *value, size_t len);
-int validate_syntax(t_token *token_list);
+int		token_command(char *value, size_t len);
+
+// parsing
+void 	ft_perror_parsing(int error_id, char* error_info);
+t_ast 	*build_ast(t_token_data **token_data);
+char	*ft_strndup(t_gc *gc, const char *src, int start, int end);
+t_ast 	*create_ast_node(t_token_data **token_data, t_tok_type type);
 
 // builtins
 int		ft_echo(t_token *current);
