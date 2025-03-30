@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 18:10:25 by xueyang           #+#    #+#             */
-/*   Updated: 2025/03/24 15:37:09 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/03/29 21:39:52 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	update_env_var(t_env **lst, char *name, char *new_val)
 	{
 		temp = search_name_node(lst, name);
 		old_val = temp->val;
-		temp->val = new_val;
+		temp->val = new_val; // or ft_strdup(new_val) ...?
 		free(old_val);
 	}
 	return (0);

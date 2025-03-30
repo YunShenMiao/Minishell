@@ -94,7 +94,7 @@ typedef struct s_token_data
 }				t_token_data;
 
 /****************************************************************************************************/
-/*																									*/
+/*									ENVIRONMENT VARIABLES											*/
 /****************************************************************************************************/
 
 typedef struct s_env
@@ -114,18 +114,24 @@ typedef struct s_data
 // helper
 void	start_message(void);
 void	free_array(char **arr);
-int		ft_put_to_fd(char *str, int fd);
+// int		ft_put_to_fd(char *str, int fd);
+
+// error_handling
+int		error_general(char *msg);
+int		error_free(char *msg, t_data *shell);
+
+//env_list
 t_env	*create_env(char *name, char *value);
 t_env	*ft_env_last(t_env *lst);
 void	ft_env_add_back(t_env **lst, t_env *new);
-int		error_general(char *msg);
-int		error_free(char *msg, t_data *shell);
-int		count_arr_row(char **arr);
-int		find_equal(char *str);
-int		init_env(char **envp);
 t_env	*search_name_node(t_env **lst, char *name);
 char	*search_name_val(t_env **lst, char *name);
 int		update_env_var(t_env **lst, char *name, char *new_val);
+
+//init_envp
+int		count_arr_row(char **arr);
+int		find_sign(char *str, char c);
+int		init_env(char **envp);
 
 // garbage collector
 t_gc    *init_gc(void);
@@ -147,6 +153,6 @@ int validate_syntax(t_token *token_list);
 int		ft_echo(t_token *current);
 int		ft_pwd(t_token *current);
 int		ft_exit(t_token *current);
-int		ft_cd(t_token *current);
+int		ft_cd(t_token *current, t_env *top);
 
 #endif
