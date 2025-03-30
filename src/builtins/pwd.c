@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 15:17:27 by xueyang           #+#    #+#             */
-/*   Updated: 2025/03/24 15:17:48 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/03/30 15:36:57 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	ft_pwd(t_data *shell)
 	t_token	*current;
 
 	current = shell->cur_token;
-	if (current->next && current->next->type == TOK_WORD)
+	if (current->next && (current->next->type == TOK_WORD_NQ || current->next->type == TOK_WORD_SQ || current->next->type == TOK_WORD_DQ))
 		return (error_general("pwd: too many arguments"));
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
