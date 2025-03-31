@@ -136,6 +136,7 @@ int		error_free(char *msg, t_data *shell);
 t_env	*create_env(char *name, char *value);
 t_env	*ft_env_last(t_env *lst);
 void	ft_env_add_back(t_env **lst, t_env *new);
+void	ft_env_del(t_env *top, t_env *to_del);
 t_env	*search_name_node(t_env **lst, char *name);
 char	*search_name_val(t_env **lst, char *name);
 int		update_env_var(t_env **lst, char *name, char *new_val);
@@ -169,5 +170,8 @@ int		ft_echo(t_token *current);
 int		ft_pwd(t_token *current);
 int		ft_exit(t_token *current);
 int		ft_cd(t_token *current, t_env *top);
+int		ft_env(t_env *top_env, t_token *current);
+int		ft_export(t_env	*top_env, t_token *current);
+int		ft_unset(t_env	*top_env, t_token *current);
 
 #endif

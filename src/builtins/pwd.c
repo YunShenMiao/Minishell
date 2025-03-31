@@ -6,18 +6,16 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 15:17:27 by xueyang           #+#    #+#             */
-/*   Updated: 2025/03/30 15:36:57 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/03/31 12:37:08 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	ft_pwd(t_data *shell)
+int	ft_pwd(t_token *current)
 {
 	char	*cwd;
-	t_token	*current;
-
-	current = shell->cur_token;
+	
 	if (current->next && (current->next->type == TOK_WORD_NQ || current->next->type == TOK_WORD_SQ || current->next->type == TOK_WORD_DQ))
 		return (error_general("pwd: too many arguments"));
 	cwd = getcwd(NULL, 0);

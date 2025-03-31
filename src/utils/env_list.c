@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 18:10:25 by xueyang           #+#    #+#             */
-/*   Updated: 2025/03/29 21:39:52 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/03/31 12:05:14 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,22 @@ void	ft_env_add_back(t_env **lst, t_env *new)
 		*lst = new;
 	else
 	{
-		last_node = ft_lstlast(*lst);
+		last_node = ft_env_last(*lst);
 		last_node->next = new;
 	}
+}
+
+void	ft_env_del(t_env *top, t_env *to_del)
+{
+	t_env	*before;
+
+	before = top;
+	while (before->next != to_del)
+		before = before->next;
+	before->next = to_del->next;
+	free(to_del->name);
+	free(to_del->val);
+	free(to_del);
 }
 
 t_env	*search_name_node(t_env **lst, char *name)

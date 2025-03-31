@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:18:21 by xueyang           #+#    #+#             */
-/*   Updated: 2025/03/30 15:19:27 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/03/31 12:29:35 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	update_PWDs(t_env *top, char *new_pwd)
 	t_env	*pwd_node;
 	char	*old_pwd;
 
-	pwd_node = search_by_name(&top, "PWD");
+	pwd_node = search_name_node(&top, "PWD");
 	old_pwd =  pwd_node->val;
 	if (update_env_var(&top, "OLDPWD", old_pwd) == 1)
 		return (1);
@@ -51,11 +51,11 @@ int	swap_PWDs(t_env *top)
 	char	*pwd;
 	char	*old_pwd;
 
-	pwd_node = search_by_name(&top, "PWD");
+	pwd_node = search_name_node(&top, "PWD");
 	pwd =  ft_strdup(pwd_node->val);
 	if (!pwd)
 		return (1);
-	old_pwd_node = search_by_name(&top, "OLDPWD");
+	old_pwd_node = search_name_node(&top, "OLDPWD");
 	old_pwd =  ft_strdup(old_pwd_node->val);
 	if (!old_pwd)
 		return (1);
@@ -217,7 +217,7 @@ int	cd_minus(t_env *top, char *path, char *home)
 // 	int		i;
 
 
-// 	pwd_node = search_by_name(&top, "PWD");
+// 	pwd_node = search_name_node(&top, "PWD");
 // 	while(path[i])
 // 	{
 // 		if (path[i] == '.' && path[i + 1] == '.' && path[i + 2] == '/')
