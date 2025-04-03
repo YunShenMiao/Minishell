@@ -126,7 +126,7 @@ typedef struct s_data
 // helper
 void	start_message(void);
 void	free_array(char **arr);
-// int		ft_put_to_fd(char *str, int fd);
+int		ft_put_to_fd(char *str, int fd);
 
 // error_handling
 int		error_general(char *msg);

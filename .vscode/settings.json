@@ -18,6 +18,7 @@
         "tuple": "c",
         "type_traits": "c",
         "vector": "c",
-        "typeinfo": "c"
+        "typeinfo": "c",
+        "__locale": "c"
     }
 }
