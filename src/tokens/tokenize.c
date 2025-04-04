@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 09:41:57 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/03/28 13:51:41 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/03/29 13:51:10 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	end_quote(t_token_data **token_data)
 		break;
 	} */
 	if ((*token_data)->input[i] == '\0')
-		return (ft_perror_parsing(UNCLOSED_QUOTES, "unclosed quotes"), -1);
+		return (/* ft_perror_parsing(UNCLOSED_QUOTES, "unclosed quotes"), */ -1);
 	return (i);
 }
 
@@ -89,7 +89,7 @@ int	in_token(t_token_data **token_data, int *i)
 	(*token_data)->end = (*i);
 	if (add_token(token_data) == 1)
 		return (1);
-	if ((*token_data)->input[(*i) - 1] != '|')
+	if ((*token_data)->input[(*i) - 1] != '|'/*  && (*token_data)->input[(*i - 3)] != '>' && (*token_data)->input[(*i - 3)] != '<' */)
 		(*token_data)->first++;
 	return (0);
 }
@@ -117,5 +117,7 @@ int	tokenize(t_token_data **token_data)
 				return (1);
 		}
 	}
+	(*token_data)->finish = 1;
+	add_token(token_data);
 	return (0);
 }

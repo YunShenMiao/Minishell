@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:10:15 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/03/27 15:37:25 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/03/30 14:05:26 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,28 +61,6 @@ t_tok_type	token_type(t_token_data **token_data, t_token *token)
 		return (TOK_WORD_NQ); 
 }
 
-// modified strndup to use gc_malloc & have starting and end position for allocating 
-char *ft_strndup(t_gc *gc, const char *src, int start, int end)
-{
-	char	*address;
-	char	*old_dest;
-
-	if (end - start <= 0)
-	return(NULL);
-	address = (char *)gc_malloc(gc, TOKENS, end - start + 1);
-	old_dest = address;
-	if (address == NULL)
-		return (NULL);
-	while (src[start] != '\0' && start < end)
-	{
-		*address = src[start];
-		address++;
-		start++;
-	}
-	*address = '\0';
-	return (old_dest);
-}
-
 t_token	*create_token(t_token_data **token_data)
 {
 	t_token	*token;
@@ -90,7 +68,16 @@ t_token	*create_token(t_token_data **token_data)
 	token = (t_token *)gc_malloc((*token_data)->gc, TOKENS, sizeof(t_token));
 	if (!token)
 		return (NULL);
+	if ((*token_data)->finish == 1)
+	{
+		token->value = ft_strndup((*token_data)->gc, "newline", 0, 7);
+		token->type = TOK_END;
+	}
+	else
+	{
 	token->value = ft_strndup((*token_data)->gc, (*token_data)->input, (*token_data)->start, (*token_data)->end);
+	token->type = token_type(token_data, token);
+	}
 	if(!token->value)
 	{
 		free(token);
@@ -98,7 +85,6 @@ t_token	*create_token(t_token_data **token_data)
 	}
 	token->prev = NULL;
 	token->next = NULL;
-	token->type = token_type(token_data, token);
 	if (token->type == TOK_INVALID)
 	return(NULL);
 	return (token);

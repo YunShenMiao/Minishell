@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:14:39 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/03/27 15:36:44 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/03/30 14:19:17 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,14 @@ int	init_token_data(char *input, t_token_data **token_data, t_gc *gc)
 		return (1);
 	(*token_data)->input = input;
 	(*token_data)->token_list = NULL;
+	(*token_data)->ast = NULL;
 	(*token_data)->in_SQ = 0;
 	(*token_data)->in_DQ = 0;
 	(*token_data)->start = 0;
 	(*token_data)->end = 0;
 	(*token_data)->first = 0;
 	(*token_data)->gc = gc;
+	(*token_data)->finish = 0;
+	(*token_data)->syntax_error = 0;
 	return (0);
 }
