@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:10:15 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/03/30 14:05:26 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/04 12:47:50 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ int	token_command(char *value, size_t len)
 
 t_tok_type	token_type(t_token_data **token_data, t_token *token)
 {
-	int len;
+	int	len;
 
 	len = ft_strlen(token->value);
-	if(len == 0)
+	if (len == 0)
 		return (TOK_EMPTY_WORD);
 	if (ft_strncmp(token->value, ">", len) == 0)
 		return (TOK_REDIRECT_OUT);
@@ -58,7 +58,7 @@ t_tok_type	token_type(t_token_data **token_data, t_token *token)
 	else if ((*token_data)->in_SQ == 1)
 		return (TOK_WORD_SQ);
 	else
-		return (TOK_WORD_NQ); 
+		return (TOK_WORD_NQ);
 }
 
 t_token	*create_token(t_token_data **token_data)
@@ -75,18 +75,16 @@ t_token	*create_token(t_token_data **token_data)
 	}
 	else
 	{
-	token->value = ft_strndup((*token_data)->gc, (*token_data)->input, (*token_data)->start, (*token_data)->end);
-	token->type = token_type(token_data, token);
+		token->value = ft_strndup((*token_data)->gc, (*token_data)->input,
+				(*token_data)->start, (*token_data)->end);
+		token->type = token_type(token_data, token);
 	}
-	if(!token->value)
-	{
-		free(token);
-		return NULL;
-	}
+	if (!token->value)
+		return (free(token), NULL);
 	token->prev = NULL;
 	token->next = NULL;
 	if (token->type == TOK_INVALID)
-	return(NULL);
+		return (NULL);
 	return (token);
 }
 

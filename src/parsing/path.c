@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 21:06:35 by xueyang           #+#    #+#             */
-/*   Updated: 2025/03/23 13:30:33 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/04 12:39:27 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,17 @@ static char	*handle_path(char *cmd, char *part_env)
 
 char	*find_path(char *cmd, char **envp)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (cmd[i])
 	{
 		if (cmd[i] == '/')
-			return (cmd);
+		{
+			if (access(cmd, X_OK) == 0)
+				return (cmd);
+			return (NULL);
+		}
 		i++;
 	}
 	if (envp == NULL || !*envp)

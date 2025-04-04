@@ -103,6 +103,7 @@ typedef struct s_token_data
 	int			first;
 	int			finish;
 	int			syntax_error;
+	char		**envp;
 	t_gc		*gc;
 }				t_token_data;
 
@@ -156,7 +157,7 @@ void	gc_free_all(t_gc *gc);
 // tokens
 int		modify_input(char *input, char **modified_input, t_gc *gc);
 int 	tokenize(t_token_data **token_data);
-int 	init_token_data(char *input, t_token_data **token_data, t_gc *gc);
+int 	init_token_data(char *input, t_token_data **token_data, t_gc *gc, char **envp);
 int		add_token(t_token_data **token_data);
 int		token_command(char *value, size_t len);
 
@@ -169,6 +170,7 @@ int		is_word(t_tok_type type);
 t_ast	*parse_redirections(t_token_data **token_data, t_token **current);
 t_ast	*parse_command(t_token_data **token_data, t_token **current);
 t_ast	*parse_pipes(t_token_data **token_data, t_token **current);
+char	*find_path(char *cmd, char **envp);
 
 // builtins
 int		ft_echo(t_token *current);

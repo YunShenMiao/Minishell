@@ -80,13 +80,13 @@ void print_ast(t_ast *node, int depth, char *pos)
 }
 
 //general structure function for parsing
-int	parse_main(char *input, t_token_data **token_data, t_gc *gc)
+int	parse_main(char *input, t_token_data **token_data, t_gc *gc, char **envp)
 {
 	char *modified_input;
 
 	if (modify_input(input, &modified_input, gc) == 1)
 		return (printf("Allocation Error\n"), 1);
-	if (init_token_data(modified_input, token_data, gc) == 1)
+	if (init_token_data(modified_input, token_data, gc, envp) == 1)
 		return (printf("Allocation Error\n"), 1);
 	if (tokenize(token_data) == 1)
 		return (1);
@@ -100,13 +100,14 @@ int	parse_main(char *input, t_token_data **token_data, t_gc *gc)
 	return (0);
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
 	char *input;
 	char *prompt = GREEN "minishell" BLUE ">" RESET " ";
 	t_token_data *token_data;
 	t_gc *gc;
-
+	if (argc < 1 || argv[0] == NULL)
+	return(1);
 	start_message();
 	while (1)
 	{
@@ -126,7 +127,7 @@ int	main(void)
 			gc_free_all(gc);
 		break;
 		}
-		if (parse_main(input, &token_data, gc) == 1)
+		if (parse_main(input, &token_data, gc, envp) == 1)
 		gc_free_all(gc);
 		//execution
 	}

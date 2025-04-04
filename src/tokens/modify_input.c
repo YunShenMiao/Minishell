@@ -6,13 +6,14 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:51:05 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/03/27 15:37:42 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/04 12:46:32 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-//recognises each corresponding -n after echo command and merges to one without space
+// recognises each corresponding -n after echo command
+// and merges to one without space
 void	merge_echo_n(char *input, char **edited, int *count, int *count2)
 {
 	if (input[*count2] == 'e' && ft_strncmp(&input[*count2], "echo -n", 7) == 0)
@@ -36,7 +37,8 @@ void	merge_echo_n(char *input, char **edited, int *count, int *count2)
 	}
 }
 
-//adds extra spaces for redirections, heredoc and pipes which can be inputted without space as delimiter
+// adds extra spaces for redirections, heredoc and pipes which
+// can be inputted without space as delimiter
 void	edit_spaces(char *input, char **edited, int *count, int *count2)
 {
 	if (input[*count2] == '>' || input[*count2] == '<' || input[*count2] == '|')
@@ -62,27 +64,28 @@ void	edit_spaces(char *input, char **edited, int *count, int *count2)
 // trims extra quotes that bash ignores
 void	trim_quotes(char *input, int *count2)
 {
-	int count2cp;
+	int	count2cp;
 
 	count2cp = 0;
 	if (input[count2cp + *count2] == '\"')
 	{
-	while (input[count2cp + *count2] == '\"')
-	count2cp++;
+		while (input[count2cp + *count2] == '\"')
+			count2cp++;
 	}
-	else if(input[*count2] == '\'')
+	else if (input[*count2] == '\'')
 	{
 		while (input[count2cp] == '\'')
-		count2cp++;
+			count2cp++;
 	}
 	if (count2cp % 2 == 0 && count2cp > 1)
-	(*count2) += (count2cp - 2);
+		(*count2) += (count2cp - 2);
 	else if (count2cp > 2)
-	(*count2) += (count2cp - 3);
+		(*count2) += (count2cp - 3);
 }
 
-// edits input string to pre-handle some cases and simplify tokenization and parsing
-// cases being handled: "echo -n"/"echo -n -n -n" | missing spaces: eg "miao>>output.txt"
+// edits input string to pre-handle some cases and simplify tokenization
+// and parsing, cases being handled: "echo -n"/"echo -n -n"
+// | missing spaces: eg "miao>>output.txt"
 // | quotes to ignore: eg """""" -> ""
 int	edit_input(char *input, char **modified_input, t_gc *gc)
 {
@@ -111,7 +114,5 @@ int	modify_input(char *input, char **modified_input, t_gc *gc)
 	if ((edit_input(input, modified_input, gc)) == 1)
 		return (free(input), 1);
 	free(input);
-	/* 	if (parsing_error(head) == -1)
-		return(-1); */
 	return (0);
 }
