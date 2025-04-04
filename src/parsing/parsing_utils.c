@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:55:26 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/04 12:42:56 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/04 13:30:45 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*ft_strndup(t_gc *gc, const char *src, int start, int end)
 	char	*address;
 	char	*old_dest;
 
-	if (end - start <= 0)
+	if (end - start < 0)
 		return (NULL);
 	address = (char *)gc_malloc(gc, TOKENS, end - start + 1);
 	old_dest = address;

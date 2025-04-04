@@ -79,6 +79,24 @@ void print_ast(t_ast *node, int depth, char *pos)
     print_ast(node->right, depth + 1, "Right:");
 }
 
+/* void	test(t_token_data **token_data, char **envp)
+{
+	t_ast *tree;
+
+	tree = (*token_data)->ast;
+	pid_t pid = fork();
+	if (pid == 0) { 
+		execve(tree->cmd_path, tree->args, envp);
+    perror("execve failed");
+    exit(1);
+	} 
+	else {  
+    waitpid(pid, NULL, 0); 
+	}
+/* 	if (tree->type == TOK_COMMAND)
+	execve(tree->cmd_path, tree->args, envp); */
+} */
+
 //general structure function for parsing
 int	parse_main(char *input, t_token_data **token_data, t_gc *gc, char **envp)
 {
@@ -96,6 +114,7 @@ int	parse_main(char *input, t_token_data **token_data, t_gc *gc, char **envp)
 	return(1);
 	print_list((*token_data)->token_list);
 	print_ast((*token_data)->ast, 0, "Root: ");
+	/* test(token_data, envp); */
 	gc_free_all(gc);
 	return (0);
 }
