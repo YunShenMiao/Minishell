@@ -6,39 +6,57 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:51:05 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/04 12:46:32 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/07 15:50:36 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+void	merge_echo_n2(char **edited, int *count, int *count2)
+{
+	(*edited)[*count] = 'e';
+	(*edited)[*count + 1] = 'c';
+	(*edited)[*count + 2] = 'h';
+	(*edited)[*count + 3] = 'o';
+	(*edited)[*count + 4] = '-';
+	(*edited)[*count + 5] = 'n';
+	(*count) += 6;
+	(*count2) += 7;
+}
+
 // recognises each corresponding -n after echo command
 // and merges to one without space
 void	merge_echo_n(char *input, char **edited, int *count, int *count2)
 {
-	if (input[*count2] == 'e' && ft_strncmp(&input[*count2], "echo -n", 7) == 0)
+	int	i;
+
+	if (input[*count2] == 'e' && ft_strncmp(&input[*count2], "echo -n", 7) == 0
+		&& (input[*count2 + 7] == ' ' || input[*count2 + 7] == 'n'
+			|| input[*count2 + 7] == '\0'))
 	{
-		(*edited)[*count] = 'e';
-		(*edited)[*count + 1] = 'c';
-		(*edited)[*count + 2] = 'h';
-		(*edited)[*count + 3] = 'o';
-		(*edited)[*count + 4] = '-';
-		(*edited)[*count + 5] = 'n';
-		(*count) += 6;
-		(*count2) += 7;
+		merge_echo_n2(edited, count, count2);
 		while (input[*count2] != '\0')
 		{
-			if (input[*count2] == ' ' && ft_strncmp(&input[*count2], " -n ",
-					4) == 0)
+			if (ft_strncmp(&input[*count2], " -n", 3) == 0)
+			{
+				if (input[*count2 + 3] != ' ' && input[*count2 + 3] != 'n'
+					&& input[*count2 + 3] != '\0')
+					break ;
 				(*count2) += 3;
-			else
+			}
+			i = 0;
+			while (ft_strncmp(&input[*count2 + i], "n", 1) == 0)
+				i++;
+			if (input[*count2 + i] == ' ' || input[*count2 + i] == '\0')
+				(*count2) += i;
+			if (ft_strncmp(&input[*count2], " -n", 3) != 0)
 				break ;
 		}
 	}
 }
 
 // adds extra spaces for redirections, heredoc and pipes which
-// can be inputted without space as delimiter
+// if inputted without space as delimiter
 void	edit_spaces(char *input, char **edited, int *count, int *count2)
 {
 	if (input[*count2] == '>' || input[*count2] == '<' || input[*count2] == '|')
@@ -84,10 +102,10 @@ void	trim_quotes(char *input, int *count2)
 }
 
 // edits input string to pre-handle some cases and simplify tokenization
-// and parsing, cases being handled: "echo -n"/"echo -n -n"
+// and parsing, cases being handled: "echo -n"/"echo -n -nn"
 // | missing spaces: eg "miao>>output.txt"
 // | quotes to ignore: eg """""" -> ""
-int	edit_input(char *input, char **modified_input, t_gc *gc)
+int	modify_input(char *input, char **modified_input, t_gc *gc)
 {
 	int	count;
 	int	count2;
@@ -106,13 +124,6 @@ int	edit_input(char *input, char **modified_input, t_gc *gc)
 		count2++;
 	}
 	(*modified_input)[count] = '\0';
-	return (0);
-}
-
-int	modify_input(char *input, char **modified_input, t_gc *gc)
-{
-	if ((edit_input(input, modified_input, gc)) == 1)
-		return (free(input), 1);
 	free(input);
 	return (0);
 }

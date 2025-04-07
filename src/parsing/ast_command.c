@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:50:00 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/04 12:42:12 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/07 15:53:03 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ t_ast	*parse_command(t_token_data **token_data, t_token **current)
 	t_ast	*cmd_node;
 	t_ast	*re_node;
 
-	if (!(*current) || ((*current)->type != TOK_COMMAND
-			&& !is_word((*current)->type)))
+	if (!(*current) || /* ((*current)->type != TOK_COMMAND
+			&&  */!is_word((*current)->type))
 	{
 		re_node = parse_redirections(token_data, current);
 		if (re_node != NULL)

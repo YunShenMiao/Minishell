@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:10:15 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/04 12:47:50 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/07 15:52:00 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ t_tok_type	token_type(t_token_data **token_data, t_token *token)
 		return (TOK_HEREDOC);
 	else if (ft_strncmp(token->value, "|", len) == 0)
 		return (((*token_data)->first = 0), TOK_PIPE);
-	else if (token_command(token->value, len) == 0 && (*token_data)->first == 0)
-		return (TOK_COMMAND);
+/* 	else if (token_command(token->value, len) == 0 && (*token_data)->first == 0)
+		return (TOK_COMMAND); */
 	else if ((*token_data)->in_DQ == 1)
 		return (TOK_WORD_DQ);
 	else if ((*token_data)->in_SQ == 1)

@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 09:41:57 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/04 16:38:57 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/07 15:14:41 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,7 @@ int	end_quote(t_token_data **token_data)
 	while ((*token_data)->input[i] && (*token_data)->input[i] != quote)
 		i++;
 	if ((*token_data)->input[i] == '\0')
-		return (ft_perror_parsing(UNCLOSED_QUOTES, "unclosed quotes"),
-			-1);
+		return (ft_perror_parsing(UNCLOSED_QUOTES, "unclosed quotes"), -1);
 	return (i);
 }
 
@@ -56,17 +55,18 @@ int	in_quote_token(t_token_data **token_data, int *i)
 	(*i)++;
 	(*token_data)->start = (*i);
 	(*token_data)->end = end_quote(token_data);
-	if ((*token_data)->end - (*token_data)->start == 0 && (*token_data)->input[(*token_data)->end + 1] != '\0'
-	 && ((*token_data)->input[(*token_data)->end + 1] != ' '
-	|| (*token_data)->input[(*token_data)->start - 2] != ' '))
+	if ((*token_data)->end - (*token_data)->start == 0
+		&& (*token_data)->input[(*token_data)->end + 1] != '\0'
+		&& ((*token_data)->input[(*token_data)->end + 1] != ' '
+			|| (*token_data)->input[(*token_data)->start - 2] != ' '))
 	{
-	quote_status(token_data, (*token_data)->input[(*token_data)->end]);
-	(*i)++;
-	return(0);
+		quote_status(token_data, (*token_data)->input[(*token_data)->end]);
+		(*i)++;
+		return (0);
 	}
 	if ((*token_data)->end == -1)
 		return (1);
-		printf("s %d e %d\n", (*token_data)->start, (*token_data)->end);
+	printf("s %d e %d\n", (*token_data)->start, (*token_data)->end);
 	if (add_token(token_data) == 1)
 		return (1);
 	quote_status(token_data, (*token_data)->input[(*token_data)->end]);
@@ -92,6 +92,7 @@ int	in_token(t_token_data **token_data, int *i)
 	return (0);
 }
 
+// decides if token is SQ DQ or NQ and skips spaces before calling add_token
 int	tokenize(t_token_data **token_data)
 {
 	int	i;
