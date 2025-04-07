@@ -6,14 +6,12 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 09:41:57 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/07 15:14:41 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/07 16:00:53 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-// still need to handle echo "" ""hello"" ("" is empty arg which is
-// right but ""hello"" is also giving two emtpy args which needs to be fixed")
 // export hello=$hello -> unset hello hello hello (unsets ignores rest)
 
 void	quote_status(t_token_data **token_data, char input)
@@ -49,7 +47,7 @@ int	end_quote(t_token_data **token_data)
 	return (i);
 }
 
-// fixed the quotes but very unellegantly, could segfault???
+// fixed the quotes but very unellegantly, should change this at some point
 int	in_quote_token(t_token_data **token_data, int *i)
 {
 	(*i)++;
@@ -71,8 +69,6 @@ int	in_quote_token(t_token_data **token_data, int *i)
 		return (1);
 	quote_status(token_data, (*token_data)->input[(*token_data)->end]);
 	(*i) = (*token_data)->end + 1;
-	if ((*token_data)->input[(*i) - 1] != '|')
-		(*token_data)->first++;
 	return (0);
 }
 
@@ -81,14 +77,12 @@ int	in_token(t_token_data **token_data, int *i)
 	(*token_data)->start = (*i);
 	while ((*token_data)->input[(*i)] != ' '
 		&& (*token_data)->input[(*i)] != '\"'
-		&& (*token_data)->input[(*i)] != '\0'
+		&& (*token_data)->input[(*i)] != '\''
 		&& (*token_data)->input[(*i)] != '\0')
 		(*i)++;
 	(*token_data)->end = (*i);
 	if (add_token(token_data) == 1)
 		return (1);
-	if ((*token_data)->input[(*i) - 1] != '|')
-		(*token_data)->first++;
 	return (0);
 }
 

@@ -6,33 +6,11 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:10:15 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/07 15:52:00 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/07 16:10:19 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-int	token_command(char *value, size_t len)
-{
-	if (ft_strncmp(value, "cd", len) == 0)
-		return (0);
-	else if (ft_strncmp(value, "echo", len) == 0)
-		return (0);
-	else if (ft_strncmp(value, "echo-n", len) == 0)
-		return (0);
-	else if (ft_strncmp(value, "pwd", len) == 0)
-		return (0);
-	else if (ft_strncmp(value, "env", len) == 0)
-		return (0);
-	else if (ft_strncmp(value, "export", len) == 0)
-		return (0);
-	if (ft_strncmp(value, "unset", len) == 0)
-		return (0);
-	else if (ft_strncmp(value, "exit", len) == 0)
-		return (0);
-	else
-		return (1);
-}
 
 t_tok_type	token_type(t_token_data **token_data, t_token *token)
 {
@@ -50,9 +28,7 @@ t_tok_type	token_type(t_token_data **token_data, t_token *token)
 	else if (ft_strncmp(token->value, "<<", len) == 0)
 		return (TOK_HEREDOC);
 	else if (ft_strncmp(token->value, "|", len) == 0)
-		return (((*token_data)->first = 0), TOK_PIPE);
-/* 	else if (token_command(token->value, len) == 0 && (*token_data)->first == 0)
-		return (TOK_COMMAND); */
+		return (TOK_PIPE);
 	else if ((*token_data)->in_DQ == 1)
 		return (TOK_WORD_DQ);
 	else if ((*token_data)->in_SQ == 1)
@@ -88,6 +64,7 @@ t_token	*create_token(t_token_data **token_data)
 	return (token);
 }
 
+// creates the simple token list out of the modified input string
 int	add_token(t_token_data **token_data)
 {
 	t_token	*new_token;

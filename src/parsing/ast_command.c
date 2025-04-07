@@ -6,11 +6,33 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:50:00 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/07 15:53:03 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/07 16:04:29 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+int	token_command(char *value, size_t len)
+{
+	if (ft_strncmp(value, "cd", len) == 0)
+		return (0);
+	else if (ft_strncmp(value, "echo", len) == 0)
+		return (0);
+	else if (ft_strncmp(value, "echo-n", len) == 0)
+		return (0);
+	else if (ft_strncmp(value, "pwd", len) == 0)
+		return (0);
+	else if (ft_strncmp(value, "env", len) == 0)
+		return (0);
+	else if (ft_strncmp(value, "export", len) == 0)
+		return (0);
+	if (ft_strncmp(value, "unset", len) == 0)
+		return (0);
+	else if (ft_strncmp(value, "exit", len) == 0)
+		return (0);
+	else
+		return (1);
+}
 
 void	parse_command_args(t_token_data **token_data, t_token **current,
 		t_ast *cmd_node)
@@ -42,8 +64,7 @@ t_ast	*parse_command(t_token_data **token_data, t_token **current)
 	t_ast	*cmd_node;
 	t_ast	*re_node;
 
-	if (!(*current) || /* ((*current)->type != TOK_COMMAND
-			&&  */!is_word((*current)->type))
+	if (!(*current) || !is_word((*current)->type))
 	{
 		re_node = parse_redirections(token_data, current);
 		if (re_node != NULL)

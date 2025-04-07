@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:14:39 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/04 12:44:05 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/07 16:01:29 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 // initializes token_data which is passed during tokenization to access
 // modified input, set in-quote status, pass start
-// & end position of token_values have a signifier "first"
-// for position beginning and after pipe & pass garbage collector
+// & end position of token_values & pass garbage collector
 int	init_token_data(char *input, t_token_data **token_data,
 	t_gc *gc, char **envp)
 {
@@ -29,7 +28,6 @@ int	init_token_data(char *input, t_token_data **token_data,
 	(*token_data)->in_DQ = 0;
 	(*token_data)->start = 0;
 	(*token_data)->end = 0;
-	(*token_data)->first = 0;
 	(*token_data)->gc = gc;
 	(*token_data)->finish = 0;
 	(*token_data)->syntax_error = 0;

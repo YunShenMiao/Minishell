@@ -6,15 +6,14 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:10:01 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/04 13:23:07 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/07 16:21:43 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 // << >> < > at cmd position no more error but no further handling, in exec?
-// issue with left or right??? especially redirections
-// conflicting word-command logic in lexing and parsing...
+// issue with left or right???
 
 // function is creating ast out of tokens starting with recursive calls
 // on lowest precedence (pipes)
