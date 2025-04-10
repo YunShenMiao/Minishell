@@ -6,33 +6,11 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:50:00 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/07 16:04:29 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/10 14:26:58 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-int	token_command(char *value, size_t len)
-{
-	if (ft_strncmp(value, "cd", len) == 0)
-		return (0);
-	else if (ft_strncmp(value, "echo", len) == 0)
-		return (0);
-	else if (ft_strncmp(value, "echo-n", len) == 0)
-		return (0);
-	else if (ft_strncmp(value, "pwd", len) == 0)
-		return (0);
-	else if (ft_strncmp(value, "env", len) == 0)
-		return (0);
-	else if (ft_strncmp(value, "export", len) == 0)
-		return (0);
-	if (ft_strncmp(value, "unset", len) == 0)
-		return (0);
-	else if (ft_strncmp(value, "exit", len) == 0)
-		return (0);
-	else
-		return (1);
-}
 
 void	parse_command_args(t_token_data **token_data, t_token **current,
 		t_ast *cmd_node)
@@ -48,14 +26,14 @@ void	parse_command_args(t_token_data **token_data, t_token **current,
 		*current = (*current)->next;
 		i++;
 	}
-	cmd_node->cmd_path = find_path(cmd_node->args[0], (*token_data)->envp);
+	/* cmd_node->cmd_path = find_path(cmd_node->args[0], (*token_data)->envp);
 	if (cmd_node->cmd_path == NULL && token_command(cmd_node->args[0],
 			ft_strlen(cmd_node->args[0])) == 1)
 	{
 		if ((*token_data)->syntax_error == 0)
 			ft_perror_parsing(INVALID_COMMAND, cmd_node->args[0]);
 		(*token_data)->syntax_error = 1;
-	}
+	} */
 	cmd_node->args[i] = NULL;
 }
 

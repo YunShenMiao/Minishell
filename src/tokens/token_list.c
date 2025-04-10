@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:10:15 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/07 16:10:19 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/08 16:30:47 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ t_token	*create_token(t_token_data **token_data)
 				(*token_data)->start, (*token_data)->end);
 		token->type = token_type(token_data, token);
 	}
+	printf("token %s type %d\n", token->value, token->type);
 	if (!token->value)
 		return (free(token), NULL);
 	token->prev = NULL;
@@ -83,5 +84,61 @@ int	add_token(t_token_data **token_data)
 		temp = temp->next;
 	temp->next = new_token;
 	new_token->prev = temp;
+	return (0);
+}
+
+void	quote_status(t_token_data **token_data, char input)
+{
+	if (input == '\'' && ((*token_data)->in_SQ) == 0
+		&& ((*token_data)->in_DQ) == 0)
+		(*token_data)->in_SQ = 1;
+	else if (input == '\"' && ((*token_data)->in_SQ) == 0
+		&& ((*token_data)->in_DQ) == 0)
+		(*token_data)->in_DQ = 1;
+	else if (input == '\'' && (*token_data)->in_SQ == 1
+		&& ((*token_data)->in_DQ) == 0)
+		(*token_data)->in_SQ = 0;
+	else if (input == '\"' && ((*token_data)->in_SQ) == 0
+		&& ((*token_data)->in_DQ) == 1)
+		(*token_data)->in_DQ = 0;
+}
+
+int	tokenize(t_token_data **token_data)
+{
+	int	i;
+
+	i = 0;
+	while ((*token_data)->input[i] != '\0')
+	{
+		if ((*token_data)->input[i] == ' ')
+			i++;
+		else
+		{
+			(*token_data)->start = i;
+			while(1)
+			{
+			quote_status(token_data, (*token_data)->input[i]);
+			while ((*token_data)->input[i] != '\0' && ((*token_data)->in_DQ == 1 || (*token_data)->in_SQ == 1))
+			{
+				i++;
+				quote_status(token_data, (*token_data)->input[i]);
+			}
+			i++;
+			while ((*token_data)->input[i] != '\0' && (*token_data)->input[i] != ' '
+			&& (*token_data)->input[i] != '\'' && (*token_data)->input[i] != '\"')
+				i++;
+			if ((*token_data)->input[i] == ' ' || (*token_data)->input[i] == '\0')
+			{
+			(*token_data)->end = i;
+			if (add_token(token_data) == 1)
+				return (1);
+			break;
+			}
+			}
+		}
+	}
+	(*token_data)->finish = 1;
+	if (add_token(token_data) == 1)
+		return (1);
 	return (0);
 }

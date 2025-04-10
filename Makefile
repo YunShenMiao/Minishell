@@ -13,7 +13,8 @@ SRC			= 	$(SRC_DIR)/main.c \
 				$(SRC_DIR)/tokens/token_list.c $(SRC_DIR)/tokens/tokenize.c \
 				$(SRC_DIR)/parsing/parsing_utils.c $(SRC_DIR)/parsing/ast.c \
 				$(SRC_DIR)/parsing/ast_redirect.c $(SRC_DIR)/parsing/ast_command.c \
-				$(SRC_DIR)/parsing/ast_pipes.c $(SRC_DIR)/parsing/path.c
+				$(SRC_DIR)/parsing/ast_pipes.c $(SRC_DIR)/parsing/path.c \
+				$(SRC_DIR)/parsing/error_check.c
 OBJ			= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 
 # $(SRC_DIR)/builtins/cd.c $(SRC_DIR)/builtins/echo.c $(SRC_DIR)/builtins/env.c \

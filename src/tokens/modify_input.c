@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:51:05 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/07 15:50:36 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/08 15:59:12 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,11 @@ void	edit_spaces(char *input, char **edited, int *count, int *count2)
 {
 	if (input[*count2] == '>' || input[*count2] == '<' || input[*count2] == '|')
 	{
-		(*edited)[*count] = ' ';
-		(*count)++;
+		if (input[*count2 - 1] != '\"' && input[*count2 - 1] != '\'')
+		{
+			(*edited)[*count] = ' ';
+			(*count)++;
+		}
 		if (input[*count2] == input[*count2 + 1])
 		{
 			(*edited)[*count] = input[*count2];
@@ -71,8 +74,9 @@ void	edit_spaces(char *input, char **edited, int *count, int *count2)
 		}
 	}
 	(*edited)[*count] = input[*count2];
-	if ((*edited)[*count] == '>' || (*edited)[*count] == '<'
-		|| (*edited)[*count] == '|')
+	if (((*edited)[*count] == '>' || (*edited)[*count] == '<'
+			|| (*edited)[*count] == '|') && (input[*count2 + 1] != '\"'
+			&& input[*count2 + 1] != '\''))
 	{
 		(*count)++;
 		(*edited)[*count] = ' ';

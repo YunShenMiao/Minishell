@@ -171,6 +171,8 @@ t_ast	*parse_redirections(t_token_data **token_data, t_token **current);
 t_ast	*parse_command(t_token_data **token_data, t_token **current);
 t_ast	*parse_pipes(t_token_data **token_data, t_token **current);
 char	*find_path(char *cmd, char **envp);
+void	quote_status(t_token_data **token_data, char input);
+int 	quotes_var(t_token_data **token_data, t_ast **ast);
 
 // builtins
 int		ft_echo(t_token *current);
