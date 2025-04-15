@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 13:51:18 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/15 15:04:31 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/15 17:32:32 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,13 @@ void	expand_var(char **str, int *i, int *count, char **new)
 	//(check for var)
 	// var valid -> add var to new increment i & count
 	// var invalid -> just skip and increment i
-	if ((*str)[(*i) + 1] == '?')
-		// handle ?
-		while ((*str)[*i] != '\0' && (*str)[*i] < 123 && (*str)[*i] > 96
-			&& (*str)[*i] < 91 && (*str)[*i] > 47)
-			(*i)++;
+	// if ((*str)[(*i) + 1] == '?')
+	// 	// handle ?
+	// else 
+	while ((*str)[*i] != '\0' && (*str)[*i] < 123 && (*str)[*i] > 96
+		&& (*str)[*i] < 91 && (*str)[*i] > 47)
+		(*i)++;
+	if (search_name_val() != NULL)
 	(*new)[*count] = 'X';
 	(*count)++;
 }
