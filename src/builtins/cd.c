@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:18:21 by xueyang           #+#    #+#             */
-/*   Updated: 2025/03/31 12:29:35 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/15 17:37:05 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,21 +30,21 @@ char	*find_home(void)
 	return (home);
 }
 
-int	update_PWDs(t_env *top, char *new_pwd)
+int	update_PWDs(t_env *top, char *new_pwd, t_gc *gc)
 {
 	t_env	*pwd_node;
 	char	*old_pwd;
 
 	pwd_node = search_name_node(&top, "PWD");
 	old_pwd =  pwd_node->val;
-	if (update_env_var(&top, "OLDPWD", old_pwd) == 1)
+	if (update_env_var(&top, "OLDPWD", old_pwd, gc) == 1)
 		return (1);
-	if (update_env_var(&top, "PWD", new_pwd) == 1)
+	if (update_env_var(&top, "PWD", new_pwd, gc) == 1)
 		return (1);
 	return (0);
 }
 
-int	swap_PWDs(t_env *top)
+int	swap_PWDs(t_env *top, t_gc *gc)
 {
 	t_env	*pwd_node;
 	t_env	*old_pwd_node;
@@ -59,9 +59,9 @@ int	swap_PWDs(t_env *top)
 	old_pwd =  ft_strdup(old_pwd_node->val);
 	if (!old_pwd)
 		return (1);
-	if (update_env_var(&top, "OLDPWD", pwd) == 1)
+	if (update_env_var(&top, "OLDPWD", pwd, gc) == 1)
 		return (1);
-	if (update_env_var(&top, "PWD", old_pwd) == 1)
+	if (update_env_var(&top, "PWD", old_pwd, gc) == 1)
 		return (1);
 	printf("%s\n", old_pwd);
 	return (0);
@@ -109,7 +109,7 @@ char	*get_parent_dir(char *cur_dir)
 	return (pwd);
 }
 
-int	cd_tilde(t_env *top, char *path, char *home)
+int	cd_tilde(t_env *top, char *path, char *home, t_gc *gc)
 {
 	char	*full_path;
 	char	*use_part;
@@ -136,7 +136,7 @@ int	cd_tilde(t_env *top, char *path, char *home)
 			free(full_path);
 			return (error_general("malloc: failed to create path"));		
 		}
-		if (update_PWDs(top, full_path) == 1)
+		if (update_PWDs(top, full_path, gc) == 1)
 		{
 			free(full_path);
 			return (error_general("malloc: failed to update path"));
@@ -146,11 +146,11 @@ int	cd_tilde(t_env *top, char *path, char *home)
 	return (0);
 }
 
-int	cd_nothing(t_env *top, char *home)
+int	cd_nothing(t_env *top, char *home, t_gc *gc)
 {
 	if (chdir(home) == -1)
 		return (error_general("chdir: failed to go home dir"));
-	if (update_PWDs(top, home) == 1)
+	if (update_PWDs(top, home, gc) == 1)
 		return (error_general("malloc: failed to update path"));
 	return (0);
 }
@@ -164,20 +164,20 @@ int	cd_nothing(t_env *top, char *home)
 // 	return (0);
 // }
 
-int	cd_minus(t_env *top, char *path, char *home)
+int	cd_minus(t_env *top, char *path, char *home, t_gc *gc)
 {
 	if (!path[1])
 	{
 		if (chdir(search_name_val(&top, "OLDPWD")) == -1)
 			return (error_general("OLDPWD not set"));
-		if (swap_PWDs(top) == 1)
+		if (swap_PWDs(top, gc) == 1)
 			return (error_general("malloc: failed to update path"));
 	}
 	else if (path[1] == '-')
 	{
 		if (chdir(home) == -1)
 			return (error_general("chdir: failed to go home dir"));
-		if (update_PWDs(top, home) == 1)
+		if (update_PWDs(top, home, gc) == 1)
 			return (error_general("malloc: failed to update path"));
 	}
 	else
@@ -283,7 +283,7 @@ char	*normalize_path(const char *path)
 	return (current_path);
 }
 
-int	ft_cd(t_token *current, t_env *top)
+int	ft_cd(t_token *current, t_env *top, t_gc *gc)
 {
 	char	*path;
 	char	*home;
@@ -293,14 +293,14 @@ int	ft_cd(t_token *current, t_env *top)
 	if (!home)
 		return (1);
 	if (!current->next)
-		return (cd_nothing(top, home));
+		return (cd_nothing(top, home, gc));
 	else
 	{
 		path = current->next;
 		if (path[0] == '~')
-			return (cd_tilde(top, path, home) == 1);
+			return (cd_tilde(top, path, home, gc) == 1);
 		else if (path[0] == '-')
-			return (cd_minus(top, path, home));
+			return (cd_minus(top, path, home, gc));
 		else
 		{
 			temp = path;
@@ -308,7 +308,7 @@ int	ft_cd(t_token *current, t_env *top)
 			// free(temp);
 			if (chdir(path) == -1)
 				return (error_general("cd: no such file or directory"));
-			if (update_PWDs(top, path) == 1)
+			if (update_PWDs(top, path, gc) == 1)
 				return (error_general("malloc: failed to update path"));
 		}
 	}
