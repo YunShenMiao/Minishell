@@ -112,7 +112,7 @@ int	parse_main(char *input, t_token_data **token_data, t_gc *gc, char **envp)
 		return(1); */
 	if (build_ast(token_data) == NULL)
 	return(1);
-	if (quotes_var(token_data, &(*token_data)->ast) == 1)
+	if (expand_ast_nodes(token_data, &(*token_data)->ast) == 1)
 	return(1);
 	print_list((*token_data)->token_list);
 	print_ast((*token_data)->ast, 0, "Root: ");
