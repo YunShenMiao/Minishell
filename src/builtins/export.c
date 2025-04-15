@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:21:43 by xueyang           #+#    #+#             */
-/*   Updated: 2025/03/31 12:30:04 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/15 17:30:23 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	print_export(t_env	*top_env)
 	return (0);
 }
 
-int	add_env_var(t_env *top_env, char *assign)
+int	add_env_var(t_env *top_env, char *assign, t_gc *gc)
 {
 	t_env	*new;
 	char	*name;
@@ -38,14 +38,14 @@ int	add_env_var(t_env *top_env, char *assign)
 	value = ft_substr(assign, find_sign(assign, '=') + 1, ft_strlen(assign));
 	if (!value)
 		return (error_general("malloc: env not initiated"));
-	new = create_env(name, value);
+	new = create_env(name, value, gc);
 	if (!new)
 		return (error_general("malloc: env not initiated"));
 	ft_env_add_back(&top_env, new);
 	return (0);
 }
 
-int	ft_export(t_env	*top_env, t_token *current)
+int	ft_export(t_env	*top_env, t_token *current, t_gc *gc)
 {
 	char	*assign;
 	t_env	*new;
@@ -60,7 +60,7 @@ int	ft_export(t_env	*top_env, t_token *current)
 		assign = current->next->value;
 		if (find_sign(assign, '=') < 0)
 		{
-			new = create_env(assign, NULL);
+			new = create_env(assign, NULL, gc);
 			if (!new)
 				return (error_general("malloc: env not initiated"));
 			ft_env_add_back(&top_env, new);
@@ -68,7 +68,7 @@ int	ft_export(t_env	*top_env, t_token *current)
 		else if (find_sign(assign, '=') == 0)
 			return (error_general("export: not a valid identifier"));
 		else
-			return (add_env_var(top_env, assign));
+			return (add_env_var(top_env, assign, gc));
 	}
 	return (0);
 }

@@ -6,17 +6,17 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 18:10:25 by xueyang           #+#    #+#             */
-/*   Updated: 2025/03/31 12:05:14 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/15 17:29:57 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-t_env	*create_env(char *name, char *value)
+t_env	*create_env(char *name, char *value, t_gc *gc)
 {
 	t_env	*env_var;
 
-	env_var = malloc(sizeof(t_env));
+	env_var = gc_malloc(gc, ENV, sizeof(t_env));
 	if (!env_var)
 		return (NULL);
     env_var->name = name;
@@ -95,14 +95,14 @@ char	*search_name_val(t_env **lst, char *name)
 	return (NULL);
 }
 
-int	update_env_var(t_env **lst, char *name, char *new_val)
+int	update_env_var(t_env **lst, char *name, char *new_val, t_gc *gc)
 {
 	t_env	*temp;
 	char	*old_val;
 
 	if (!search_name_node(lst, name))
 	{
-		temp = create_env(name, new_val);
+		temp = create_env(name, new_val, gc);
 		if (!temp)
 			return (error_general("malloc: fail to create new env var"));
 		ft_env_add_back(lst, temp);
