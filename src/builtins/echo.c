@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:14:16 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/15 18:16:35 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/15 22:26:12 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,10 @@ int	ft_echo(char **args)
 	int		no_newline;
 	int		i;
 
-	if (ft_strncmp(args[0], "echo", 4) == 0)
-		no_newline = 0;
-	else if (ft_strncmp(args[0], "echo-n", 6) == 0)
+	if (ft_strncmp(args[0], "echo-n", 6) == 0)
 		no_newline = 1;
+	else if (ft_strncmp(args[0], "echo", 4) == 0)
+		no_newline = 0;
 	i = 0;
 	while (args[i + 1])
 	{

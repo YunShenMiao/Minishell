@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:21:36 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/15 18:28:58 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/15 22:18:07 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,9 @@ int	ft_unset(t_env	*top_env, char **args)
 			i++;
 			if (is_valid_name(args[i]) == 0)
 			{
-				to_del = search_name_node(&top_env, args[i]);
+				to_del = search_name_node(top_env, args[i]);
 				if (to_del)
-					ft_env_del(top_env, to_del);
+					ft_env_del(&top_env, to_del);
 			}
 			else
 				invalid_count++;

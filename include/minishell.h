@@ -118,7 +118,7 @@ typedef struct s_env
 {
 	char			*name;
 	char			*val;
-	struct t_env	*next;
+	struct s_env	*next;
 }					t_env;
 
 typedef struct s_data
@@ -141,15 +141,16 @@ int		error_free(char *msg, t_data *shell);
 t_env	*create_env(char *name, char *value, t_gc *gc);
 t_env	*ft_env_last(t_env *lst);
 void	ft_env_add_back(t_env **lst, t_env *new);
-void	ft_env_del(t_env *top, t_env *to_del);
-t_env	*search_name_node(t_env **lst, char *name);
-char	*search_name_val(t_env **lst, char *name);
+void	ft_env_del(t_env **top, t_env *to_del);
+t_env	*search_name_node(t_env *top, char *name);
+char	*search_name_val(t_env *top, char *name);
 int		update_env_var(t_env **lst, char *name, char *new_val, t_gc *gc);
 
 //init_envp
 int		count_arr_row(char **arr);
 int		find_sign(char *str, char c);
-int		init_env(char **envp, t_gc *gc);
+// int		init_env(char **envp, t_gc *gc);
+t_env	*init_env(char **envp, t_gc *gc);
 
 // garbage collector
 t_gc    *init_gc(void);

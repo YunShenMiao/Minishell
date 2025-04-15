@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:21:43 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/15 18:24:49 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/15 21:35:30 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	print_export(t_env	*top_env)
 		temp = temp->next;
 	}
 	printf("declare -x %s=%s\n", temp->name, temp->val);
-	return (0);
 }
 
 int	add_env_var(t_env *top_env, char *assign, t_gc *gc)

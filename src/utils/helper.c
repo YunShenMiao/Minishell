@@ -27,7 +27,7 @@ void	free_array(char **arr)
 
 int	ft_put_to_fd(char *str, int fd)
 {
-	if (write(fd, str, ft_strlen(str)) != ft_strlen(str))
+	if (write(fd, str, ft_strlen(str)) < 0)
 	{
 		perror("write error");
 		return (1);
