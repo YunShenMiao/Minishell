@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:21:36 by xueyang           #+#    #+#             */
-/*   Updated: 2025/03/31 12:36:00 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/15 18:28:58 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,23 +27,54 @@ int	is_valid_name(char *name)
 	return (0);
 }
 
-int	ft_unset(t_env	*top_env, t_token *current)
+// int	ft_unset(t_env	*top_env, t_token *current)
+// {
+// 	t_env	*to_del;
+// 	int		invalid_count;
+
+
+// 	if (!current->next)
+// 		return (0);
+// 	else
+// 	{
+// 		invalid_count = 0;
+// 		while (current->next)
+// 		{
+// 			current = current->next;
+// 			if (is_valid_name(current->value) == 0)
+// 			{
+// 				to_del = search_name_node(&top_env, current->value);
+// 				if (to_del)
+// 					ft_env_del(top_env, to_del);
+// 			}
+// 			else
+// 				invalid_count++;
+// 		}
+// 		if (invalid_count > 0)
+// 			return (error_general("unset: not a valid identifier"));
+// 	}
+// 	return (0);
+// }
+
+int	ft_unset(t_env	*top_env, char **args)
 {
 	t_env	*to_del;
 	int		invalid_count;
+	int		i;
 
 
-	if (!current->next)
+	if (!args[1])
 		return (0);
 	else
 	{
+		i = 0;
 		invalid_count = 0;
-		while (current->next)
+		while (args[i + 1])
 		{
-			current = current->next;
-			if (is_valid_name(current->value) == 0)
+			i++;
+			if (is_valid_name(args[i]) == 0)
 			{
-				to_del = search_name_node(&top_env, current->value);
+				to_del = search_name_node(&top_env, args[i]);
 				if (to_del)
 					ft_env_del(top_env, to_del);
 			}

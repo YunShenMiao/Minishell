@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:21:43 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/15 17:30:23 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/15 18:24:49 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,19 +45,47 @@ int	add_env_var(t_env *top_env, char *assign, t_gc *gc)
 	return (0);
 }
 
-int	ft_export(t_env	*top_env, t_token *current, t_gc *gc)
+// int	ft_export(t_env	*top_env, t_token *current, t_gc *gc)
+// {
+// 	char	*assign;
+// 	t_env	*new;
+
+
+// 	if (!current->next)
+// 		print_export(top_env);
+// 	else if (current->next->next)
+// 		return (error_general("export: bad assign"));
+// 	else
+// 	{
+// 		assign = current->next->value;
+// 		if (find_sign(assign, '=') < 0)
+// 		{
+// 			new = create_env(assign, NULL, gc);
+// 			if (!new)
+// 				return (error_general("malloc: env not initiated"));
+// 			ft_env_add_back(&top_env, new);
+// 		}
+// 		else if (find_sign(assign, '=') == 0)
+// 			return (error_general("export: not a valid identifier"));
+// 		else
+// 			return (add_env_var(top_env, assign, gc));
+// 	}
+// 	return (0);
+// }
+
+int	ft_export(t_env	*top_env, char **args, t_gc *gc)
 {
 	char	*assign;
 	t_env	*new;
 
 
-	if (!current->next)
+	if (!args[1])
 		print_export(top_env);
-	else if (current->next->next)
+	else if (args[2])
 		return (error_general("export: bad assign"));
 	else
 	{
-		assign = current->next->value;
+		assign = args[1];
 		if (find_sign(assign, '=') < 0)
 		{
 			new = create_env(assign, NULL, gc);

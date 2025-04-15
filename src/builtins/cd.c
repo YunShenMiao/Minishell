@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:18:21 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/15 17:37:05 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/15 18:04:07 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,7 +283,39 @@ char	*normalize_path(const char *path)
 	return (current_path);
 }
 
-int	ft_cd(t_token *current, t_env *top, t_gc *gc)
+// int	ft_cd(t_token *current, t_env *top, t_gc *gc)
+// {
+// 	char	*path;
+// 	char	*home;
+// 	char	*temp;
+	
+// 	home = find_home();
+// 	if (!home)
+// 		return (1);
+// 	if (!current->next)
+// 		return (cd_nothing(top, home, gc));
+// 	else
+// 	{
+// 		path = current->next;
+// 		if (path[0] == '~')
+// 			return (cd_tilde(top, path, home, gc) == 1);
+// 		else if (path[0] == '-')
+// 			return (cd_minus(top, path, home, gc));
+// 		else
+// 		{
+// 			temp = path;
+// 			path = normalize_path(temp);
+// 			// free(temp);
+// 			if (chdir(path) == -1)
+// 				return (error_general("cd: no such file or directory"));
+// 			if (update_PWDs(top, path, gc) == 1)
+// 				return (error_general("malloc: failed to update path"));
+// 		}
+// 	}
+// 	return (0);
+// }
+
+int	ft_cd(char **args, t_env *top, t_gc *gc)
 {
 	char	*path;
 	char	*home;
@@ -292,11 +324,11 @@ int	ft_cd(t_token *current, t_env *top, t_gc *gc)
 	home = find_home();
 	if (!home)
 		return (1);
-	if (!current->next)
+	if (!args[1])
 		return (cd_nothing(top, home, gc));
 	else
 	{
-		path = current->next;
+		path = args[1];
 		if (path[0] == '~')
 			return (cd_tilde(top, path, home, gc) == 1);
 		else if (path[0] == '-')

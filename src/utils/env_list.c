@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 18:10:25 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/15 17:29:57 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/15 18:27:26 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	ft_env_add_back(t_env **lst, t_env *new)
 	}
 }
 
+// is there anything as gc_free? check how to free here again, or check if a var= NULL before freeing it in the gc_free_all
 void	ft_env_del(t_env *top, t_env *to_del)
 {
 	t_env	*before;

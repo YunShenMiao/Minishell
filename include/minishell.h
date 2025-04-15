@@ -179,12 +179,12 @@ int 	expand_ast_nodes(t_token_data **token_data, t_ast **ast);
 char	*handle_quotes(t_token_data **token_data, char **str);
 
 // builtins
-int		ft_echo(t_token *current, t_env *top_env);
-int		ft_pwd(t_token *current);
-int		ft_exit(t_token *current, t_gc *gc);
-int		ft_cd(t_token *current, t_env *top, t_gc *gc);
-int		ft_env(t_env *top_env, t_token *current);
-int		ft_export(t_env	*top_env, t_token *current, t_gc *gc);
-int		ft_unset(t_env	*top_env, t_token *current);
+int		ft_echo(char **args);
+int		ft_pwd(char **args);
+int		ft_exit(t_gc *gc);
+int		ft_cd(char **args, t_env *top, t_gc *gc);
+int		ft_env(char **args, t_env *top_env);
+int		ft_export(t_env	*top_env, char **args, t_gc *gc);
+int		ft_unset(t_env	*top_env, char **args);
 
 #endif
