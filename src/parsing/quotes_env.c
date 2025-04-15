@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 13:51:18 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/15 13:53:13 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/15 15:04:31 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 void	expand_var(char **str, int *i, int *count, char **new)
 {
-	/*     int copy;
-		copy = (*i); */
+	int start;
+
+	start = (*i);
 	//(check for var)
 	// var valid -> add var to new increment i & count
 	// var invalid -> just skip and increment i
-	printf("easd\n");
 	if ((*str)[(*i) + 1] == '?')
 		// handle ?
 		while ((*str)[*i] != '\0' && (*str)[*i] < 123 && (*str)[*i] > 96
@@ -33,8 +33,11 @@ void	in_dq(char **str, char **new, int *i, int *count)
 {
 	if ((*str)[*i] == '$' && (*str)[*i + 1] != '\0' && (*str)[*i + 1] != ' ')
 		expand_var(str, i, count, new);
-	else if ((*str)[*i] != '\"')
-		(*new)[(*count)++] = (*str)[*i];
+	if ((*str)[*i] != '\"')
+	{
+		(*new)[*count] = (*str)[*i];
+		(*count)++;
+	}
 	(*i)++;
 }
 

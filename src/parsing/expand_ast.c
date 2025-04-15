@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:29:30 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/15 13:54:06 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/15 17:00:10 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,13 @@
 
 int	token_command(char *value, size_t len)
 {
-	if (ft_strncmp(value, "cd", len) == 0 || ft_strncmp(value, "\"cd\"",
-			len) == 0 || ft_strncmp(value, "\'cd\'", len) == 0)
+	if (ft_strncmp(value, "cd", len) == 0)
 		return (0);
-	else if (ft_strncmp(value, "echo", len) == 0 || ft_strncmp(value,
-			"\"echo\"", len) == 0 || ft_strncmp(value, "\'echo\'", len) == 0)
+	else if (ft_strncmp(value, "echo", len) == 0)
 		return (0);
-	else if (ft_strncmp(value, "echo-n", len) == 0 || ft_strncmp(value,
-			"\"echo-n\"", len) == 0 || ft_strncmp(value, "\'echo-n\'",
-			len) == 0)
+	else if (ft_strncmp(value, "echo-n", len) == 0)
 		return (0);
-	else if (ft_strncmp(value, "pwd", len) == 0 || ft_strncmp(value, "\"pwd\"",
-			len) == 0 || ft_strncmp(value, "\'pwd\'", len) == 0)
+	else if (ft_strncmp(value, "pwd", len) == 0)
 		return (0);
 	else if (ft_strncmp(value, "env", len) == 0)
 		return (0);

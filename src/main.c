@@ -127,6 +127,8 @@ int	main(int argc, char **argv, char **envp)
 	char *prompt = GREEN "minishell" BLUE ">" RESET " ";
 	t_token_data *token_data;
 	t_gc *gc;
+	t_env *env_list;
+
 	if (argc < 1 || argv[0] == NULL)
 	return(1);
 	start_message();
@@ -141,6 +143,7 @@ int	main(int argc, char **argv, char **envp)
 		}
 		if (*input)
 			add_history(input);
+		env_list = init_env(envp);
 		gc = init_gc();
 		if (ft_strncmp(input, "exit", 4) == 0)
 		{

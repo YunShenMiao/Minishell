@@ -89,6 +89,7 @@ typedef struct s_ast
 	struct s_ast	*left;
 	struct s_ast	*right;
 	char			*cmd_path;
+	t_gc			*gc;
 }					t_ast;
 
 typedef struct s_token_data
@@ -96,6 +97,7 @@ typedef struct s_token_data
 	char		*input;
 	t_token		*token_list;
 	t_ast		*ast;
+	struct s_env env_list;
 	int			in_SQ;
 	int			in_DQ;
 	int			start;

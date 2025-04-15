@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:55:26 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/15 12:43:19 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/15 17:10:30 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ t_ast	*create_ast_node(t_token_data **token_data, t_tok_type type)
 	new_node->left = NULL;
 	new_node->right = NULL;
 	new_node->cmd_path = NULL;
+	new_node->gc = (*token_data)->gc;
 	return (new_node);
 }
 
