@@ -25,12 +25,12 @@ void	free_array(char **arr)
 	free(arr);
 }
 
-// int	ft_put_to_fd(char *str, int fd)
-// {
-// 	if (write(fd, str, ft_strlen(str)) != ft_strlen(str))
-// 	{
-// 		perror("write error");
-// 		return (1);
-// 	}
-// 	return (0);
-// }
+int	ft_put_to_fd(char *str, int fd)
+{
+	if (write(fd, str, ft_strlen(str)) != ft_strlen(str))
+	{
+		perror("write error");
+		return (1);
+	}
+	return (0);
+}

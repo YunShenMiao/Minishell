@@ -1,24 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/23 16:21:25 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/15 17:41:43 by xueyang          ###   ########.fr       */
+/*   Created: 2025/04/15 15:52:20 by xueyang           #+#    #+#             */
+/*   Updated: 2025/04/15 16:07:54 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-//need to check whether exit is a command or a word, a file... (pwd exit, pwd >> exit)
-//need to free everything before exit!!!
-int	ft_exit(t_token *current, t_gc *gc)
+int heredoc(char *delimiter)
 {
-	if (current->type == TOK_COMMAND)
+	int fd[2];
+	char *line;
+
+	pipe(fd);
+	while (1)
 	{
-		gc_free_all(gc);
-		exit(EXIT_SUCCESS);
+		line = readline("> ");
+		if (!line || strcmp(line, delimiter) == 0)
+		{
+			free(line);
+			break;
+		}
+		write(fd[1], line, strlen(line));
+		write(fd[1], "\n", 1);
+		free(line);
 	}
+	close(fd[1]);
+	return fd[0];
 }
