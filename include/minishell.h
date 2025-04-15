@@ -97,7 +97,7 @@ typedef struct s_token_data
 	char		*input;
 	t_token		*token_list;
 	t_ast		*ast;
-	struct s_env env_list;
+	struct s_env *env_list;
 	int			in_SQ;
 	int			in_DQ;
 	int			start;
