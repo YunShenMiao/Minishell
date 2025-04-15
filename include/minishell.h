@@ -181,7 +181,7 @@ char	*handle_quotes(t_token_data **token_data, char **str);
 // builtins
 int		ft_echo(t_token *current, t_env *top_env);
 int		ft_pwd(t_token *current);
-int		ft_exit(t_token *current);
+int		ft_exit(t_token *current, t_gc *gc);
 int		ft_cd(t_token *current, t_env *top, t_gc *gc);
 int		ft_env(t_env *top_env, t_token *current);
 int		ft_export(t_env	*top_env, t_token *current, t_gc *gc);
