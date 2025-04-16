@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 13:51:18 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/16 12:35:35 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/16 17:13:45 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ void	in_dq(t_token_data **token_data, char **new, int *i, int *count)
 	if ((*token_data)->expand_str[*i] == '$' && (*token_data)->expand_str[*i
 		+ 1] != '\0' && (*token_data)->expand_str[*i + 1] != ' ')
 		expand_var(token_data, i, count, *new);
+	else 
+	(*i)++;
 	if ((*token_data)->expand_str[*i] != '\"')
 	{
 		(*new)[*count] = (*token_data)->expand_str[*i];

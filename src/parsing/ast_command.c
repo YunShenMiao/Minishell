@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:50:00 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/10 14:26:58 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:47:08 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,11 @@ t_ast	*parse_command(t_token_data **token_data, t_token **current)
 	if (re_node)
 	{
 		re_node->right = cmd_node;
+		if (re_node->type == TOK_REDIRECT_IN)
+		{
+		re_node->left = create_ast_node(token_data, TOK_REDIRECT_IN);
+		re_node->left->file_name = re_node->file_name;
+		}
 		return (re_node);
 	}
 	return (cmd_node);

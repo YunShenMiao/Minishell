@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:29:30 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/15 17:00:10 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/16 17:16:56 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ int	token_command(char *value, size_t len)
 int	valid_cmd(t_token_data **token_data, t_ast *node)
 {
 	node->cmd_path = find_path(node->args[0], (*token_data)->envp);
-	if (node->cmd_path == NULL && token_command(node->args[1],
-			ft_strlen(node->args[1])) == 1)
+	if (node->cmd_path == NULL && token_command(node->args[0],
+			ft_strlen(node->args[0])) == 1)
 	{
 		if ((*token_data)->syntax_error == 0)
 			ft_perror_parsing(INVALID_COMMAND, node->args[0]);
