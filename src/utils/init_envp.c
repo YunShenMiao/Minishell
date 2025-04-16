@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 12:00:31 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/15 17:30:33 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/15 21:06:34 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,42 @@ int	find_sign(char *str, char c)
 	return (-1);
 }
 
-int	init_env(char **envp, t_gc *gc)
+// int	init_env(char **envp, t_gc *gc)
+// {
+// 	t_env	*top_env;
+// 	t_env	*new;
+// 	char	*name;
+// 	char	*value;
+// 	int		i;
+
+// 	name = ft_substr(envp[0], 0, find_sign(envp[0], '='));
+// 	if (!name)
+// 		return (error_general("malloc: env not initiated"));
+// 	value = ft_substr(envp[0], find_sign(envp[0], '=') + 1, ft_strlen(envp[0]));
+// 	if (!value)
+// 		return (error_general("malloc: env not initiated"));
+// 	top_env = create_env(name, value, gc);
+// 	if (!top_env)
+// 		return (error_general("malloc: env not initiated"));
+// 	i = 1;
+// 	while (i < count_arr_row(envp))
+// 	{
+// 		name = ft_substr(envp[i], 0, find_sign(envp[i], '='));
+// 		if (!name)
+// 			return (error_general("malloc: env not initiated"));
+// 		value = ft_substr(envp[i], find_sign(envp[i], '=') + 1, ft_strlen(envp[i]));
+// 		if (!value)
+// 			return (error_general("malloc: env not initiated"));
+// 		new = create_env(name, value, gc);
+// 		if (!new)
+// 			return (error_general("malloc: env not initiated"));
+// 		ft_env_add_back(&top_env, new);
+// 		i++;
+// 	}
+// 	return (0);
+// }
+
+t_env	*init_env(char **envp, t_gc *gc)
 {
 	t_env	*top_env;
 	t_env	*new;
@@ -71,27 +106,27 @@ int	init_env(char **envp, t_gc *gc)
 
 	name = ft_substr(envp[0], 0, find_sign(envp[0], '='));
 	if (!name)
-		return (error_general("malloc: env not initiated"));
+		return (NULL);
 	value = ft_substr(envp[0], find_sign(envp[0], '=') + 1, ft_strlen(envp[0]));
 	if (!value)
-		return (error_general("malloc: env not initiated"));
+		return (NULL);
 	top_env = create_env(name, value, gc);
 	if (!top_env)
-		return (error_general("malloc: env not initiated"));
+		return (NULL);
 	i = 1;
 	while (i < count_arr_row(envp))
 	{
 		name = ft_substr(envp[i], 0, find_sign(envp[i], '='));
 		if (!name)
-			return (error_general("malloc: env not initiated"));
+			return (NULL);
 		value = ft_substr(envp[i], find_sign(envp[i], '=') + 1, ft_strlen(envp[i]));
 		if (!value)
-			return (error_general("malloc: env not initiated"));
+			return (NULL);
 		new = create_env(name, value, gc);
 		if (!new)
-			return (error_general("malloc: env not initiated"));
+			return (NULL);
 		ft_env_add_back(&top_env, new);
 		i++;
 	}
-	return (0);
+	return (top_env);
 }

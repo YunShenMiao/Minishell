@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:18:21 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/15 17:37:05 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/15 22:39:00 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,9 @@
 // pwd is actually similar??
 // needs to be checked again
 
-char	*find_home(void)
+char	*find_home(t_env *top)
 {
-	char	*home;
-
-	home = getenv("HOME");
+	char *home = search_name_val(top, "HOME");
 	if (!home)
 	{
 		perror("HOME not set\n");
@@ -35,8 +33,10 @@ int	update_PWDs(t_env *top, char *new_pwd, t_gc *gc)
 	t_env	*pwd_node;
 	char	*old_pwd;
 
-	pwd_node = search_name_node(&top, "PWD");
+	pwd_node = search_name_node(top, "PWD");
 	old_pwd =  pwd_node->val;
+	if (!pwd_node || !pwd_node->val)
+		return (error_general("PWD not set"));
 	if (update_env_var(&top, "OLDPWD", old_pwd, gc) == 1)
 		return (1);
 	if (update_env_var(&top, "PWD", new_pwd, gc) == 1)
@@ -51,11 +51,13 @@ int	swap_PWDs(t_env *top, t_gc *gc)
 	char	*pwd;
 	char	*old_pwd;
 
-	pwd_node = search_name_node(&top, "PWD");
+	pwd_node = search_name_node(top, "PWD");
+	if (!pwd_node || !pwd_node->val)
+		return (error_general("PWD not set"));
 	pwd =  ft_strdup(pwd_node->val);
 	if (!pwd)
 		return (1);
-	old_pwd_node = search_name_node(&top, "OLDPWD");
+	old_pwd_node = search_name_node(top, "OLDPWD");
 	old_pwd =  ft_strdup(old_pwd_node->val);
 	if (!old_pwd)
 		return (1);
@@ -74,7 +76,7 @@ int	find_last_slash(char *path)
 	i = ft_strlen(path) - 1;
 	while (i >= 0)
 	{
-		if (path[i] = '/')
+		if (path[i] == '/')
 			return (i);
 		i--;
 	}
@@ -155,20 +157,11 @@ int	cd_nothing(t_env *top, char *home, t_gc *gc)
 	return (0);
 }
 
-// int	cd_normal(t_env *top, char *path)
-// {
-// 	if (chdir(path) == -1)
-// 		return (error_general("cd: no such file or directory"));
-// 	if (update_PWDs(top, path) == 1)
-// 		return (error_general("malloc: failed to update path"));
-// 	return (0);
-// }
-
 int	cd_minus(t_env *top, char *path, char *home, t_gc *gc)
 {
 	if (!path[1])
 	{
-		if (chdir(search_name_val(&top, "OLDPWD")) == -1)
+		if (chdir(search_name_val(top, "OLDPWD")) == -1)
 			return (error_general("OLDPWD not set"));
 		if (swap_PWDs(top, gc) == 1)
 			return (error_general("malloc: failed to update path"));
@@ -184,49 +177,6 @@ int	cd_minus(t_env *top, char *path, char *home, t_gc *gc)
 		return (error_general("cd: invalid option"));
 	return (0);
 }
-
-// int	count_dot(char *path)
-// {
-// 	int i;
-// 	int	count_parent;
-// 	int	count_self;
-
-// 	i = 0;
-// 	count_parent = 0;
-// 	count_self = 0;
-// 	while(path[i])
-// 	{
-// 		if (path[i] == '.' && path[i + 1] == '.' && path[i + 2] == '/')
-// 		{
-// 			i = i + 2;
-// 			count_parent++;
-// 		}
-// 		else if (path[i] == '.' && path[i + 1] == '/')
-// 		{
-// 			i++;
-// 			count_self++;
-// 		}
-// 		i++;
-// 	}
-// 	return (count_parent);
-// }
-
-// int	cd_dot(t_env *top, char *path)
-// {
-// 	t_env	*pwd_node;
-// 	int		i;
-
-
-// 	pwd_node = search_name_node(&top, "PWD");
-// 	while(path[i])
-// 	{
-// 		if (path[i] == '.' && path[i + 1] == '.' && path[i + 2] == '/')
-// 		{
-// 			i = i + 2;
-			
-// 		}
-// 	}
-// }
 
 char	*normalize_path(const char *path)
 {
@@ -252,13 +202,13 @@ char	*normalize_path(const char *path)
 	i = 0;
 	while (tokens[i])
 	{
-		if (ft_strcmp(tokens[i], "..") == 0)
+		if (ft_strncmp(tokens[i], "..", 3) == 0)
 		{
 			temp = get_parent_dir(current_path);
 			free(current_path);
 			current_path = temp;
 		}
-		else if (ft_strcmp(tokens[i], ".") != 0 && tokens[i][0] != '\0')
+		else if (ft_strncmp(tokens[i], ".", 2) != 0 && tokens[i][0] != '\0')
 		{
 			if (ft_strlen(current_path) > 1 && \
 				current_path[ft_strlen(current_path) - 1] != '/')
@@ -283,33 +233,39 @@ char	*normalize_path(const char *path)
 	return (current_path);
 }
 
-int	ft_cd(t_token *current, t_env *top, t_gc *gc)
+int	ft_cd(char **args, t_env *top, t_gc *gc)
 {
 	char	*path;
 	char	*home;
-	char	*temp;
 	
-	home = find_home();
+	home = find_home(top);
 	if (!home)
 		return (1);
-	if (!current->next)
+	if (!args[1])
 		return (cd_nothing(top, home, gc));
 	else
 	{
-		path = current->next;
+		path = args[1];
 		if (path[0] == '~')
-			return (cd_tilde(top, path, home, gc) == 1);
+			return (cd_tilde(top, path, home, gc));
 		else if (path[0] == '-')
 			return (cd_minus(top, path, home, gc));
 		else
 		{
-			temp = path;
-			path = normalize_path(temp);
-			// free(temp);
+			path = normalize_path(args[1]);
+			if (!path)
+				return (error_general("malloc: path normalization failed"));
 			if (chdir(path) == -1)
+			{
+				free(path);
 				return (error_general("cd: no such file or directory"));
+			}
 			if (update_PWDs(top, path, gc) == 1)
+			{
+				free(path);
 				return (error_general("malloc: failed to update path"));
+			}
+			free(path);
 		}
 	}
 	return (0);
