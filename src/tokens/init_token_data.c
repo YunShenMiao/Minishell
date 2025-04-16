@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:14:39 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/15 17:31:21 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/15 17:59:39 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ int	init_token_data(char *input, t_token_data **token_data,
 	(*token_data)->finish = 0;
 	(*token_data)->syntax_error = 0;
 	(*token_data)->envp = envp;
-	(*token_data)->env_list = (t_env*)gc_malloc(gc, TOKENS, sizeof(t_env));
-	if (!(*token_data)->env_list)
-	return(1);
-	(*token_data)->env_list = init_env(envp);
+	// (*token_data)->env_list = (t_env*)gc_malloc(gc, TOKENS, sizeof(t_env));
+	// if (!(*token_data)->env_list)
+	// return(1);
+	// (*token_data)->env_list = init_env(envp);
 	return (0);
 }

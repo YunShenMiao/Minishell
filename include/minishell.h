@@ -93,12 +93,21 @@ typedef struct s_ast
 	t_gc			*gc;
 }					t_ast;
 
+typedef struct s_expand_env
+{
+	char		**str;
+	char		**new;
+	int			*i;
+	int			*count;
+	struct s_env		*env_list;
+}	t_expand_env;
+
+
 typedef struct s_token_data
 {
 	char		*input;
 	t_token		*token_list;
 	t_ast		*ast;
-	struct s_env *env_list;
 	int			in_SQ;
 	int			in_DQ;
 	int			start;
