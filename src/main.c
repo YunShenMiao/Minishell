@@ -101,11 +101,17 @@ void	test(t_token_data **token_data, char **envp)
 int	parse_main(char *input, t_token_data **token_data, t_gc *gc, char **envp)
 {
 	char *modified_input;
+	// t_expand_env *env_data;
 
+	// env_data = (t_expand_env*)gc_malloc(gc, TOKENS, sizeof(t_expand_env));
+	// if (!env_data)
+	// return(NULL);
 	if (modify_input(input, &modified_input, gc) == 1)
 		return (printf("Allocation Error\n"), 1);
 	if (init_token_data(modified_input, token_data, gc, envp) == 1)
 		return (printf("Allocation Error\n"), 1);
+/* 	if (init_env_data(token_data, gc, envp) == 1)
+		return (printf("Allocation Error\n"), 1); */
 	if (tokenize(token_data) == 1)
 		return (1);
 	/* if (syntax_error(token_data) == 1)
