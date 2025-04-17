@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:29:30 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/16 17:16:56 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/17 14:24:42 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,16 @@
 
 // new logic for handling quotes and environment variables
 // NEED TO: check memory leaks
-// NEED TO: create expand env logic
 // NEED TO: handle error returns throughout functions
-// NEED TO: norminette & generally structure and name more logically (cmd | quotes | env var)
+// NEED TO: norminette & generally structure and name more 
+// logically (cmd | quotes | env var)
 // NEED TO: go to token_list and norminette tokenize (+ check efficiency)
 // NEED TO: go through structs and delete unused vars
 // proj-checks: ms1 (safety copy before changes 10.04)
 // NEED TO: maybe combine redirect functions in ast_redirect.c
 // a=b echo $a rn is giving invalid command error -> should be working?
-// --> handling it by creating temp_var array; maybe split logic to first check for temp var and then when creating the args array
+// --> handling it by creating temp_var array; maybe split logic to 
+// first check for temp var and then when creating the args array
 // having different counts for prev args[i] and new args[i], e.g. temp_var[i]
 // -> max i = 3
 // args[0] -> args[3++] ->newargs[0++]
@@ -89,8 +90,7 @@ int	expand_ast_nodes(t_token_data **token_data, t_ast **ast)
 		if (command_args(node, &i, token_data) == 1)
 			return (1);
 	}
-	else if (node->type == TOK_APPEND || node->type == TOK_HEREDOC
-		|| node->type == TOK_REDIRECT_IN || node->type == TOK_REDIRECT_OUT)
+	else if (node->type == TOK_FILE)
 	{
 		node->file_name = handle_quotes(token_data, &node->file_name);
 		if (node->file_name == NULL)

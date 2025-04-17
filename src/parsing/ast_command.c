@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:50:00 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/16 16:47:08 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/17 18:21:27 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,13 @@ void	parse_command_args(t_token_data **token_data, t_token **current,
 	int	i;
 
 	i = 0;
-	while (*current && (is_word((*current)->type)
-			|| (*current)->type == TOK_COMMAND))
+	while (*current && (*current)->type == TOK_WORD)
 	{
 		cmd_node->args[i] = ft_strndup((*token_data)->gc, (*current)->value, 0,
 				ft_strlen((*current)->value));
 		*current = (*current)->next;
 		i++;
 	}
-	/* cmd_node->cmd_path = find_path(cmd_node->args[0], (*token_data)->envp);
-	if (cmd_node->cmd_path == NULL && token_command(cmd_node->args[0],
-			ft_strlen(cmd_node->args[0])) == 1)
-	{
-		if ((*token_data)->syntax_error == 0)
-			ft_perror_parsing(INVALID_COMMAND, cmd_node->args[0]);
-		(*token_data)->syntax_error = 1;
-	} */
 	cmd_node->args[i] = NULL;
 }
 
@@ -42,9 +33,9 @@ t_ast	*parse_command(t_token_data **token_data, t_token **current)
 	t_ast	*cmd_node;
 	t_ast	*re_node;
 
-	if (!(*current) || !is_word((*current)->type))
+	if (!(*current) || (*current)->type != TOK_WORD)
 	{
-		re_node = parse_redirections(token_data, current);
+		re_node = parse_redirections(token_data, current, NULL);
 		if (re_node != NULL)
 			return (re_node);
 		else if ((*token_data)->syntax_error == 0)
@@ -55,16 +46,8 @@ t_ast	*parse_command(t_token_data **token_data, t_token **current)
 	cmd_node->args = (char **)gc_malloc((*token_data)->gc, PARSING,
 			sizeof(char *) * 10);
 	parse_command_args(token_data, current, cmd_node);
-	re_node = parse_redirections(token_data, current);
+	re_node = parse_redirections(token_data, current, cmd_node);
 	if (re_node)
-	{
-		re_node->right = cmd_node;
-		if (re_node->type == TOK_REDIRECT_IN)
-		{
-		re_node->left = create_ast_node(token_data, TOK_REDIRECT_IN);
-		re_node->left->file_name = re_node->file_name;
-		}
 		return (re_node);
-	}
 	return (cmd_node);
 }

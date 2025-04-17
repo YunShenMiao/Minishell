@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 13:51:18 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/16 17:13:45 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/17 18:22:40 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ void	expand_var(t_token_data **token_data, int *i, int *count, char *new)
 	(*i)++;
 	start = (*i);
 	// if ((*str)[(*i) + 1] == '?')
-	// 	// handle ?
-	// else
+	// 	// handle ? else
 	while ((*token_data)->expand_str[*i] != '\0'
 		&& (((*token_data)->expand_str[*i] < 123
 				&& (*token_data)->expand_str[*i] > 96)
@@ -44,30 +43,38 @@ void	expand_var(t_token_data **token_data, int *i, int *count, char *new)
 
 void	in_dq(t_token_data **token_data, char **new, int *i, int *count)
 {
-	if ((*token_data)->expand_str[*i] == '$' && (*token_data)->expand_str[*i
-		+ 1] != '\0' && (*token_data)->expand_str[*i + 1] != ' ')
-		expand_var(token_data, i, count, *new);
-	else 
+	if ((*token_data)->expand_str[*i] == '\"')
 	(*i)++;
+	if ((*token_data)->expand_str[*i] == '$' && (*token_data)->expand_str[*i
+			+ 1] != '\0' && (*token_data)->expand_str[*i + 1] != ' ')
+		expand_var(token_data, i, count, *new);
 	if ((*token_data)->expand_str[*i] != '\"')
 	{
 		(*new)[*count] = (*token_data)->expand_str[*i];
 		(*count)++;
+		(*i)++;
 	}
 }
 
 void	in_sq(char **str, char **new, int *i, int *count)
 {
-	if ((*str)[*i] != '\'')
-		(*new)[(*count)++] = (*str)[(*i)];
 	(*i)++;
+	while ((*str)[*i] != '\'')
+	{
+		(*new)[(*count)] = (*str)[(*i)];
+		(*count)++;
+		(*i)++;
+	}
 }
 
 void	in_nq(t_token_data **token_data, char **new, int *i, int *count)
 {
 	if ((*token_data)->expand_str[*i] == '$' && (*token_data)->expand_str[*i
-		+ 1] != '\0' && (*token_data)->expand_str[*i + 1] != ' ')
+			+ 1] != '\0' && (*token_data)->expand_str[*i + 1] != ' ')
+			{
 		expand_var(token_data, i, count, *new);
+		return;
+			}
 	if ((*token_data)->expand_str[*i] != '\"'
 		&& (*token_data)->expand_str[*i] != '\'')
 	{

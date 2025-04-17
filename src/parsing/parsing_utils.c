@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:55:26 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/15 17:10:30 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/17 14:15:30 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ t_ast	*create_ast_node(t_token_data **token_data, t_tok_type type)
 		return (NULL);
 	new_node->type = type;
 	new_node->args = NULL;
-	new_node->fd = -1;
 	new_node->file_name = NULL;
 	new_node->left = NULL;
 	new_node->right = NULL;
@@ -65,8 +64,20 @@ char	*ft_strndup(t_gc *gc, const char *src, int start, int end)
 	return (old_dest);
 }
 
-int	is_word(t_tok_type type)
+// checks for current quote status & when encountering a quote 
+// either sets it to "in quote (1)" or "outside quote (0)"")
+void	quote_status(t_token_data **token_data, char input)
 {
-	return (type == TOK_WORD_DQ || type == TOK_WORD_SQ || type == TOK_WORD_NQ
-		|| type == TOK_EMPTY_WORD);
+	if (input == '\'' && ((*token_data)->in_SQ) == 0
+		&& ((*token_data)->in_DQ) == 0)
+		(*token_data)->in_SQ = 1;
+	else if (input == '\"' && ((*token_data)->in_SQ) == 0
+		&& ((*token_data)->in_DQ) == 0)
+		(*token_data)->in_DQ = 1;
+	else if (input == '\'' && (*token_data)->in_SQ == 1
+		&& ((*token_data)->in_DQ) == 0)
+		(*token_data)->in_SQ = 0;
+	else if (input == '\"' && ((*token_data)->in_SQ) == 0
+		&& ((*token_data)->in_DQ) == 1)
+		(*token_data)->in_DQ = 0;
 }

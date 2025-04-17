@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 18:10:25 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/16 17:24:09 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/17 18:19:14 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ char	*search_name_val(t_env *top, char *name)
 	t_env	*temp;
 
 	temp = top;
-	printf("name: %s\n", name);
 	while (temp)
 	{
 		if (ft_strlen(temp->name) == ft_strlen(name) && \
