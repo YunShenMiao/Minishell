@@ -10,6 +10,8 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <errno.h>
+# include <string.h>
 
 # define GREEN "\033[1;32m"
 # define BLUE "\033[1;34m"
@@ -193,5 +195,21 @@ int		ft_cd(char **args, t_env *top, t_gc *gc);
 int		ft_env(char **args, t_env *top_env);
 int		ft_export(t_env	*top_env, char **args, t_gc *gc);
 int		ft_unset(t_env	*top_env, char **args);
+
+//execution
+int		exec_redirs(t_ast *node);
+int		execute_builtins(t_ast *node, t_token_data **token_data);
+char	**env_to_array(t_env *top);
+void	exec_cmd(t_ast *node, int prev_read, t_token_data *td);
+int		run_simple_cmd(t_ast *node, t_token_data *td);
+
+//pipe
+int		exec_pipe(t_ast *node, int prev_read, t_token_data *td);
+
+//redirections
+int		red_out_overwrite(char *filename);
+int		red_out_append(char *filename);
+int		red_in(char *filename);
+int 	heredoc(char *delimiter);
 
 #endif
