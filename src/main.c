@@ -136,8 +136,9 @@ void	print_ast(t_ast *node, int depth, char *pos)
 		printf("PIPE");
 	else if (node->type == TOK_REDIRECT_IN || node->type == TOK_REDIRECT_OUT
 		|| node->type == TOK_APPEND || node->type == TOK_HEREDOC)
-		printf("REDIR: %d (fd=%d) -> %s", node->type, node->fd,
-			node->file_name);
+		printf("REDIR: %d -> %s", node->type, node->file_name);
+	else if (node->type == TOK_FILE)
+			printf("FILE: %s", node->file_name);
 	printf("\n");
 
 	print_ast(node->left, depth + 1, "Left:");

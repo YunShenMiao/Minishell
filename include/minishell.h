@@ -63,10 +63,8 @@ typedef enum s_tok_type
 	TOK_APPEND,
 	TOK_HEREDOC,
 	TOK_COMMAND,
-	TOK_WORD_DQ,
-	TOK_WORD_SQ,
 	TOK_WORD,
-	TOK_EMPTY_WORD,
+	TOK_FILE,
 	TOK_END
 	// TOK_ENV
 	// TOK_AND,
@@ -86,7 +84,6 @@ typedef struct s_ast
 	t_tok_type		type;
 	char			**args;
 	char			*file_name;
-	int				fd;
 	struct s_ast	*left;
 	struct s_ast	*right;
 	char			*cmd_path;
@@ -180,7 +177,7 @@ void 	ft_perror_parsing(int error_id, char* error_info);
 t_ast 	*build_ast(t_token_data **token_data);
 char	*ft_strndup(t_gc *gc, const char *src, int start, int end);
 t_ast 	*create_ast_node(t_token_data **token_data, t_tok_type type);
-t_ast	*parse_redirections(t_token_data **token_data, t_token **current);
+t_ast	*parse_redirections(t_token_data **token_data, t_token **current, t_ast *prev);
 t_ast	*parse_command(t_token_data **token_data, t_token **current);
 t_ast	*parse_pipes(t_token_data **token_data, t_token **current);
 char	*find_path(char *cmd, char **envp);
