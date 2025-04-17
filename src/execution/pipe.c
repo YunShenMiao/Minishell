@@ -6,64 +6,86 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 20:44:12 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/15 16:11:40 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/17 13:41:24 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <errno.h>
 
-int	check_child(char *path, char **arr_cmd, char **envp)
+/**
+ * The AST is built so that the *last* pipe symbol (|) becomes the root. For each
+ * PIPE node we always visit the left subtree first and then the right subtree –
+ * that guarantees that the *first* command in the textual pipeline is executed
+ * first, exactly as the user typed it.
+ *
+ *          ls | grep .c | wc -l               (textual order)
+ *                   
+ *                (PIPE) ─── right ──>  wc -l  (last command)
+ *                   │
+ *               left│
+ *                   │
+ *                (PIPE) ─── right ──> grep .c
+ *                   │
+ *               left│
+ *                   │
+ *                  ls                         (first command)
+ *
+ * The recursion always forks twice per PIPE node:
+ *   1. The *left‑hand* child duplicates its stdout to the write end of the pipe
+ *      and recurses on the left subtree.
+ *   2. The *right‑hand* child duplicates its stdin to the read end of the pipe
+ *      and recurses on the right subtree.
+ *   3. The parent closes both ends of the pipe and waits for the two children.
+ *
+ */
+
+static void	fatal_perror(const char *msg)
 {
-	if (path == NULL)
-	{
-		put_path_error(arr_cmd[0]);
-		free_array(arr_cmd);
-		exit(127);
-	}
-	if (access(path, X_OK) == -1)
-	{
-		free_array(arr_cmd);
-		perror("permission denied");
-		exit(126);
-	}
-	if (execve(path, arr_cmd, envp) == -1)
-	{
-		free_array(arr_cmd);
-		exit_handling("execve error");
-	}
-	exit(0);
+	perror(msg);
+	exit(EXIT_FAILURE);
 }
 
-void	child_one(int *fd, int in, char **envp, char *cmd)
+//prev_read = -1 for the first one
+int	exec_pipe(t_ast *node, int prev_read, t_env *env)
 {
-	char	**arr_cmd;
-	char	*path;
+	int		status;
+	int		fd[2];
+	pid_t	pid;
+	int		wstatus;
 
-	if (in == 1)
-		exit (EXIT_FAILURE);
-	close(fd[0]);
-	dup2(in, STDIN_FILENO);
-	dup2(fd[1], STDOUT_FILENO);
+	if (!node)
+		return (EXIT_FAILURE);
+	if (node->type != TOK_PIPE)
+		return (exec_cmd(node, prev_read, env));
+	status = 0;
+	if (pipe(fd) == -1)
+		return (perror("pipe"), 1);
+	pid = fork();
+	if (pid == -1)
+		return (perror("fork"), 1);
+	if (pid == 0)
+	{
+		close(fd[0]);
+		if (prev_read != -1)
+		{
+			if (dup2(prev_read, STDIN_FILENO) == -1)
+				fatal_perror("dup2");
+			close(prev_read);
+		}
+		if (dup2(fd[1], STDOUT_FILENO) == -1)
+			fatal_perror("dup2");
+		close(fd[1]);
+		exit(exec_pipe(node->left, -1, env)); //Execute left subtree and recursive
+	}
 	close(fd[1]);
-	arr_cmd = parse_command_result(cmd);
-	if (arr_cmd == NULL)
-		exit_handling("malloc error");
-	path = find_path(arr_cmd[0], envp);
-	check_child(path, arr_cmd, envp);
+	if (prev_read != -1)
+		close(prev_read);
+	status = exec_pipe(node->right, fd[0], env);
+	if (waitpid(pid, &wstatus, 0) == -1)
+		perror("waitpid");
+	else if (WIFEXITED(wstatus))
+		status = WEXITSTATUS(wstatus);
+	return (status);
 }
-
-void	child_two(int *fd, int out, char **envp, char *cmd)
-{
-	char	**arr_cmd;
-	char	*path;
-
-	close(fd[1]);
-	dup2(fd[0], STDIN_FILENO);
-	dup2(out, STDOUT_FILENO);
-	close(fd[0]);
-	arr_cmd = parse_command_result(cmd);
-	if (arr_cmd == NULL)
-		exit_handling("malloc error");
-	path = find_path(arr_cmd[0], envp);
-	check_child(path, arr_cmd, envp);
-}
+ 

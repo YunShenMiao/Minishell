@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 20:44:04 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/15 16:07:50 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:21:13 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	red_out_append(char *filename)
 }
 
 // redirect input <
-int	red_out_overwrite(char *filename)
+int	red_in(char *filename)
 {
 	int fd;
 

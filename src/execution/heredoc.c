@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:52:20 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/15 16:07:54 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/17 13:04:15 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,5 @@ int heredoc(char *delimiter)
 		free(line);
 	}
 	close(fd[1]);
-	return fd[0];
+	return (fd[0]);
 }
