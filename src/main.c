@@ -109,40 +109,40 @@ int	execution_main(t_token_data **token_data, t_ast *node)
 	return (0);
 }
 
-// void	print_ast(t_ast *node, int depth, char *pos)
-// {
-// 	int i;
+void	print_ast(t_ast *node, int depth, char *pos)
+{
+	int i;
 
-// 	if (!node)
-// 		return ;
-// 	i = 0;
-// 	while (i < depth)
-// 	{
-// 		printf("  ");
-// 		i++;
-// 	}
-// 	printf("%s ", pos);
-// 	if (node->type == TOK_COMMAND)
-// 	{
-// 		printf("CMD: ");
-// 		i = 0;
-// 		while (node->args[i])
-// 		{
-// 			printf("%s ", node->args[i]);
-// 			i++;
-// 		}
-// 	}
-// 	else if (node->type == TOK_PIPE)
-// 		printf("PIPE");
-// 	else if (node->type == TOK_REDIRECT_IN || node->type == TOK_REDIRECT_OUT
-// 		|| node->type == TOK_APPEND || node->type == TOK_HEREDOC)
-// 		printf("REDIR: %d (fd=%d) -> %s", node->type, node->fd,
-// 			node->file_name);
-// 	printf("\n");
+	if (!node)
+		return ;
+	i = 0;
+	while (i < depth)
+	{
+		printf("  ");
+		i++;
+	}
+	printf("%s ", pos);
+	if (node->type == TOK_COMMAND)
+	{
+		printf("CMD: ");
+		i = 0;
+		while (node->args[i])
+		{
+			printf("%s ", node->args[i]);
+			i++;
+		}
+	}
+	else if (node->type == TOK_PIPE)
+		printf("PIPE");
+	else if (node->type == TOK_REDIRECT_IN || node->type == TOK_REDIRECT_OUT
+		|| node->type == TOK_APPEND || node->type == TOK_HEREDOC)
+		printf("REDIR: %d (fd=%d) -> %s", node->type, node->fd,
+			node->file_name);
+	printf("\n");
 
-// 	print_ast(node->left, depth + 1, "Left:");
-// 	print_ast(node->right, depth + 1, "Right:");
-// }
+	print_ast(node->left, depth + 1, "Left:");
+	print_ast(node->right, depth + 1, "Right:");
+}
 
 // general structure function for parsing
 int	parse_main(char *input, t_token_data **token_data, t_gc *gc, char **envp)
@@ -153,14 +153,14 @@ int	parse_main(char *input, t_token_data **token_data, t_gc *gc, char **envp)
 		return (printf("Allocation Error\n"), 1);
 	if (init_token_data(modified_input, token_data, gc, envp) == 1)
 		return (printf("Allocation Error\n"), 1);
-	if (tokenize(token_data) == 1)
+	if (tokenize(*token_data) == 1)
 		return (1);
 	if (build_ast(token_data) == NULL)
 		return (1);
 	if (expand_ast_nodes(token_data, &(*token_data)->ast) == 1)
 		return (1);
 	// print_list((*token_data)->token_list);
-	// print_ast((*token_data)->ast, 0, "Root: ");
+	print_ast((*token_data)->ast, 0, "Root: ");
 	// test(token_data, envp);
 	return (0);
 }

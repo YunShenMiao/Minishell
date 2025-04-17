@@ -65,7 +65,7 @@ typedef enum s_tok_type
 	TOK_COMMAND,
 	TOK_WORD_DQ,
 	TOK_WORD_SQ,
-	TOK_WORD_NQ,
+	TOK_WORD,
 	TOK_EMPTY_WORD,
 	TOK_END
 	// TOK_ENV
@@ -170,18 +170,16 @@ void	gc_free_category(t_gc *gc, t_mem_location category);
 void	gc_free_all(t_gc *gc);
 
 // tokens
-int		modify_input(char *input, char **modified_input, t_gc *gc);
-int 	tokenize(t_token_data **token_data);
-int 	init_token_data(char *input, t_token_data **token_data, t_gc *gc, char **envp);
-int		add_token(t_token_data **token_data);
-int		token_command(char *value, size_t len);
+int			modify_input(char *input, char **modified_input, t_gc *gc);
+int 		tokenize(t_token_data *token_data);
+int 		init_token_data(char *input, t_token_data **token_data, t_gc *gc, char **envp);
+t_tok_type	token_type(t_token *token);
 
 // parsing
 void 	ft_perror_parsing(int error_id, char* error_info);
 t_ast 	*build_ast(t_token_data **token_data);
 char	*ft_strndup(t_gc *gc, const char *src, int start, int end);
 t_ast 	*create_ast_node(t_token_data **token_data, t_tok_type type);
-int		is_word(t_tok_type type);
 t_ast	*parse_redirections(t_token_data **token_data, t_token **current);
 t_ast	*parse_command(t_token_data **token_data, t_token **current);
 t_ast	*parse_pipes(t_token_data **token_data, t_token **current);

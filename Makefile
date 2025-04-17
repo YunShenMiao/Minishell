@@ -11,7 +11,7 @@ SRC			= 	$(SRC_DIR)/main.c $(SRC_DIR)/utils/error_handling.c \
 				$(SRC_DIR)/utils/helper.c $(SRC_DIR)/utils/garbage_collector.c \
 				$(SRC_DIR)/utils/init_envp.c $(SRC_DIR)/utils/env_list.c \
 				$(SRC_DIR)/tokens/init_token_data.c $(SRC_DIR)/tokens/modify_input.c \
-				$(SRC_DIR)/tokens/token_list.c $(SRC_DIR)/tokens/tokenize.c \
+				$(SRC_DIR)/tokens/token_list.c \
 				$(SRC_DIR)/parsing/parsing_utils.c $(SRC_DIR)/parsing/ast.c \
 				$(SRC_DIR)/parsing/ast_redirect.c $(SRC_DIR)/parsing/ast_command.c \
 				$(SRC_DIR)/parsing/ast_pipes.c $(SRC_DIR)/parsing/path.c \
