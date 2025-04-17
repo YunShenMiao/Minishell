@@ -6,12 +6,11 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 20:44:12 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/17 14:22:27 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/17 17:53:52 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
 
 /**
  * The AST is built so that the *last* pipe symbol (|) becomes the root. For each
@@ -47,7 +46,7 @@ static void	fatal_perror(const char *msg)
 }
 
 //prev_read = -1 for the first one
-int	exec_pipe(t_ast *node, int prev_read, t_env *env)
+int	exec_pipe(t_ast *node, int prev_read, t_token_data *td)
 {
 	int		status;
 	int		fd[2];
@@ -57,7 +56,7 @@ int	exec_pipe(t_ast *node, int prev_read, t_env *env)
 	if (!node)
 		return (EXIT_FAILURE);
 	if (node->type != TOK_PIPE)
-		return (exec_cmd(node, prev_read, env));
+		exec_cmd(node, prev_read, td);
 	status = 0;
 	if (pipe(fd) == -1)
 		return (perror("pipe"), 1);
@@ -76,12 +75,12 @@ int	exec_pipe(t_ast *node, int prev_read, t_env *env)
 		if (dup2(fd[1], STDOUT_FILENO) == -1)
 			fatal_perror("dup2");
 		close(fd[1]);
-		exit(exec_pipe(node->left, -1, env)); //Execute left subtree and recursive
+		exit(exec_pipe(node->left, -1, td)); //Execute left subtree and recursive
 	}
 	close(fd[1]);
 	if (prev_read != -1)
 		close(prev_read);
-	status = exec_pipe(node->right, fd[0], env);
+	status = exec_pipe(node->right, fd[0], td);
 	if (waitpid(pid, &wstatus, 0) == -1)
 		perror("waitpid");
 	else if (WIFEXITED(wstatus))

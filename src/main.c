@@ -19,50 +19,50 @@
 #define RESET "\033[0m"
 
 
-int	execute_builtins(t_ast *node, t_token_data **token_data)
-{
-	char *value;
-	int len;
-	int result;
+// int	execute_builtins(t_ast *node, t_token_data **token_data)
+// {
+// 	char *value;
+// 	int len;
+// 	int result;
 
-	value = node->args[0];
-	len = ft_strlen(node->args[0]);
-	result = -1;
-	if (ft_strncmp(value, "cd", len) == 0)
-		result = ft_cd(node->args, (*token_data)->env_list, (*token_data)->gc);
-	else if (ft_strncmp(value, "echo", len) == 0 || ft_strncmp(value, "echo-n",
-			len) == 0)
-		result = ft_echo(node->args);
-	else if (ft_strncmp(value, "pwd", len) == 0)
-		result = ft_pwd(node->args);
-	else if (ft_strncmp(value, "env", len) == 0)
-		result = ft_env(node->args, (*token_data)->env_list);
-	else if (ft_strncmp(value, "export", len) == 0)
-		result = ft_export((*token_data)->env_list, node->args,
-				(*token_data)->gc);
-	if (ft_strncmp(value, "unset", len) == 0)
-		result = ft_unset((*token_data)->env_list, node->args);
-	else if (ft_strncmp(value, "exit", len) == 0)
-		result = ft_exit((*token_data)->gc);
-	return (result);
-}
+// 	value = node->args[0];
+// 	len = ft_strlen(node->args[0]);
+// 	result = -1;
+// 	if (ft_strncmp(value, "cd", len) == 0)
+// 		result = ft_cd(node->args, (*token_data)->env_list, (*token_data)->gc);
+// 	else if (ft_strncmp(value, "echo", len) == 0 || ft_strncmp(value, "echo-n",
+// 			len) == 0)
+// 		result = ft_echo(node->args);
+// 	else if (ft_strncmp(value, "pwd", len) == 0)
+// 		result = ft_pwd(node->args);
+// 	else if (ft_strncmp(value, "env", len) == 0)
+// 		result = ft_env(node->args, (*token_data)->env_list);
+// 	else if (ft_strncmp(value, "export", len) == 0)
+// 		result = ft_export((*token_data)->env_list, node->args,
+// 				(*token_data)->gc);
+// 	if (ft_strncmp(value, "unset", len) == 0)
+// 		result = ft_unset((*token_data)->env_list, node->args);
+// 	else if (ft_strncmp(value, "exit", len) == 0)
+// 		result = ft_exit((*token_data)->gc);
+// 	return (result);
+// }
 
-void	execute_cmd(t_ast *node, char **envp)
-{
-	pid_t pid;
+// void	execute_cmd(t_ast *node, char **envp)
+// {
+// 	pid_t pid;
 
-	pid = fork();
-	if (pid == 0)
-	{
-		execve(node->cmd_path, node->args, envp);
-		perror("execve failed");
-		exit(1);
-	}
-	else
-	{
-		waitpid(pid, NULL, 0);
-	}
-}
+// 	pid = fork();
+// 	if (pid == 0)
+// 	{
+// 		execve(node->cmd_path, node->args, envp);
+// 		perror("execve failed");
+// 		exit(1);
+// 	}
+// 	else
+// 	{
+// 		waitpid(pid, NULL, 0);
+// 	}
+// }
 
 // int	exec_redirect(t_ast *node)
 // {
@@ -87,20 +87,18 @@ int	execution_main(t_token_data **token_data, t_ast *node)
 	if (node->type == TOK_PIPE)
 	{
 		printf("pipe\n");
-		/* exec_pipe(); */
-		return (0);
+		return (exec_pipe(node, -1, (*token_data)));
 	}
 	else if (node->type == TOK_COMMAND)
 	{
 		printf("cmd\n");
-		if (execute_builtins(node, token_data) == -1)
-			execute_cmd(node, (*token_data)->envp);
+		return (run_simple_cmd(node, (*token_data)));
 	}
-	else if (node->type == TOK_APPEND || node->type == TOK_HEREDOC
+	else if (node->type == TOK_APPEND || node->type == TOK_HEREDOC \
 		|| node->type == TOK_REDIRECT_IN || node->type == TOK_REDIRECT_OUT)
 	{
 		printf("redirect\n");
-		/* exec_redirect(node); */
+		exec_redirs(node);
 	}
 	if (node->left != NULL)
 		execution_main(token_data, node->left);
