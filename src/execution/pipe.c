@@ -6,12 +6,12 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 20:44:12 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/17 13:41:24 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/17 14:22:27 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include <errno.h>
+
 
 /**
  * The AST is built so that the *last* pipe symbol (|) becomes the root. For each

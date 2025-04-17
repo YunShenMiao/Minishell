@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 15:17:27 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/15 21:55:59 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/17 14:22:21 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,20 +52,17 @@ int	ft_pwd(char **args)
 
 	if (args && args[1])
 		return (error_general("pwd: too many arguments"));
-
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{
 		perror("getcwd");
 		return (error_general("getcwd failed"));
 	}
-
 	if (ft_put_to_fd(cwd, 1) == 1 || ft_put_to_fd("\n", 1) == 1)
 	{
 		free(cwd);
 		return (1);
 	}
-
 	free(cwd);
 	return (0);
 }

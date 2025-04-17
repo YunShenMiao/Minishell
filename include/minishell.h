@@ -10,6 +10,8 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <errno.h>
+# include <string.h>
 
 # define GREEN "\033[1;32m"
 # define BLUE "\033[1;34m"

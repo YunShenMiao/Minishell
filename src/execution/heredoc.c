@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:52:20 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/17 13:04:15 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/17 14:11:23 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,11 @@ int heredoc(char *delimiter)
 	int fd[2];
 	char *line;
 
-	pipe(fd);
+	if (pipe(fd) == -1)
+	{
+		perror("pipe error");
+		return (-1);
+    }
 	while (1)
 	{
 		line = readline("> ");
