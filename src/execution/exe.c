@@ -6,23 +6,23 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 20:06:50 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/17 17:47:09 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/18 15:38:41 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	exec_redirs(t_ast *node)
+int	do_redir(t_tok_type tp, t_ast *node)
 {
-	int hd;
+	int	hd;
 
-	if (node->type == TOK_REDIRECT_OUT)
+	if (tp == TOK_REDIRECT_OUT)
 		return (red_out_overwrite(node->file_name));
-	if (node->type == TOK_APPEND)
+	if (tp == TOK_APPEND)
 		return (red_out_append(node->file_name));
-	if (node->type == TOK_REDIRECT_IN)
+	if (tp == TOK_REDIRECT_IN)
 		return (red_in(node->file_name));
-	if (node->type == TOK_HEREDOC)
+	if (tp == TOK_HEREDOC)
 	{
 		hd = heredoc(node->file_name);
 		if (hd == -1)
@@ -32,6 +32,32 @@ int	exec_redirs(t_ast *node)
 		close(hd);
 		return (0);
 	}
+	return (-1);
+}
+
+int	exec_redir_normal(t_ast *node, t_token_data **td, t_tok_type tp)
+{
+	if (node->left)
+		exec_redir_normal(node->left, td, node->type);
+	if (node->right)
+		exec_redir_normal(node->right, td, node->type);
+	if (node->type == TOK_COMMAND)
+		run_simple_cmd(node, *td);
+	if (node->type == TOK_FILE)
+		return (do_redir(tp, node));
+	return (-1);
+}
+
+int	exec_redir_pipe(t_ast *node, t_token_data **td, t_tok_type tp, int prev_read)
+{
+	if (node->left)
+		exec_redir_pipe(node->left, td, node->type, prev_read);
+	if (node->right)
+		exec_redir_pipe(node->right, td, node->type, prev_read);
+	if (node->type == TOK_COMMAND)
+		exec_cmd(node, prev_read, *td);
+	if (node->type == TOK_FILE)
+		return (do_redir(tp, node));
 	return (-1);
 }
 
@@ -90,10 +116,6 @@ char	**env_to_array(t_env *top)
     return (out);
 }
 
-/*
-In the parent (interactive shell process) → use exit(status) when you run the builtin exit, because you want a clean shutdown.
-In any forked child that will not call execve() successfully → use _exit(status) (or __exit, exit_group, etc.) so you leave immediately without touching user‑space buffers or handlers.
-*/
 //run inside *already‑forked* child (either from exec_pipe() or run_simple_cmd()).
 void	exec_cmd(t_ast *node, int prev_read, t_token_data *td)
 {
@@ -106,8 +128,6 @@ void	exec_cmd(t_ast *node, int prev_read, t_token_data *td)
 		dup2(prev_read, STDIN_FILENO);
 		close(prev_read);
 	}
-	if (apply_redirs(node))
-		_exit(1);
 	tmp = td;
 	builtin_status = execute_builtins(node, &tmp);
 	if (builtin_status != -1)
@@ -118,11 +138,7 @@ void	exec_cmd(t_ast *node, int prev_read, t_token_data *td)
 	_exit(127);
 }
 
-/*
-** run_simple_cmd(): for commands that are NOT part of a pipeline.
-** 1. Try built‑ins *in parent* (so cd/export really affect the shell state).
-** 2. Otherwise fork, let the child call exec_cmd(), wait & return status.
-*/
+// run_simple_cmd(): for commands that are NOT part of a pipeline.
 int run_simple_cmd(t_ast *node, t_token_data *td)
 {
 	t_token_data	*tmp;

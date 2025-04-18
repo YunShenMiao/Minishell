@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 20:44:12 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/17 17:53:52 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/18 15:18:06 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	exec_pipe(t_ast *node, int prev_read, t_token_data *td)
 	if (!node)
 		return (EXIT_FAILURE);
 	if (node->type != TOK_PIPE)
-		exec_cmd(node, prev_read, td);
+		exec_redir_pipe(node, (&td), node->type, prev_read);
 	status = 0;
 	if (pipe(fd) == -1)
 		return (perror("pipe"), 1);

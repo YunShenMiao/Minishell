@@ -98,7 +98,7 @@ int	execution_main(t_token_data **token_data, t_ast *node)
 		|| node->type == TOK_REDIRECT_IN || node->type == TOK_REDIRECT_OUT)
 	{
 		printf("redirect\n");
-		exec_redirs(node);
+		return (exec_redir_normal(node, token_data, node->type));
 	}
 	if (node->left != NULL)
 		execution_main(token_data, node->left);
