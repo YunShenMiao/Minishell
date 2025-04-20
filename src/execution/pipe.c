@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 20:44:12 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/18 15:18:06 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/20 19:34:52 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,43 +48,112 @@ static void	fatal_perror(const char *msg)
 //prev_read = -1 for the first one
 int	exec_pipe(t_ast *node, int prev_read, t_token_data *td)
 {
-	int		status;
 	int		fd[2];
+	int		status;
 	pid_t	pid;
-	int		wstatus;
 
-	if (!node)
-		return (EXIT_FAILURE);
-	if (node->type != TOK_PIPE)
-		exec_redir_pipe(node, (&td), node->type, prev_read);
-	status = 0;
-	if (pipe(fd) == -1)
-		return (perror("pipe"), 1);
-	pid = fork();
-	if (pid == -1)
-		return (perror("fork"), 1);
-	if (pid == 0)
+	if (node->type == TOK_PIPE)
 	{
-		close(fd[0]);
-		if (prev_read != -1)
+		if (pipe(fd) == -1)
+			return (perror("pipe"), 1);
+		pid = fork();
+		if (pid == -1)
+			return (perror("fork"), 1);
+		if (pid == 0)
 		{
-			if (dup2(prev_read, STDIN_FILENO) == -1)
+			if (prev_read != -1)
+			{
+				if (dup2(prev_read, STDIN_FILENO) == -1)
+					fatal_perror("dup2");
+				close(prev_read);
+			}
+			if (dup2(fd[1], STDOUT_FILENO) == -1)
 				fatal_perror("dup2");
-			close(prev_read);
+			close(fd[0]);
+			close(fd[1]);
+			exec_pipe(node->left, -1, td);
+			_exit(1);
 		}
-		if (dup2(fd[1], STDOUT_FILENO) == -1)
-			fatal_perror("dup2");
 		close(fd[1]);
-		exit(exec_pipe(node->left, -1, td)); //Execute left subtree and recursive
+		if (prev_read != -1)
+			close(prev_read);
+		status = exec_pipe(node->right, fd[0], td);
+		if (waitpid(pid, &status, 0) == -1)
+			perror("waitpid");
+		else if (WIFEXITED(status))
+			td->last_exit = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			td->last_exit = 128 + WTERMSIG(status);
+		return (status);
 	}
-	close(fd[1]);
-	if (prev_read != -1)
-		close(prev_read);
-	status = exec_pipe(node->right, fd[0], td);
-	if (waitpid(pid, &wstatus, 0) == -1)
-		perror("waitpid");
-	else if (WIFEXITED(wstatus))
-		status = WEXITSTATUS(wstatus);
-	return (status);
+	else
+	{
+		//still need to fork the last command!
+		pid = fork();
+		if (pid == -1)
+			return (perror("fork"), 1);
+		if (pid == 0)
+		{
+			if (prev_read != -1)
+			{
+				if (dup2(prev_read, STDIN_FILENO) == -1)
+					fatal_perror("dup2");
+				close(prev_read);
+			}
+			exec_redir_pipe(node, &td, node->type, prev_read);
+			_exit(1);
+		}
+		if (prev_read != -1)
+			close(prev_read);
+		if (waitpid(pid, &status, 0) == -1)
+			perror("waitpid");
+		else if (WIFEXITED(status))
+			td->last_exit = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			td->last_exit = 128 + WTERMSIG(status);
+		return (status);
+	}
 }
- 
+
+// int	exec_pipe(t_ast *node, int prev_read, t_token_data *td)
+// {
+// 	int		status;
+// 	int		fd[2];
+// 	pid_t	pid;
+
+// 	if (!node)
+// 		return (EXIT_FAILURE);
+// 	if (node->type != TOK_PIPE)
+// 		exec_redir_pipe(node, (&td), node->type, prev_read);
+// 	status = 0;
+// 	if (pipe(fd) == -1)
+// 		return (perror("pipe"), 1);
+// 	pid = fork();
+// 	if (pid == -1)
+// 		return (perror("fork"), 1);
+// 	if (pid == 0)
+// 	{
+// 		close(fd[0]);
+// 		if (prev_read != -1)
+// 		{
+// 			if (dup2(prev_read, STDIN_FILENO) == -1)
+// 				fatal_perror("dup2");
+// 			close(prev_read);
+// 		}
+// 		if (dup2(fd[1], STDOUT_FILENO) == -1)
+// 			fatal_perror("dup2");
+// 		close(fd[1]);
+// 		exit(exec_pipe(node->left, -1, td)); //Execute left subtree and recursive
+// 	}
+// 	close(fd[1]);
+// 	if (prev_read != -1)
+// 		close(prev_read);
+// 	status = exec_pipe(node->right, fd[0], td);
+// 	if (waitpid(pid, &status, 0) == -1)
+// 		perror("waitpid");
+// 	else if (WIFEXITED(status))
+// 		td->last_exit = WEXITSTATUS(status);
+// 	else if (WIFSIGNALED(status))
+// 		td->last_exit = 128 + WTERMSIG(status);
+// 	return (status);
+// }

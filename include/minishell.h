@@ -118,6 +118,7 @@ typedef struct s_token_data
 	char 			*expand_str;
 	struct s_env	*env_list;
 	t_gc			*gc;
+	int				last_exit;
 }				t_token_data;
 
 /****************************************************************************************************/
@@ -190,7 +191,7 @@ char	*handle_quotes(t_token_data **token_data, char **str);
 // builtins
 int		ft_echo(char **args);
 int		ft_pwd(char **args);
-int		ft_exit(t_gc *gc);
+int		ft_exit(char **args, t_gc *gc);
 int		ft_cd(char **args, t_env *top, t_gc *gc);
 int		ft_env(char **args, t_env *top_env);
 int		ft_export(t_env	*top_env, char **args, t_gc *gc);

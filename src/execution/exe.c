@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 20:06:50 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/18 15:38:41 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/20 19:35:57 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	execute_builtins(t_ast *node, t_token_data **token_data)
 	else if (ft_strncmp(value, "unset", len) == 0)
 		return (ft_unset((*token_data)->env_list, node->args));
 	else if (ft_strncmp(value, "exit", len) == 0)
-		return (ft_exit((*token_data)->gc));
+		return (ft_exit(node->args, (*token_data)->gc));
 	return (-1);
 }
 
@@ -139,7 +139,7 @@ void	exec_cmd(t_ast *node, int prev_read, t_token_data *td)
 }
 
 // run_simple_cmd(): for commands that are NOT part of a pipeline.
-int run_simple_cmd(t_ast *node, t_token_data *td)
+int	run_simple_cmd(t_ast *node, t_token_data *td)
 {
 	t_token_data	*tmp;
 	int				status;
@@ -154,8 +154,11 @@ int run_simple_cmd(t_ast *node, t_token_data *td)
 		return (perror("fork"), 1);
 	if (pid == 0)
 		exec_cmd(node, -1, td);
-	waitpid(pid, &status, 0);
+	if (waitpid(pid, &status, 0) == -1)
+		perror("waitpid");
 	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	return (1);
+		td->last_exit = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		td->last_exit = 128 + WTERMSIG(status);
+	return (td->last_exit);
 }
