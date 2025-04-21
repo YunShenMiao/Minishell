@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:29:30 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/17 14:24:42 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/18 13:26:04 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,9 @@
 // NEED TO: go through structs and delete unused vars
 // proj-checks: ms1 (safety copy before changes 10.04)
 // NEED TO: maybe combine redirect functions in ast_redirect.c
-// a=b echo $a rn is giving invalid command error -> should be working?
-// --> handling it by creating temp_var array; maybe split logic to 
-// first check for temp var and then when creating the args array
-// having different counts for prev args[i] and new args[i], e.g. temp_var[i]
-// -> max i = 3
-// args[0] -> args[3++] ->newargs[0++]
+// handle ~ ?
 
+// checks if cmd is builtin
 int	token_command(char *value, size_t len)
 {
 	if (ft_strncmp(value, "cd", len) == 0)
@@ -50,6 +46,7 @@ int	token_command(char *value, size_t len)
 		return (1);
 }
 
+// checks if args[0] is a valid cmd or builtin, returns error if not
 int	valid_cmd(t_token_data **token_data, t_ast *node)
 {
 	node->cmd_path = find_path(node->args[0], (*token_data)->envp);
@@ -64,6 +61,8 @@ int	valid_cmd(t_token_data **token_data, t_ast *node)
 	return (0);
 }
 
+// passes each arg of the command to handle the quotes & checks if arg[0]
+// is a valid command or not
 int	command_args(t_ast *node, int *i, t_token_data **token_data)
 {
 	while (node->args[*i] != NULL)
@@ -78,6 +77,8 @@ int	command_args(t_ast *node, int *i, t_token_data **token_data)
 	return (0);
 }
 
+// traverses through the ast and handles quotes and 
+// environment var expansion for cmd-args & file-names in quotes_env.c
 int	expand_ast_nodes(t_token_data **token_data, t_ast **ast)
 {
 	t_ast	*node;

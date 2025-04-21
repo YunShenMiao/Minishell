@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:55:26 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/17 14:15:30 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/18 13:07:07 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	ft_perror_parsing(int error_id, char *error_info)
 		printf("🐢 minishell: syntax error '%s'\n", error_info);
 }
 
+// creates ast nodes and setting its variables + linking them to
+// left and right node -> aststructure
 t_ast	*create_ast_node(t_token_data **token_data, t_tok_type type)
 {
 	t_ast	*new_node;
@@ -41,7 +43,7 @@ t_ast	*create_ast_node(t_token_data **token_data, t_tok_type type)
 	return (new_node);
 }
 
-// modified strndup to use gc_malloc 
+// modified strndup to use gc_malloc
 // & have starting and end position for allocating
 char	*ft_strndup(t_gc *gc, const char *src, int start, int end)
 {
@@ -64,9 +66,9 @@ char	*ft_strndup(t_gc *gc, const char *src, int start, int end)
 	return (old_dest);
 }
 
-// checks for current quote status & when encountering a quote 
+// checks for current quote status & when encountering a quote
 // either sets it to "in quote (1)" or "outside quote (0)"")
-void	quote_status(t_token_data **token_data, char input)
+int	quote_status(t_token_data **token_data, char input)
 {
 	if (input == '\'' && ((*token_data)->in_SQ) == 0
 		&& ((*token_data)->in_DQ) == 0)
@@ -80,4 +82,8 @@ void	quote_status(t_token_data **token_data, char input)
 	else if (input == '\"' && ((*token_data)->in_SQ) == 0
 		&& ((*token_data)->in_DQ) == 1)
 		(*token_data)->in_DQ = 0;
+	if ((*token_data)->in_DQ == 1 || (*token_data)->in_SQ == 1)
+		return (1);
+	else
+		return (0);
 }
