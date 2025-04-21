@@ -118,6 +118,7 @@ typedef struct s_token_data
 	char 			*expand_str;
 	struct s_env	*env_list;
 	t_gc			*gc;
+	int				last_exit;
 }				t_token_data;
 
 /****************************************************************************************************/
@@ -190,14 +191,16 @@ char	*handle_quotes(t_token_data **token_data, char **str);
 // builtins
 int		ft_echo(char **args);
 int		ft_pwd(char **args);
-int		ft_exit(t_gc *gc);
+int		ft_exit(char **args, t_gc *gc);
 int		ft_cd(char **args, t_env *top, t_gc *gc);
 int		ft_env(char **args, t_env *top_env);
 int		ft_export(t_env	*top_env, char **args, t_gc *gc);
 int		ft_unset(t_env	*top_env, char **args);
 
 //execution
-int		exec_redirs(t_ast *node);
+int		do_redir(t_tok_type tp, t_ast *node);
+int		exec_redir_normal(t_ast *node, t_token_data **td, t_tok_type tp);
+int		exec_redir_pipe(t_ast *node, t_token_data **td, t_tok_type tp, int prev_read);
 int		execute_builtins(t_ast *node, t_token_data **token_data);
 char	**env_to_array(t_env *top);
 void	exec_cmd(t_ast *node, int prev_read, t_token_data *td);
