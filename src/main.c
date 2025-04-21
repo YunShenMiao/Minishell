@@ -2,9 +2,12 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*                                                    +:+ +:+        
+	+:+     */
+/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+      
+	+#+        */
+/*                                                +#+#+#+#+#+  
+	+#+           */
 /*   Created: 2025/04/16 18:09:52 by jwardeng          #+#    #+#             */
 /*   Updated: 2025/04/16 18:09:52 by jwardeng         ###   ########.fr       */
 /*                                                                            */
@@ -81,24 +84,24 @@
 // }
 
 //
-	// either split into if pipes execute everything in pipes and no pipes separate
+// either split into if pipes execute everything in pipes and no pipes separate
 int	execution_main(t_token_data **token_data, t_ast *node)
 {
 	if (node->type == TOK_PIPE)
 	{
 		printf("pipe\n");
-		return (exec_pipe(node, -1, (*token_data)));
+		// return (exec_pipe(node, -1, (*token_data)));
 	}
 	else if (node->type == TOK_COMMAND)
 	{
 		printf("cmd\n");
 		return (run_simple_cmd(node, (*token_data)));
 	}
-	else if (node->type == TOK_APPEND || node->type == TOK_HEREDOC \
+	else if (node->type == TOK_APPEND || node->type == TOK_HEREDOC
 		|| node->type == TOK_REDIRECT_IN || node->type == TOK_REDIRECT_OUT)
 	{
 		printf("redirect\n");
-		exec_redirs(node);
+		// return(exec_redirs(node));
 	}
 	if (node->left != NULL)
 		execution_main(token_data, node->left);
@@ -136,7 +139,7 @@ void	print_ast(t_ast *node, int depth, char *pos)
 		|| node->type == TOK_APPEND || node->type == TOK_HEREDOC)
 		printf("REDIR: %d -> %s", node->type, node->file_name);
 	else if (node->type == TOK_FILE)
-			printf("FILE: %s", node->file_name);
+		printf("FILE: %s", node->file_name);
 	printf("\n");
 
 	print_ast(node->left, depth + 1, "Left:");
@@ -181,6 +184,7 @@ void	parse_execute(char *input, char **envp)
 	}
 }
 
+// if string only space or tab -> just new prompt
 int	main(int argc, char **argv, char **envp)
 {
 	char *input;
@@ -193,14 +197,13 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		input = readline(prompt);
-		if (!input)
+		if (!input || ft_strlen(input) == 0)
+			continue ;
+		else
 		{
-			printf("\n");
-			break ;
-		}
-		if (*input)
 			add_history(input);
-		parse_execute(input, envp);
+			parse_execute(input, envp);
+		}
 	}
 	return (0);
 }

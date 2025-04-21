@@ -18,7 +18,8 @@ SRC			= 	$(SRC_DIR)/main.c $(SRC_DIR)/utils/error_handling.c \
 				$(SRC_DIR)/parsing/expand_ast.c $(SRC_DIR)/parsing/quotes_env.c \
 				$(SRC_DIR)/builtins/cd.c $(SRC_DIR)/builtins/echo.c $(SRC_DIR)/builtins/env.c \
 				$(SRC_DIR)/builtins/exit.c $(SRC_DIR)/builtins/export.c $(SRC_DIR)/builtins/pwd.c \
-				$(SRC_DIR)/builtins/unset.c 
+				$(SRC_DIR)/builtins/unset.c \
+				$(SRC_DIR)/execution/pipe.c $(SRC_DIR)/execution/redirection.c $(SRC_DIR)/execution/exe.c
 OBJ			= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 
 # $(SRC_DIR)/builtins/cd.c $(SRC_DIR)/builtins/echo.c $(SRC_DIR)/builtins/env.c \

@@ -183,7 +183,7 @@ t_ast	*parse_redirections(t_token_data **token_data, t_token **current, t_ast *p
 t_ast	*parse_command(t_token_data **token_data, t_token **current);
 t_ast	*parse_pipes(t_token_data **token_data, t_token **current);
 char	*find_path(char *cmd, char **envp);
-void	quote_status(t_token_data **token_data, char input);
+int		quote_status(t_token_data **token_data, char input);
 int 	expand_ast_nodes(t_token_data **token_data, t_ast **ast);
 char	*handle_quotes(t_token_data **token_data, char **str);
 

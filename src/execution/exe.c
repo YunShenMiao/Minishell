@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exe.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 20:06:50 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/17 17:47:09 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/17 18:32:46 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,8 @@ void	exec_cmd(t_ast *node, int prev_read, t_token_data *td)
 		dup2(prev_read, STDIN_FILENO);
 		close(prev_read);
 	}
-	if (apply_redirs(node))
-		_exit(1);
+	// if (apply_redirs(node))
+	// 	_exit(1);
 	tmp = td;
 	builtin_status = execute_builtins(node, &tmp);
 	if (builtin_status != -1)
