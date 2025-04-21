@@ -111,7 +111,6 @@ typedef struct s_token_data
 	int				in_DQ;
 	int				start;
 	int				end;
-	int				first;
 	int				finish;
 	int				syntax_error;
 	char			**envp;
@@ -176,7 +175,7 @@ int 		init_token_data(char *input, t_token_data **token_data, t_gc *gc, char **e
 t_tok_type	token_type(t_token *token);
 
 // parsing
-void 	ft_perror_parsing(int error_id, char* error_info);
+void 	ft_perror_parsing(t_token_data **token_data, int error_id, char* error_info);
 t_ast 	*build_ast(t_token_data **token_data);
 char	*ft_strndup(t_gc *gc, const char *src, int start, int end);
 t_ast 	*create_ast_node(t_token_data **token_data, t_tok_type type);

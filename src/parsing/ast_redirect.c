@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:41:12 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/17 18:21:42 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/21 16:55:53 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_ast	*parse_append(t_token_data **token_data, t_token **current, t_ast *prev)
 	if (!(*current) || (*current)->type != TOK_WORD)
 	{
 		if ((*token_data)->syntax_error == 0)
-			ft_perror_parsing(SYNTAX_ERROR, (*current)->value);
+			ft_perror_parsing(token_data, SYNTAX_ERROR, (*current)->value);
 		return ((*token_data)->syntax_error = 1, NULL);
 	}
 	re_node = create_ast_node(token_data, TOK_APPEND);
@@ -49,7 +49,7 @@ t_ast	*parse_heredoc(t_token_data **token_data, t_token **current,
 	if (!(*current) || (*current)->type != TOK_WORD)
 	{
 		if ((*token_data)->syntax_error == 0)
-			ft_perror_parsing(SYNTAX_ERROR, (*current)->value);
+			ft_perror_parsing(token_data, SYNTAX_ERROR, (*current)->value);
 		return ((*token_data)->syntax_error = 1, NULL);
 	}
 	re_node = create_ast_node(token_data, TOK_HEREDOC);
@@ -74,7 +74,7 @@ t_ast	*parse_re_out(t_token_data **token_data, t_token **current, t_ast *prev)
 	if (!(*current) || (*current)->type != TOK_WORD)
 	{
 		if ((*token_data)->syntax_error == 0)
-			ft_perror_parsing(SYNTAX_ERROR, (*current)->value);
+			ft_perror_parsing(token_data, SYNTAX_ERROR, (*current)->value);
 		return ((*token_data)->syntax_error = 1, NULL);
 	}
 	re_node = create_ast_node(token_data, TOK_REDIRECT_OUT);
@@ -99,7 +99,7 @@ t_ast	*parse_re_in(t_token_data **token_data, t_token **current, t_ast *prev)
 	if (!(*current) || (*current)->type != TOK_WORD)
 	{
 		if ((*token_data)->syntax_error == 0)
-			ft_perror_parsing(SYNTAX_ERROR, (*current)->value);
+			ft_perror_parsing(token_data, SYNTAX_ERROR, (*current)->value);
 		return ((*token_data)->syntax_error = 1, NULL);
 	}
 	re_node = create_ast_node(token_data, TOK_REDIRECT_IN);

@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 13:51:18 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/18 13:31:41 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/21 16:53:48 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,21 @@ void	expand_var(t_token_data **token_data, int *i, int *count, char *new)
 {
 	int		start;
 	char	*value;
+	char	*exitcode;
 
 	(*i)++;
 	start = (*i);
-	// if ((*str)[(*i) + 1] == '?')
-	// 	// handle ? else
+	if ((*token_data)->expand_str[*i] == '?')
+	{
+		exitcode = ft_itoa((*token_data)->last_exit);
+		while (*exitcode)
+		{
+		new[*count] = *exitcode;
+		(*count)++;
+		exitcode++;
+		}
+		(*i)++;
+	}
 	while ((*token_data)->expand_str[*i] != '\0'
 		&& (((*token_data)->expand_str[*i] < 123
 				&& (*token_data)->expand_str[*i] > 96)
@@ -119,6 +129,6 @@ char	*handle_quotes(t_token_data **token_data, char **str)
 			in_nq(token_data, &new, &i, &count);
 	}
 	if ((*token_data)->in_DQ == 1 || (*token_data)->in_SQ == 1)
-		return ((ft_perror_parsing(UNCLOSED_QUOTES, "unclosed quotes")), NULL);
+		return ((ft_perror_parsing(token_data, UNCLOSED_QUOTES, "unclosed quotes")), NULL);
 	return (new[count] = '\0', new);
 }

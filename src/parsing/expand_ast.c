@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:29:30 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/18 13:26:04 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/21 16:53:34 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	valid_cmd(t_token_data **token_data, t_ast *node)
 			ft_strlen(node->args[0])) == 1)
 	{
 		if ((*token_data)->syntax_error == 0)
-			ft_perror_parsing(INVALID_COMMAND, node->args[0]);
+			ft_perror_parsing(token_data, INVALID_COMMAND, node->args[0]);
 		(*token_data)->syntax_error = 1;
 		return (1);
 	}

@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:14:39 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/17 12:53:35 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/21 18:50:04 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 int	init_token_data(char *input, t_token_data **token_data, t_gc *gc,
 		char **envp)
 {
-	(*token_data) = (t_token_data *)gc_malloc(gc, TOKENS, sizeof(t_token_data));
-	if (!(*token_data))
-		return (1);
+	// (*token_data) = (t_token_data *)gc_malloc(gc, TOKENS, sizeof(t_token_data));
+	// if (!(*token_data))
+	// 	return (1);
 	(*token_data)->input = input;
 	(*token_data)->token_list = NULL;
 	(*token_data)->ast = NULL;
@@ -31,12 +31,11 @@ int	init_token_data(char *input, t_token_data **token_data, t_gc *gc,
 	(*token_data)->end = 0;
 	(*token_data)->gc = gc;
 	(*token_data)->finish = 0;
-	(*token_data)->syntax_error = 0;
 	(*token_data)->envp = envp;
 	(*token_data)->expand_str = NULL;
-	(*token_data)->env_list = (t_env *)gc_malloc(gc, TOKENS, sizeof(t_env));
-	if (!(*token_data)->env_list)
-		return (1);
-	(*token_data)->env_list = init_env(envp, gc);
+	(*token_data)->syntax_error = 0;
+	// (*token_data)->env_list = (t_env *)gc_malloc(gc, TOKENS, sizeof(t_env));
+	// if (!(*token_data)->env_list)
+	// 	return (1);
 	return (0);
 }

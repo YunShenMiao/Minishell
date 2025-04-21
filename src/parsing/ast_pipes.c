@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:54:32 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/04 12:37:58 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/21 16:56:07 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_ast	*parse_pipes(t_token_data **token_data, t_token **current)
 		if (!right)
 		{
 			if ((*token_data)->syntax_error == 0)
-				ft_perror_parsing(SYNTAX_ERROR, (*current)->value);
+				ft_perror_parsing(token_data, SYNTAX_ERROR, (*current)->value);
 			return ((*token_data)->syntax_error = 1, NULL);
 		}
 		pipe = create_ast_node(token_data, TOK_PIPE);

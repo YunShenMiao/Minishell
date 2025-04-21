@@ -89,18 +89,18 @@ int	execution_main(t_token_data **token_data, t_ast *node)
 {
 	if (node->type == TOK_PIPE)
 	{
-		printf("pipe\n");
-		// return (exec_pipe(node, -1, (*token_data)));
+		// printf("pipe\n");
+		return (exec_pipe(node, -1, (*token_data)));
 	}
 	else if (node->type == TOK_COMMAND)
 	{
-		printf("cmd\n");
+		// printf("cmd\n");
 		return (run_simple_cmd(node, (*token_data)));
 	}
 	else if (node->type == TOK_APPEND || node->type == TOK_HEREDOC
 		|| node->type == TOK_REDIRECT_IN || node->type == TOK_REDIRECT_OUT)
 	{
-		printf("redirect\n");
+		// printf("redirect\n");
 		return (exec_redir_normal(node, token_data, node->type));
 	}
 	if (node->left != NULL)
@@ -110,41 +110,41 @@ int	execution_main(t_token_data **token_data, t_ast *node)
 	return (0);
 }
 
-void	print_ast(t_ast *node, int depth, char *pos)
-{
-	int i;
+// void	print_ast(t_ast *node, int depth, char *pos)
+// {
+// 	int i;
 
-	if (!node)
-		return ;
-	i = 0;
-	while (i < depth)
-	{
-		printf("  ");
-		i++;
-	}
-	printf("%s ", pos);
-	if (node->type == TOK_COMMAND)
-	{
-		printf("CMD: ");
-		i = 0;
-		while (node->args[i])
-		{
-			printf("%s ", node->args[i]);
-			i++;
-		}
-	}
-	else if (node->type == TOK_PIPE)
-		printf("PIPE");
-	else if (node->type == TOK_REDIRECT_IN || node->type == TOK_REDIRECT_OUT
-		|| node->type == TOK_APPEND || node->type == TOK_HEREDOC)
-		printf("REDIR: %d -> %s", node->type, node->file_name);
-	else if (node->type == TOK_FILE)
-		printf("FILE: %s", node->file_name);
-	printf("\n");
+// 	if (!node)
+// 		return ;
+// 	i = 0;
+// 	while (i < depth)
+// 	{
+// 		printf("  ");
+// 		i++;
+// 	}
+// 	printf("%s ", pos);
+// 	if (node->type == TOK_COMMAND)
+// 	{
+// 		printf("CMD: ");
+// 		i = 0;
+// 		while (node->args[i])
+// 		{
+// 			printf("%s ", node->args[i]);
+// 			i++;
+// 		}
+// 	}
+// 	else if (node->type == TOK_PIPE)
+// 		printf("PIPE");
+// 	else if (node->type == TOK_REDIRECT_IN || node->type == TOK_REDIRECT_OUT
+// 		|| node->type == TOK_APPEND || node->type == TOK_HEREDOC)
+// 		printf("REDIR: %d -> %s", node->type, node->file_name);
+// 	else if (node->type == TOK_FILE)
+// 		printf("FILE: %s", node->file_name);
+// 	printf("\n");
 
-	print_ast(node->left, depth + 1, "Left:");
-	print_ast(node->right, depth + 1, "Right:");
-}
+// 	print_ast(node->left, depth + 1, "Left:");
+// 	print_ast(node->right, depth + 1, "Right:");
+// }
 
 // general structure function for parsing
 int	parse_main(char *input, t_token_data **token_data, t_gc *gc, char **envp)
@@ -162,26 +162,30 @@ int	parse_main(char *input, t_token_data **token_data, t_gc *gc, char **envp)
 	if (expand_ast_nodes(token_data, &(*token_data)->ast) == 1)
 		return (1);
 	// print_list((*token_data)->token_list);
-	print_ast((*token_data)->ast, 0, "Root: ");
+	// print_ast((*token_data)->ast, 0, "Root: ");
 	// test(token_data, envp);
 	return (0);
 }
 
-void	parse_execute(char *input, char **envp)
+void	parse_execute(char *input, char **envp, t_token_data **token_data)
 {
-	t_token_data *token_data;
-	t_gc *gc;
+	// t_token_data *token_data;
+	// t_gc *gc;
 
-	token_data = NULL;
-	gc = init_gc();
+	// token_data = NULL;
+	// gc = init_gc();
 
-	if (parse_main(input, &token_data, gc, envp) == 1)
-		gc_free_all(gc);
-	else
-	{
-		if (execution_main(&token_data, token_data->ast) == 1)
-			gc_free_all(gc);
-	}
+	// parse_main(input, token_data, (*token_data)->gc, envp);
+	// execution_main(token_data, (*token_data)->ast);
+	if (parse_main(input, token_data, (*token_data)->gc, envp) == 1)
+		gc_free_all((*token_data)->gc);
+	else if (execution_main(token_data, (*token_data)->ast) == 1)
+		gc_free_all((*token_data)->gc);
+		else
+		{
+		gc_free_category((*token_data)->gc, TOKENS);
+		gc_free_category((*token_data)->gc, PARSING);
+		}
 }
 
 // if string only space or tab -> just new prompt
@@ -189,21 +193,44 @@ int	main(int argc, char **argv, char **envp)
 {
 	char *input;
 	char *prompt;
+	t_token_data *token_data;
+	t_gc *gc;
 
+	token_data = malloc(sizeof(t_token_data));
+	if (!token_data)
+		return (1);
+	token_data->last_exit = 0;
+	gc = init_gc();
+	token_data->env_list = init_env(envp, gc);
 	if (argc < 1 || argv[0] == NULL)
 		return (1);
 	prompt = GREEN "minishell" BLUE ">" RESET " ";
 	start_message();
 	while (1)
 	{
-		input = readline(prompt);
+		// input = readline(prompt);
+		if (isatty(fileno(stdin)))
+		{
+			input = readline(prompt);
+		}
+		else
+		{
+			char *line = get_next_line(fileno(stdin));
+			if (!line)
+				break;
+			input = ft_strtrim(line, "\n");
+			free(line);
+		}
 		if (!input || ft_strlen(input) == 0)
 			continue ;
 		else
 		{
+			token_data->gc = gc;
 			add_history(input);
-			parse_execute(input, envp);
+			parse_execute(input, envp, &token_data);
+			gc = init_gc();
 		}
 	}
+	free(token_data);
 	return (0);
 }

@@ -20,8 +20,6 @@ SRC			= 	$(SRC_DIR)/main.c \
 				$(SRC_DIR)/builtins/unset.c \
 				src/execution/exe.c src/execution/pipe.c src/execution/redirection.c src/execution/signal.c
 
-				$(SRC_DIR)/builtins/unset.c \
-				$(SRC_DIR)/execution/pipe.c $(SRC_DIR)/execution/redirection.c $(SRC_DIR)/execution/exe.c
 OBJ			= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 
 # $(SRC_DIR)/builtins/cd.c $(SRC_DIR)/builtins/echo.c $(SRC_DIR)/builtins/env.c \

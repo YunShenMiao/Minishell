@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:10:01 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/07 16:21:43 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/21 15:51:06 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,5 @@ t_ast	*build_ast(t_token_data **token_data)
 	(*token_data)->ast = ast;
 	if ((*token_data)->syntax_error == 1)
 		return (NULL);
-	printf("error: %d\n", (*token_data)->syntax_error);
 	return (ast);
 }
