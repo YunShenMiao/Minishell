@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 13:51:18 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/21 16:53:48 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:46:14 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	expand_var(t_token_data **token_data, int *i, int *count, char *new)
 	int		start;
 	char	*value;
 	char	*exitcode;
-
+	if ((*token_data)->expand_str[*i] != '\0')
 	(*i)++;
 	start = (*i);
 	if ((*token_data)->expand_str[*i] == '?')
@@ -57,12 +57,12 @@ void	expand_var(t_token_data **token_data, int *i, int *count, char *new)
 // skipping dq, handling env expansion & copying rest
 void	in_dq(t_token_data **token_data, char **new, int *i, int *count)
 {
-	if ((*token_data)->expand_str[*i] == '\"')
+	if ((*token_data)->expand_str[*i] != '\0' && (*token_data)->expand_str[*i] == '\"')
 		(*i)++;
 	if ((*token_data)->expand_str[*i] == '$' && (*token_data)->expand_str[*i
-			+ 1] != '\0' && (*token_data)->expand_str[*i + 1] != ' ')
+			+ 1] != '\0' && (*token_data)->expand_str[*i + 1] != ' ' && (*token_data)->expand_str[*i + 1] != '\"')
 		expand_var(token_data, i, count, *new);
-	if ((*token_data)->expand_str[*i] != '\"')
+	if ((*token_data)->expand_str[*i] != '\0' && (*token_data)->expand_str[*i] != '\"')
 	{
 		(*new)[*count] = (*token_data)->expand_str[*i];
 		(*count)++;
@@ -74,8 +74,9 @@ void	in_dq(t_token_data **token_data, char **new, int *i, int *count)
 // and skips initial & closing quote
 void	in_sq(char **str, char **new, int *i, int *count)
 {
+	if ((*str)[*i] == '\'')
 	(*i)++;
-	while ((*str)[*i] != '\'')
+	while ((*str)[*i] != '\0' && (*str)[*i] != '\'')
 	{
 		(*new)[(*count)] = (*str)[(*i)];
 		(*count)++;
@@ -98,6 +99,7 @@ void	in_nq(t_token_data **token_data, char **new, int *i, int *count)
 		(*new)[*count] = (*token_data)->expand_str[*i];
 		(*count)++;
 	}
+	if ((*token_data)->expand_str[*i] != '\0')
 	(*i)++;
 }
 
@@ -116,10 +118,12 @@ char	*handle_quotes(t_token_data **token_data, char **str)
 	new = (char *)gc_malloc((*token_data)->gc, PARSING, ft_strlen(*str) * 4);
 	if (!new)
 		return (NULL);
-	if ((quote_status(token_data, (*str)[i])) == 1)
+	if ((*str)[i]!= '\0' && (quote_status(token_data, (*str)[i])) == 1)
 		i++;
 	while ((*str)[i] != '\0')
 	{
+		if (i >= (int)ft_strlen(*str)) // safety check (cast for good measure)
+		break;
 		quote_status(token_data, (*str)[i]);
 		if ((*token_data)->in_DQ)
 			in_dq(token_data, &new, &i, &count);

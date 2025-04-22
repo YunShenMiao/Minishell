@@ -169,7 +169,7 @@ void	gc_free_category(t_gc *gc, t_mem_location category);
 void	gc_free_all(t_gc *gc);
 
 // tokens
-int			modify_input(char *input, char **modified_input, t_gc *gc);
+int			modify_input(char *input, char **modified_input, t_gc *gc, t_token_data **token_data);
 int 		tokenize(t_token_data *token_data);
 int 		init_token_data(char *input, t_token_data **token_data, t_gc *gc, char **envp);
 t_tok_type	token_type(t_token *token);
@@ -186,6 +186,9 @@ char	*find_path(char *cmd, char **envp);
 int		quote_status(t_token_data **token_data, char input);
 int 	expand_ast_nodes(t_token_data **token_data, t_ast **ast);
 char	*handle_quotes(t_token_data **token_data, char **str);
+int		valid_cmd(t_token_data **token_data, t_ast *node);
+void	parse_command_args(t_token_data **token_data, t_token **current,
+	t_ast *cmd_node);
 
 // builtins
 int		ft_echo(char **args);

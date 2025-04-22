@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:55:26 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/21 16:54:47 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/22 10:52:41 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,23 @@ void	ft_perror_parsing(t_token_data **token_data, int error_id, char *error_info
 {
 	if (error_id == INVALID_COMMAND)
 	{
-		write(2, "🐢 minishell: '", 16);
+		write(2, "🐢 minishell: ", 16);
 		write(2, error_info, ft_strlen(error_info));
-		write(2, "': command not found\n", 22);
+		write(2, ": command not found\n", 21);
 		(*token_data)->last_exit = 127;
 	}
 	else if (error_id == SYNTAX_ERROR)
 	{
-		write(2, "🐢 minishell: syntax error near unexpected token '", 51);
+		write(2, "🐢 minishell: syntax error near unexpected token '", 52);
 		write(2, error_info, ft_strlen(error_info));
 		write(2, "'\n", 2);
 		(*token_data)->last_exit = 2;
 	}
 	else if (error_id == UNCLOSED_QUOTES)
 	{
-		write(2, "🐢 minishell: syntax error '", 28);
+		write(2, "🐢 minishell: syntax error ", 29);
 		write(2, error_info, ft_strlen(error_info));
-		write(2, "'\n", 2);
+		write(2, "\n", 2);
 		(*token_data)->last_exit = 2;
 	}
 }

@@ -110,51 +110,52 @@ int	execution_main(t_token_data **token_data, t_ast *node)
 	return (0);
 }
 
-// void	print_ast(t_ast *node, int depth, char *pos)
-// {
-// 	int i;
+void	print_ast(t_ast *node, int depth, char *pos)
+{
+	int i;
 
-// 	if (!node)
-// 		return ;
-// 	i = 0;
-// 	while (i < depth)
-// 	{
-// 		printf("  ");
-// 		i++;
-// 	}
-// 	printf("%s ", pos);
-// 	if (node->type == TOK_COMMAND)
-// 	{
-// 		printf("CMD: ");
-// 		i = 0;
-// 		while (node->args[i])
-// 		{
-// 			printf("%s ", node->args[i]);
-// 			i++;
-// 		}
-// 	}
-// 	else if (node->type == TOK_PIPE)
-// 		printf("PIPE");
-// 	else if (node->type == TOK_REDIRECT_IN || node->type == TOK_REDIRECT_OUT
-// 		|| node->type == TOK_APPEND || node->type == TOK_HEREDOC)
-// 		printf("REDIR: %d -> %s", node->type, node->file_name);
-// 	else if (node->type == TOK_FILE)
-// 		printf("FILE: %s", node->file_name);
-// 	printf("\n");
+	if (!node)
+		return ;
+	i = 0;
+	while (i < depth)
+	{
+		printf("  ");
+		i++;
+	}
+	printf("%s ", pos);
+	if (node->type == TOK_COMMAND)
+	{
+		printf("CMD: ");
+		i = 0;
+		while (node->args[i])
+		{
+			printf("%s ", node->args[i]);
+			i++;
+		}
+	}
+	else if (node->type == TOK_PIPE)
+		printf("PIPE");
+	else if (node->type == TOK_REDIRECT_IN || node->type == TOK_REDIRECT_OUT
+		|| node->type == TOK_APPEND || node->type == TOK_HEREDOC)
+		printf("REDIR: %d -> %s", node->type, node->file_name);
+	else if (node->type == TOK_FILE)
+		printf("FILE: %s", node->file_name);
+	printf("\n");
 
-// 	print_ast(node->left, depth + 1, "Left:");
-// 	print_ast(node->right, depth + 1, "Right:");
-// }
+	print_ast(node->left, depth + 1, "Left:");
+	print_ast(node->right, depth + 1, "Right:");
+}
 
 // general structure function for parsing
 int	parse_main(char *input, t_token_data **token_data, t_gc *gc, char **envp)
 {
 	char *modified_input;
 
-	if (modify_input(input, &modified_input, gc) == 1)
+	if (init_token_data(input, token_data, gc, envp) == 1)
 		return (printf("Allocation Error\n"), 1);
-	if (init_token_data(modified_input, token_data, gc, envp) == 1)
+	if (modify_input(input, &modified_input, gc, token_data) == 1)
 		return (printf("Allocation Error\n"), 1);
+	(*token_data)->input = modified_input;
 	if (tokenize(*token_data) == 1)
 		return (1);
 	if (build_ast(token_data) == NULL)
@@ -195,6 +196,7 @@ int	main(int argc, char **argv, char **envp)
 	char *prompt;
 	t_token_data *token_data;
 	t_gc *gc;
+	int le;
 
 	token_data = malloc(sizeof(t_token_data));
 	if (!token_data)
@@ -205,7 +207,7 @@ int	main(int argc, char **argv, char **envp)
 	if (argc < 1 || argv[0] == NULL)
 		return (1);
 	prompt = GREEN "minishell" BLUE ">" RESET " ";
-	start_message();
+	// start_message();
 	while (1)
 	{
 		// input = readline(prompt);
@@ -231,6 +233,10 @@ int	main(int argc, char **argv, char **envp)
 			gc = init_gc();
 		}
 	}
+	le = (token_data->last_exit);
 	free(token_data);
+	if (gc)
+	free(gc);
+	exit(le);
 	return (0);
 }

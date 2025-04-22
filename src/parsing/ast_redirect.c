@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:41:12 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/21 16:55:53 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:12:54 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,9 @@ t_ast	*parse_re_in(t_token_data **token_data, t_token **current, t_ast *prev)
 			ft_strlen((*current)->value));
 	re_node->left = file_node;
 	*current = (*current)->next;
+	// if ((*current)->type == TOK_WORD)
+	// re_node->right = create_ast_node(token_data, TOK_COMMAND);
+	// else
 	re_node->right = prev;
 	return (re_node);
 }
@@ -117,8 +120,10 @@ t_ast	*parse_redirections(t_token_data **token_data, t_token **current,
 		t_ast *prev)
 {
 	t_ast	*redir;
+	// t_ast *cmd;
 
 	redir = NULL;
+	// cmd = NULL;
 	while (*current && ((*current)->type == TOK_REDIRECT_IN
 			|| (*current)->type == TOK_REDIRECT_OUT
 			|| (*current)->type == TOK_APPEND
@@ -132,6 +137,12 @@ t_ast	*parse_redirections(t_token_data **token_data, t_token **current,
 			redir = (parse_append(token_data, current, prev));
 		else if ((*current)->type == TOK_HEREDOC)
 			redir = (parse_heredoc(token_data, current, prev));
+		// else if ((*current)->type == TOK_WORD)
+		// {
+		// 	cmd = create_ast_node(token_data, TOK_COMMAND);
+		// 	parse_command_args(token_data, current, cmd);
+		// 	redir->left = cmd;
+		// }
 		prev = redir;
 	}
 	return (redir);

@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:51:05 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/08 15:59:12 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/22 13:06:05 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,12 @@ void	merge_echo_n(char *input, char **edited, int *count, int *count2)
 
 // adds extra spaces for redirections, heredoc and pipes which
 // if inputted without space as delimiter
-void	edit_spaces(char *input, char **edited, int *count, int *count2)
+void	edit_spaces(t_token_data **token_data, char **edited, int *count, int *count2)
 {
-	if (input[*count2] == '>' || input[*count2] == '<' || input[*count2] == '|')
+	char *input;
+
+	input = (*token_data)->input;
+	if ((input[*count2] == '>' || input[*count2] == '<' || input[*count2] == '|') && (*token_data)->in_DQ == 0 && (*token_data)->in_SQ == 0)
 	{
 		if (input[*count2 - 1] != '\"' && input[*count2 - 1] != '\'')
 		{
@@ -76,7 +79,7 @@ void	edit_spaces(char *input, char **edited, int *count, int *count2)
 	(*edited)[*count] = input[*count2];
 	if (((*edited)[*count] == '>' || (*edited)[*count] == '<'
 			|| (*edited)[*count] == '|') && (input[*count2 + 1] != '\"'
-			&& input[*count2 + 1] != '\''))
+			&& input[*count2 + 1] != '\'') && (*token_data)->in_DQ == 0 && (*token_data)->in_SQ == 0)
 	{
 		(*count)++;
 		(*edited)[*count] = ' ';
@@ -84,17 +87,17 @@ void	edit_spaces(char *input, char **edited, int *count, int *count2)
 }
 
 // trims extra quotes that bash ignores
-void	trim_quotes(char *input, int *count2)
+void	trim_quotes(char *input, int *count2, t_token_data **token_data)
 {
 	int	count2cp;
 
 	count2cp = 0;
-	if (input[count2cp + *count2] == '\"')
+	if (input[count2cp + *count2] == '\"' && (*token_data)->in_SQ == 0)
 	{
 		while (input[count2cp + *count2] == '\"')
 			count2cp++;
 	}
-	else if (input[*count2] == '\'')
+	else if (input[*count2] == '\'' && (*token_data)->in_DQ == 0)
 	{
 		while (input[count2cp] == '\'')
 			count2cp++;
@@ -109,7 +112,7 @@ void	trim_quotes(char *input, int *count2)
 // and parsing, cases being handled: "echo -n"/"echo -n -nn"
 // | missing spaces: eg "miao>>output.txt"
 // | quotes to ignore: eg """""" -> ""
-int	modify_input(char *input, char **modified_input, t_gc *gc)
+int	modify_input(char *input, char **modified_input, t_gc *gc, t_token_data **token_data)
 {
 	int	count;
 	int	count2;
@@ -121,9 +124,10 @@ int	modify_input(char *input, char **modified_input, t_gc *gc)
 	count2 = 0;
 	while (input[count2] != '\0')
 	{
+		quote_status(token_data, input[count2]);
 		merge_echo_n(input, modified_input, &count, &count2);
-		trim_quotes(input, &count2);
-		edit_spaces(input, modified_input, &count, &count2);
+		trim_quotes(input, &count2, token_data);
+		edit_spaces(token_data, modified_input, &count, &count2);
 		count++;
 		count2++;
 	}
