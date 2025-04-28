@@ -220,7 +220,7 @@ int	main(int argc, char **argv, char **envp)
 			char *line = get_next_line(fileno(stdin));
 			if (!line)
 				break;
-			input = ft_strtrim(line, "\n");
+			input = ft_strtrim(line, "\n"); //input is not freed here!!
 			free(line);
 		}
 		if (!input || ft_strlen(input) == 0)
