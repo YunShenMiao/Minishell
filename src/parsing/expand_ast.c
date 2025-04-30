@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:29:30 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/21 16:53:34 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/30 15:45:38 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	token_command(char *value, size_t len)
 // checks if args[0] is a valid cmd or builtin, returns error if not
 int	valid_cmd(t_token_data **token_data, t_ast *node)
 {
-	node->cmd_path = find_path(node->args[0], (*token_data)->envp);
+	node->cmd_path = find_path(node->args[0], (*token_data)->envp, (*token_data)->gc);
 	if (node->cmd_path == NULL && token_command(node->args[0],
 			ft_strlen(node->args[0])) == 1)
 	{

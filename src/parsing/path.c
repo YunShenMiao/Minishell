@@ -6,13 +6,13 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 21:06:35 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/07 16:11:21 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/30 15:51:22 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static char	*fallback(char *cmd)
+static char	*fallback(char *cmd, t_gc *gc)
 {
 	int		i;
 	char	*path;
@@ -25,18 +25,16 @@ static char	*fallback(char *cmd)
 	fallback_paths[2] = NULL;
 	while (fallback_paths[i])
 	{
-		path = ft_strjoin(fallback_paths[i], "/");
-		full_path = ft_strjoin(path, cmd);
-		free(path);
+		path = ft_env_strjoin(fallback_paths[i], "/", gc);
+		full_path = ft_env_strjoin(path, cmd, gc);
 		if (access(full_path, X_OK) == 0)
 			return (full_path);
-		free(full_path);
 		i++;
 	}
 	return (NULL);
 }
 
-static char	*handle_path(char *cmd, char *part_env)
+static char	*handle_path(char *cmd, char *part_env, t_gc *gc)
 {
 	int		j;
 	char	**paths;
@@ -47,21 +45,19 @@ static char	*handle_path(char *cmd, char *part_env)
 	j = 0;
 	while (paths[j])
 	{
-		path = ft_strjoin(paths[j++], "/");
-		full_path = ft_strjoin(path, cmd);
-		free(path);
+		path = ft_env_strjoin(paths[j++], "/", gc);
+		full_path = ft_env_strjoin(path, cmd, gc);
 		if (access(full_path, X_OK) == 0)
 		{
 			free_array(paths);
 			return (full_path);
 		}
-		free(full_path);
 	}
 	free_array(paths);
 	return (NULL);
 }
 
-char	*find_path(char *cmd, char **envp)
+char	*find_path(char *cmd, char **envp, t_gc *gc)
 {
 	int	i;
 
@@ -77,12 +73,12 @@ char	*find_path(char *cmd, char **envp)
 		i++;
 	}
 	if (envp == NULL || !*envp)
-		return (fallback(cmd));
+		return (fallback(cmd, gc));
 	i = 0;
 	while (envp[i])
 	{
 		if (!ft_strncmp(envp[i], "PATH=", 5))
-			return (handle_path(cmd, envp[i]));
+			return (handle_path(cmd, envp[i], gc));
 		i++;
 	}
 	return (NULL);

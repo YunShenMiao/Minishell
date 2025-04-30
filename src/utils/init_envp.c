@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_envp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 12:00:31 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/15 21:06:34 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/30 15:43:12 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,10 +104,10 @@ t_env	*init_env(char **envp, t_gc *gc)
 	char	*value;
 	int		i;
 
-	name = ft_substr(envp[0], 0, find_sign(envp[0], '='));
+	name = ft_env_substr(envp[0], 0, find_sign(envp[0], '='), gc);
 	if (!name)
 		return (NULL);
-	value = ft_substr(envp[0], find_sign(envp[0], '=') + 1, ft_strlen(envp[0]));
+	value = ft_env_substr(envp[0], find_sign(envp[0], '=') + 1, ft_strlen(envp[0]), gc);
 	if (!value)
 		return (NULL);
 	top_env = create_env(name, value, gc);
@@ -116,10 +116,10 @@ t_env	*init_env(char **envp, t_gc *gc)
 	i = 1;
 	while (i < count_arr_row(envp))
 	{
-		name = ft_substr(envp[i], 0, find_sign(envp[i], '='));
+		name = ft_env_substr(envp[i], 0, find_sign(envp[i], '='), gc);
 		if (!name)
 			return (NULL);
-		value = ft_substr(envp[i], find_sign(envp[i], '=') + 1, ft_strlen(envp[i]));
+		value = ft_env_substr(envp[i], find_sign(envp[i], '=') + 1, ft_strlen(envp[i]), gc);
 		if (!value)
 			return (NULL);
 		new = create_env(name, value, gc);

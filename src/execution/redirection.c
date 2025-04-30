@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 20:44:04 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/30 12:10:12 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/30 14:44:47 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int heredoc(char *delimiter)
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || (ft_strelen(line) == ft_strlen(delimiter) && ft_strncmp(line, delimiter, ft_strlen(line)) == 0))
+		if (!line || (ft_strlen(line) == ft_strlen(delimiter) && ft_strncmp(line, delimiter, ft_strlen(line)) == 0))
 		{
 			free(line);
 			break;

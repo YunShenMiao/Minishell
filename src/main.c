@@ -163,7 +163,7 @@ int	parse_main(char *input, t_token_data **token_data, t_gc *gc, char **envp)
 	if (expand_ast_nodes(token_data, &(*token_data)->ast) == 1)
 		return (1);
 	// print_list((*token_data)->token_list);
-	// print_ast((*token_data)->ast, 0, "Root: ");
+	print_ast((*token_data)->ast, 0, "Root: ");
 	// test(token_data, envp);
 	return (0);
 }
@@ -179,10 +179,12 @@ void	parse_execute(char *input, char **envp, t_token_data **token_data)
 	// parse_main(input, token_data, (*token_data)->gc, envp);
 	// execution_main(token_data, (*token_data)->ast);
 	if (parse_main(input, token_data, (*token_data)->gc, envp) == 1)
-		gc_free_all((*token_data)->gc);
+		// gc_free_all((*token_data)->gc);
+		printf("miao\n");
 	else if (execution_main(token_data, (*token_data)->ast) == 1)
-		gc_free_all((*token_data)->gc);
-		else
+		// gc_free_all((*token_data)->gc);
+		printf("miao\n");
+	else
 		{
 		gc_free_category((*token_data)->gc, TOKENS);
 		gc_free_category((*token_data)->gc, PARSING);
@@ -230,7 +232,7 @@ int	main(int argc, char **argv, char **envp)
 			token_data->gc = gc;
 			add_history(input);
 			parse_execute(input, envp, &token_data);
-			gc = init_gc();
+			// gc = init_gc();
 		}
 	}
 	le = (token_data->last_exit);

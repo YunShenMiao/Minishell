@@ -185,7 +185,7 @@ t_ast 	*create_ast_node(t_token_data **token_data, t_tok_type type);
 t_ast	*parse_redirections(t_token_data **token_data, t_token **current, t_ast *prev);
 t_ast	*parse_command(t_token_data **token_data, t_token **current);
 t_ast	*parse_pipes(t_token_data **token_data, t_token **current);
-char	*find_path(char *cmd, char **envp);
+char	*find_path(char *cmd, char **envp, t_gc *gc);
 int		quote_status(t_token_data **token_data, char input);
 int 	expand_ast_nodes(t_token_data **token_data, t_ast **ast);
 char	*handle_quotes(t_token_data **token_data, char **str);
@@ -207,7 +207,7 @@ int		do_redir(t_tok_type tp, t_ast *node);
 int		exec_redir_normal(t_ast *node, t_token_data **td, t_tok_type tp);
 int		exec_redir_pipe(t_ast *node, t_token_data **td, t_tok_type tp, int prev_read);
 int		execute_builtins(t_ast *node, t_token_data **token_data);
-char	**env_to_array(t_env *top);
+char	**env_to_array(t_env *top, t_gc *gc);
 void	exec_cmd(t_ast *node, int prev_read, t_token_data *td);
 int		run_simple_cmd(t_ast *node, t_token_data *td);
 
