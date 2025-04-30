@@ -142,6 +142,9 @@ typedef struct s_data
 void	start_message(void);
 void	free_array(char **arr);
 int		ft_put_to_fd(char *str, int fd);
+char	*ft_env_substr(char const *s, unsigned int start, size_t len, t_gc *gc);
+char	*ft_env_strdup(const char *src, t_gc *gc);
+char	*ft_env_strjoin(char const *s1, char const *s2, t_gc *gc);
 
 // error_handling
 int		error_general(char *msg);

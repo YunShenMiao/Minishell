@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:21:43 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/28 16:43:20 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/30 12:49:31 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ int	add_env_var(t_env *top_env, char *assign, t_gc *gc)
 	char	*value;
 
 
-	name = ft_substr(assign, 0, find_sign(assign, '='));
+	name = ft_env_substr(assign, 0, find_sign(assign, '='), gc);
 	if (!name)
 		return (error_general("malloc: env not initiated"));
-	value = ft_substr(assign, find_sign(assign, '=') + 1, ft_strlen(assign));
+	value = ft_env_substr(assign, find_sign(assign, '=') + 1, ft_strlen(assign), gc);
 	if (!value)
 		return (error_general("malloc: env not initiated"));
 	if (search_name_node(top_env, name))
