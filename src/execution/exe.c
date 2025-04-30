@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exe.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 20:06:50 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/21 16:43:09 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/04/30 12:49:23 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	execute_builtins(t_ast *node, t_token_data **token_data)
 	return (-1);
 }
 
-char	**env_to_array(t_env *top)
+char	**env_to_array(t_env *top, t_gc *gc)
 {
 	size_t	count;
 	t_env	*tmp;
@@ -96,14 +96,14 @@ char	**env_to_array(t_env *top)
 	tmp = top;
 	while (tmp && ++count)
 		tmp = tmp->next;
-	out = malloc(sizeof(char *) * (count + 1));
+	out = gc_malloc(gc, EXECUTION, sizeof(char *) * (count + 1));
 	if (!out)
 		return (NULL);
 	tmp = top;
 	i = 0;
 	while(tmp)
 	{
-        out[i] = malloc(ft_strlen(tmp->name) + ft_strlen(tmp->val) + 2);
+        out[i] = gc_malloc(gc, EXECUTION, ft_strlen(tmp->name) + ft_strlen(tmp->val) + 2);
         if (!out[i])
             return (NULL);
         ft_memcpy(out[i], tmp->name, ft_strlen(tmp->name));
@@ -134,7 +134,7 @@ void	exec_cmd(t_ast *node, int prev_read, t_token_data *td)
 	builtin_status = execute_builtins(node, &tmp);
 	if (builtin_status != -1)
 		_exit(builtin_status);
-	envp = env_to_array(td->env_list);
+	envp = env_to_array(td->env_list, td->gc);
 	execve(node->cmd_path, node->args, envp);
 	perror("execve");
 	_exit(127);

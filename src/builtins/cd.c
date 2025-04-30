@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:18:21 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/15 22:39:00 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/30 12:49:22 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,11 @@ int	swap_PWDs(t_env *top, t_gc *gc)
 	pwd_node = search_name_node(top, "PWD");
 	if (!pwd_node || !pwd_node->val)
 		return (error_general("PWD not set"));
-	pwd =  ft_strdup(pwd_node->val);
+	pwd =  ft_env_strdup(pwd_node->val, gc);
 	if (!pwd)
 		return (1);
 	old_pwd_node = search_name_node(top, "OLDPWD");
-	old_pwd =  ft_strdup(old_pwd_node->val);
+	old_pwd =  ft_env_strdup(old_pwd_node->val, gc);
 	if (!old_pwd)
 		return (1);
 	if (update_env_var(&top, "OLDPWD", pwd, gc) == 1)
@@ -83,29 +83,29 @@ int	find_last_slash(char *path)
 	return (-1);
 }
 
-char	*get_parent_dir(char *cur_dir)
+char	*get_parent_dir(char *cur_dir, t_gc *gc)
 {
 	int		len;
 	int		i;
 	char	*pwd;
 	char	*temp;
 
-	pwd = ft_strdup(cur_dir);
+	pwd = ft_env_strdup(cur_dir, gc);
 	if (!pwd)
 		return (NULL);
-	len = strlen(pwd);
+	len = ft_strlen(pwd);
 	while (len > 1 && pwd[len - 1] == '/')
 		pwd[--len] = '\0';
 	i = find_last_slash(pwd);
 	if (i == 0)
 	{
 		free(pwd);
-		pwd = ft_strdup("/"); // no need to protect because it's returning NULL anyways
+		pwd = ft_env_strdup("/", gc); // no need to protect because it's returning NULL anyways
 	}
 	else
 	{
 		temp = pwd;
-		pwd = ft_substr(temp, 0, i + 1);
+		pwd = ft_env_substr(temp, 0, i + 1, gc);
 		free(temp);
 	}
 	return (pwd);
@@ -123,10 +123,10 @@ int	cd_tilde(t_env *top, char *path, char *home, t_gc *gc)
 	}
 	else
 	{
-		use_part = ft_substr(path, 1, ft_strlen(path) - 1);
+		use_part = ft_env_substr(path, 1, ft_strlen(path) - 1, gc);
 		if (!use_part)
 			return (error_general("malloc: failed to create path"));
-		full_path = ft_strjoin(home, use_part);
+		full_path = ft_env_strjoin(home, use_part, gc);
 		if (!full_path)
 		{
 			free(use_part);
@@ -178,7 +178,7 @@ int	cd_minus(t_env *top, char *path, char *home, t_gc *gc)
 	return (0);
 }
 
-char	*normalize_path(const char *path)
+char	*normalize_path(const char *path, t_gc *gc)
 {
 	char	*full_path;
 	char	*current_path;
@@ -187,7 +187,7 @@ char	*normalize_path(const char *path)
 	int		i;
 
 	if (path[0] == '/')
-		full_path = ft_strdup("/");
+		full_path = ft_env_strdup("/", gc);
 	else
 		full_path = getcwd(NULL, 0);
 	if (!full_path)
@@ -204,7 +204,7 @@ char	*normalize_path(const char *path)
 	{
 		if (ft_strncmp(tokens[i], "..", 3) == 0)
 		{
-			temp = get_parent_dir(current_path);
+			temp = get_parent_dir(current_path, gc);
 			free(current_path);
 			current_path = temp;
 		}
@@ -213,11 +213,11 @@ char	*normalize_path(const char *path)
 			if (ft_strlen(current_path) > 1 && \
 				current_path[ft_strlen(current_path) - 1] != '/')
 			{
-				temp = ft_strjoin(current_path, "/");
+				temp = ft_env_strjoin(current_path, "/", gc);
 				free(current_path);
 				current_path = temp;
 			}
-			temp = ft_strjoin(current_path, tokens[i]);
+			temp = ft_env_strjoin(current_path, tokens[i], gc);
 			free(current_path);
 			current_path = temp;
 		}
@@ -228,7 +228,7 @@ char	*normalize_path(const char *path)
 	if (!current_path || ft_strlen(current_path) == 0)
 	{
 		free(current_path);
-		current_path = ft_strdup("/");
+		current_path = ft_env_strdup("/", gc);
 	}
 	return (current_path);
 }
@@ -252,7 +252,7 @@ int	ft_cd(char **args, t_env *top, t_gc *gc)
 			return (cd_minus(top, path, home, gc));
 		else
 		{
-			path = normalize_path(args[1]);
+			path = normalize_path(args[1], gc);
 			if (!path)
 				return (error_general("malloc: path normalization failed"));
 			if (chdir(path) == -1)

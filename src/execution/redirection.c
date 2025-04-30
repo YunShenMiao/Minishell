@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 20:44:04 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/17 17:31:25 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/30 12:10:12 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	red_in(char *filename)
 
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
-		return(perror("open error"), 1);
+		return (perror("open error"), 1);
 	if (dup2(fd, STDIN_FILENO) == -1)
 		return (1);
 	close(fd);
@@ -67,12 +67,12 @@ int heredoc(char *delimiter)
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || strcmp(line, delimiter) == 0)
+		if (!line || (ft_strelen(line) == ft_strlen(delimiter) && ft_strncmp(line, delimiter, ft_strlen(line)) == 0))
 		{
 			free(line);
 			break;
 		}
-		write(fd[1], line, strlen(line));
+		write(fd[1], line, ft_strlen(line));
 		write(fd[1], "\n", 1);
 		free(line);
 	}

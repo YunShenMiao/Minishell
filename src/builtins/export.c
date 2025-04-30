@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:21:43 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/15 21:35:30 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/30 12:49:31 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,25 @@ int	add_env_var(t_env *top_env, char *assign, t_gc *gc)
 	char	*name;
 	char	*value;
 
-	name = ft_substr(assign, 0, find_sign(assign, '='));
+
+	name = ft_env_substr(assign, 0, find_sign(assign, '='), gc);
 	if (!name)
 		return (error_general("malloc: env not initiated"));
-	value = ft_substr(assign, find_sign(assign, '=') + 1, ft_strlen(assign));
+	value = ft_env_substr(assign, find_sign(assign, '=') + 1, ft_strlen(assign), gc);
 	if (!value)
 		return (error_general("malloc: env not initiated"));
-	new = create_env(name, value, gc);
-	if (!new)
-		return (error_general("malloc: env not initiated"));
-	ft_env_add_back(&top_env, new);
+	if (search_name_node(top_env, name))
+	{
+		new = search_name_node(top_env, name);
+		new->val = value;
+	}
+	else
+	{
+		new = create_env(name, value, gc);
+		if (!new)
+			return (error_general("malloc: env not initiated"));
+		ft_env_add_back(&top_env, new);
+	}
 	return (0);
 }
 
@@ -76,26 +85,33 @@ int	ft_export(t_env	*top_env, char **args, t_gc *gc)
 {
 	char	*assign;
 	t_env	*new;
+	int		i;
 
 
 	if (!args[1])
 		print_export(top_env);
-	else if (args[2])
-		return (error_general("export: bad assign"));
 	else
 	{
-		assign = args[1];
-		if (find_sign(assign, '=') < 0)
+		i = 1;
+		while (args[i])
 		{
-			new = create_env(assign, NULL, gc);
-			if (!new)
-				return (error_general("malloc: env not initiated"));
-			ft_env_add_back(&top_env, new);
+			assign = args[1];
+			if (find_sign(assign, '=') < 0)
+			{
+				if (!search_name_node(top_env, assign))
+				{
+					new = create_env(assign, NULL, gc);
+					if (!new)
+						return (error_general("malloc: env not initiated"));
+					ft_env_add_back(&top_env, new);
+				}
+			}
+			else if (find_sign(assign, '=') == 0)
+				return (error_general("export: not a valid identifier"));
+			else
+				return (add_env_var(top_env, assign, gc));
+			i++;
 		}
-		else if (find_sign(assign, '=') == 0)
-			return (error_general("export: not a valid identifier"));
-		else
-			return (add_env_var(top_env, assign, gc));
 	}
 	return (0);
 }
