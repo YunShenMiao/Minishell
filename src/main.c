@@ -207,7 +207,7 @@ int	main(int argc, char **argv, char **envp)
 	if (argc < 1 || argv[0] == NULL)
 		return (1);
 	prompt = GREEN "minishell" BLUE ">" RESET " ";
-	// start_message();
+	start_message();
 	while (1)
 	{
 		// input = readline(prompt);
