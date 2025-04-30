@@ -178,17 +178,13 @@ void	parse_execute(char *input, char **envp, t_token_data **token_data)
 
 	// parse_main(input, token_data, (*token_data)->gc, envp);
 	// execution_main(token_data, (*token_data)->ast);
-	if (parse_main(input, token_data, (*token_data)->gc, envp) == 1)
+	parse_main(input, token_data, (*token_data)->gc, envp);
 		// gc_free_all((*token_data)->gc);
-		printf("miao\n");
-	else if (execution_main(token_data, (*token_data)->ast) == 1)
+
+	execution_main(token_data, (*token_data)->ast);
 		// gc_free_all((*token_data)->gc);
-		printf("miao\n");
-	else
-		{
 		gc_free_category((*token_data)->gc, TOKENS);
 		gc_free_category((*token_data)->gc, PARSING);
-		}
 }
 
 // if string only space or tab -> just new prompt
@@ -209,7 +205,7 @@ int	main(int argc, char **argv, char **envp)
 	if (argc < 1 || argv[0] == NULL)
 		return (1);
 	prompt = GREEN "minishell" BLUE ">" RESET " ";
-	start_message();
+	// start_message();
 	while (1)
 	{
 		// input = readline(prompt);

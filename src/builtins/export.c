@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:21:43 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/30 12:49:31 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/04/30 16:23:15 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	ft_export(t_env	*top_env, char **args, t_gc *gc)
 		i = 1;
 		while (args[i])
 		{
-			assign = args[1];
+			assign = args[i];
 			if (find_sign(assign, '=') < 0)
 			{
 				if (!search_name_node(top_env, assign))
@@ -109,7 +109,7 @@ int	ft_export(t_env	*top_env, char **args, t_gc *gc)
 			else if (find_sign(assign, '=') == 0)
 				return (error_general("export: not a valid identifier"));
 			else
-				return (add_env_var(top_env, assign, gc));
+				add_env_var(top_env, assign, gc);
 			i++;
 		}
 	}
