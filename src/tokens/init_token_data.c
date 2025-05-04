@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:14:39 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/04 10:41:12 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/04 12:29:35 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	init_token_data(char *input, t_token_data **token_data, t_gc *gc,
 	(*token_data)->syntax_error = 0;
 	(*token_data)->last_exit = 0;
 	(*token_data)->heredoc_id = 0;
+	(*token_data)->in_pipeline = 0;
 	// (*token_data)->env_list = (t_env *)gc_malloc(gc, TOKENS, sizeof(t_env));
 	// if (!(*token_data)->env_list)
 	// 	return (1);

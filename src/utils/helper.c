@@ -112,3 +112,17 @@ char	*ft_env_strjoin(char const *s1, char const *s2, t_gc *gc)
 	new[i + j] = '\0';
 	return (new);
 }
+
+int ft_ministrcmp(const char *s1, const char *s2)
+{
+	while (*s1 && *s2)
+	{
+		if (*s1 != *s2)
+			return (1);
+		s1++;
+		s2++;
+	}
+	if (*s1 == '\0' && *s2 == '\0')
+		return (0);
+	return (1);
+}

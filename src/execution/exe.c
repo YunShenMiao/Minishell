@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 20:06:50 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/04 10:52:04 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/04 12:45:05 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,27 +64,25 @@ int	exec_redir_pipe(t_ast *node, t_token_data **td, t_tok_type tp, int prev_read
 	return (-1);
 }
 
-int	execute_builtins(t_ast *node, t_token_data **token_data)
+int	execute_builtins(t_ast *node, t_token_data *token_data)
 {
 	char	*value;
-	int		len;
 
 	value = node->args[0];
-	len = ft_strlen(value);
-	if (ft_strncmp(value, "cd", len) == 0)
-		return (ft_cd(node->args, (*token_data)->env_list, (*token_data)->gc));
-	else if (ft_strncmp(value, "echo", len) == 0 || ft_strncmp(value, "echo-n", len) == 0)
+	if (ft_ministrcmp(value, "cd") == 0)
+		return (ft_cd(node->args, (token_data)->env_list, (token_data)->gc));
+	else if (ft_ministrcmp(value, "echo") == 0 || ft_ministrcmp(value, "echo-n") == 0)
 		return (ft_echo(node->args));
-	else if (ft_strncmp(value, "pwd", len) == 0)
+	else if (ft_ministrcmp(value, "pwd") == 0)
 		return (ft_pwd(node->args));
-	else if (ft_strncmp(value, "env", len) == 0)
-		return (ft_env(node->args, (*token_data)->env_list));
-	else if (ft_strncmp(value, "export", len) == 0)
-		return (ft_export((*token_data)->env_list, node->args, (*token_data)->gc));
-	else if (ft_strncmp(value, "unset", len) == 0)
-		return (ft_unset((*token_data)->env_list, node->args));
-	else if (ft_strncmp(value, "exit", len) == 0)
-		return (ft_exit(node->args, (*token_data)));
+	else if (ft_ministrcmp(value, "env") == 0)
+		return (ft_env(node->args, (token_data)->env_list));
+	else if (ft_ministrcmp(value, "export") == 0)
+		return (ft_export((token_data)->env_list, node->args, (token_data)->gc));
+	else if (ft_ministrcmp(value, "unset") == 0)
+		return (ft_unset((token_data)->env_list, node->args));
+	else if (ft_ministrcmp(value, "exit") == 0)
+		return (ft_exit(node->args, (token_data)));
 	return (-1);
 }
 
@@ -134,7 +132,7 @@ void	exec_cmd(t_ast *node, int prev_read, t_token_data *td)
 	// if (apply_redirs(node))
 	// 	_exit(1);
 	tmp = td;
-	builtin_status = execute_builtins(node, &tmp);
+	builtin_status = execute_builtins(node, tmp);
 	if (builtin_status != -1)
 		_exit(builtin_status);
 	envp = env_to_array(td->env_list, td->gc);
@@ -151,7 +149,7 @@ int	run_simple_cmd(t_ast *node, t_token_data *td)
 	pid_t			pid;
 
 	tmp = td;
-	status = execute_builtins(node, &tmp);
+	status = execute_builtins(node, tmp);
 	if (status != -1)
 		return (status);
 	pid = fork();

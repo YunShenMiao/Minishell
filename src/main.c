@@ -182,7 +182,7 @@ void	parse_execute(char *input, char **envp, t_token_data **token_data)
 		// gc_free_all((*token_data)->gc);
 	handle_all_heredocs((*token_data)->ast, &((*token_data)->heredoc_id), (*token_data));
 	// execution_main(token_data, (*token_data)->ast);
-	exec_ast((*token_data)->ast, STDIN_FILENO, STDOUT_FILENO, envp);
+	exec_ast((*token_data)->ast, STDIN_FILENO, STDOUT_FILENO, (*token_data));
 		// gc_free_all((*token_data)->gc);
 		gc_free_category((*token_data)->gc, TOKENS);
 		gc_free_category((*token_data)->gc, PARSING);

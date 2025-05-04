@@ -119,6 +119,7 @@ typedef struct s_token_data
 	t_gc			*gc;
 	int				last_exit;
 	int				heredoc_id;
+	int				in_pipeline;
 }				t_token_data;
 
 /****************************************************************************************************/
@@ -143,6 +144,7 @@ typedef struct s_data
 void	start_message(void);
 void	free_array(char **arr);
 int		ft_put_to_fd(char *str, int fd);
+int		ft_ministrcmp(const char *s1, const char *s2);
 char	*ft_env_substr(char const *s, unsigned int start, size_t len, t_gc *gc);
 char	*ft_env_strdup(const char *src, t_gc *gc);
 char	*ft_env_strjoin(char const *s1, char const *s2, t_gc *gc);
@@ -209,11 +211,11 @@ int		ft_unset(t_env	*top_env, char **args);
 int		do_redir(t_tok_type tp, t_ast *node);
 int		exec_redir_normal(t_ast *node, t_token_data **td, t_tok_type tp);
 int		exec_redir_pipe(t_ast *node, t_token_data **td, t_tok_type tp, int prev_read);
-int		execute_builtins(t_ast *node, t_token_data **token_data);
+int		execute_builtins(t_ast *node, t_token_data *token_data);
 char	**env_to_array(t_env *top, t_gc *gc);
 void	exec_cmd(t_ast *node, int prev_read, t_token_data *td);
 int		run_simple_cmd(t_ast *node, t_token_data *td);
-int		exec_ast(t_ast *node, int input_fd, int output_fd, char **envp);
+int		exec_ast(t_ast *node, int input_fd, int output_fd, t_token_data *td);
 
 //pipe
 int		exec_pipe(t_ast *node, int prev_read, t_token_data *td);
