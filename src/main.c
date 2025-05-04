@@ -163,7 +163,7 @@ int	parse_main(char *input, t_token_data **token_data, t_gc *gc, char **envp)
 	if (expand_ast_nodes(token_data, &(*token_data)->ast) == 1)
 		return (1);
 	// print_list((*token_data)->token_list);
-	print_ast((*token_data)->ast, 0, "Root: ");
+	// print_ast((*token_data)->ast, 0, "Root: ");
 	// test(token_data, envp);
 	return (0);
 }
@@ -180,8 +180,9 @@ void	parse_execute(char *input, char **envp, t_token_data **token_data)
 	// execution_main(token_data, (*token_data)->ast);
 	parse_main(input, token_data, (*token_data)->gc, envp);
 		// gc_free_all((*token_data)->gc);
-
-	execution_main(token_data, (*token_data)->ast);
+	handle_all_heredocs((*token_data)->ast, &((*token_data)->heredoc_id), (*token_data));
+	// execution_main(token_data, (*token_data)->ast);
+	exec_ast((*token_data)->ast, STDIN_FILENO, STDOUT_FILENO, envp);
 		// gc_free_all((*token_data)->gc);
 		gc_free_category((*token_data)->gc, TOKENS);
 		gc_free_category((*token_data)->gc, PARSING);

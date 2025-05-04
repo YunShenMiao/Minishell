@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_collector.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 12:22:37 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/21 17:36:21 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/04 10:48:36 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	gc_free_category(t_gc *gc, t_mem_location category)
 }
 
 //goes through all categories in the array and frees it all by calling gc_free_category 
-void	gc_free_all(t_gc *gc)
+void	gc_free_all(t_gc *gc, int heredoc_id)
 {
 	int	i;
 
@@ -93,4 +93,5 @@ void	gc_free_all(t_gc *gc)
 		i++;
 	}
 	free(gc);
+	cleanup_heredoc_tempfiles(heredoc_id);
 }

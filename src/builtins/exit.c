@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:21:25 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/20 19:15:39 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/04 10:47:08 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,11 @@ int	is_numeric(char *str)
 	return (1);
 }
 
-int	ft_exit(char **args, t_gc *gc)
+int	ft_exit(char **args, t_token_data *td)
 {
 	if (!args[1])
 	{
-		gc_free_all(gc);
+		gc_free_all(td->gc, td->heredoc_id);
 		_exit(EXIT_SUCCESS);
 	}
 	if (!is_numeric(args[1]))
@@ -55,7 +55,7 @@ int	ft_exit(char **args, t_gc *gc)
 		ft_putstr_fd("exit: ", 2);
 		ft_putstr_fd(args[1], 2);
 		ft_putendl_fd(": numeric argument required", 2);
-		gc_free_all(gc);
+		gc_free_all(td->gc, td->heredoc_id);
 		_exit(255);
 	}
 	if (args[2])
@@ -63,6 +63,6 @@ int	ft_exit(char **args, t_gc *gc)
 		ft_putstr_fd("exit: too many arguments\n", 2);
 		return (1);
 	}
-	gc_free_all(gc);
+	gc_free_all(td->gc, td->heredoc_id);
 	_exit(ft_atoi(args[1]) % 256);
 }

@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 20:06:50 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/30 12:49:23 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/04 10:52:04 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	do_redir(t_tok_type tp, t_ast *node)
 {
-	int	hd;
+	// int	hd;
 
 	if (tp == TOK_REDIRECT_OUT)
 		return (red_out_overwrite(node->file_name));
@@ -22,16 +22,19 @@ int	do_redir(t_tok_type tp, t_ast *node)
 		return (red_out_append(node->file_name));
 	if (tp == TOK_REDIRECT_IN)
 		return (red_in(node->file_name));
-	if (tp == TOK_HEREDOC)
-	{
-		hd = heredoc(node->file_name);
-		if (hd == -1)
-			return (1);
-		if (dup2(hd, STDIN_FILENO) == -1)
-			return (1);
-		close(hd);
-		return (0);
-	}
+	// if (tp == TOK_HEREDOC)
+	// {
+	// 	hd = heredoc(node->file_name);
+	// 	if (hd == -1)
+	// 		return (1);
+	// 	if (dup2(hd, STDIN_FILENO) == -1)
+	// 	{
+	// 		close(hd);
+	// 		return (1);
+	// 	}
+	// 	close(hd);
+	// 	return (0);
+	// }
 	return (-1);
 }
 
@@ -81,7 +84,7 @@ int	execute_builtins(t_ast *node, t_token_data **token_data)
 	else if (ft_strncmp(value, "unset", len) == 0)
 		return (ft_unset((*token_data)->env_list, node->args));
 	else if (ft_strncmp(value, "exit", len) == 0)
-		return (ft_exit(node->args, (*token_data)->gc));
+		return (ft_exit(node->args, (*token_data)));
 	return (-1);
 }
 

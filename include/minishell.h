@@ -118,6 +118,7 @@ typedef struct s_token_data
 	struct s_env	*env_list;
 	t_gc			*gc;
 	int				last_exit;
+	int				heredoc_id;
 }				t_token_data;
 
 /****************************************************************************************************/
@@ -169,7 +170,8 @@ t_env	*init_env(char **envp, t_gc *gc);
 t_gc    *init_gc(void);
 void 	*gc_malloc(t_gc *gc, t_mem_location category, unsigned long size);
 void	gc_free_category(t_gc *gc, t_mem_location category);
-void	gc_free_all(t_gc *gc);
+// void	gc_free_all(t_gc *gc);
+void	gc_free_all(t_gc *gc, int heredoc_id);
 
 // tokens
 int			modify_input(char *input, char **modified_input, t_gc *gc, t_token_data **token_data);
@@ -196,7 +198,8 @@ void	parse_command_args(t_token_data **token_data, t_token **current,
 // builtins
 int		ft_echo(char **args);
 int		ft_pwd(char **args);
-int		ft_exit(char **args, t_gc *gc);
+// int		ft_exit(char **args, t_gc *gc);
+int		ft_exit(char **args, t_token_data *td);
 int		ft_cd(char **args, t_env *top, t_gc *gc);
 int		ft_env(char **args, t_env *top_env);
 int		ft_export(t_env	*top_env, char **args, t_gc *gc);
@@ -210,6 +213,7 @@ int		execute_builtins(t_ast *node, t_token_data **token_data);
 char	**env_to_array(t_env *top, t_gc *gc);
 void	exec_cmd(t_ast *node, int prev_read, t_token_data *td);
 int		run_simple_cmd(t_ast *node, t_token_data *td);
+int		exec_ast(t_ast *node, int input_fd, int output_fd, char **envp);
 
 //pipe
 int		exec_pipe(t_ast *node, int prev_read, t_token_data *td);
@@ -218,6 +222,11 @@ int		exec_pipe(t_ast *node, int prev_read, t_token_data *td);
 int		red_out_overwrite(char *filename);
 int		red_out_append(char *filename);
 int		red_in(char *filename);
-int 	heredoc(char *delimiter);
+// int 	heredoc(char *delimiter);
+void	handle_all_heredocs(t_ast *node, int *heredoc_id, t_token_data *td);
+int		write_heredoc_to_file(const char *delimiter, const char *filename);
+void	cleanup_heredoc_tempfiles(int max_id);
+
+
 
 #endif
