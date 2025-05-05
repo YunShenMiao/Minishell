@@ -178,7 +178,12 @@ void	parse_execute(char *input, char **envp, t_token_data **token_data)
 
 	// parse_main(input, token_data, (*token_data)->gc, envp);
 	// execution_main(token_data, (*token_data)->ast);
-	parse_main(input, token_data, (*token_data)->gc, envp);
+	if (parse_main(input, token_data, (*token_data)->gc, envp) == 1)
+	{
+		gc_free_category((*token_data)->gc, TOKENS);
+		gc_free_category((*token_data)->gc, PARSING);
+		return;
+	}
 		// gc_free_all((*token_data)->gc);
 	handle_all_heredocs((*token_data)->ast, &((*token_data)->heredoc_id), (*token_data));
 	// execution_main(token_data, (*token_data)->ast);
