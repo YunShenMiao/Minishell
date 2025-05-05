@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 12:22:37 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/04 10:48:36 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/05 16:42:26 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,14 @@ void	gc_free_category(t_gc *gc, t_mem_location category)
 	{
 		if (/* category == TOKENS &&  */current->ptr)
 		{
-			free(current->ptr);
+			if (current->ptr != NULL)
+				free(current->ptr);
 			current->ptr = NULL;
 		}
 		temp = current;
 		current = current->next;
-		free(temp);
+		if (temp)
+			free(temp);
 	}
 	gc->gc_list[category] = NULL;
 }
