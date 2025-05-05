@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 11:12:24 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/04 12:45:31 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/05 17:57:56 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,42 @@ int	is_builtin(char **args)
 		return (1);
 	return (0);
 }
+
+int setup_redirection(int input_fd, int output_fd, int *saved_stdin, int *saved_stdout)
+{
+	if (input_fd != STDIN_FILENO)
+	{
+		*saved_stdin = dup(STDIN_FILENO);
+		if (*saved_stdin < 0)
+			return (perror("dup"), -1);
+		dup2(input_fd, STDIN_FILENO);
+		close(input_fd);
+	}
+	if (output_fd != STDOUT_FILENO)
+	{
+		*saved_stdout = dup(STDOUT_FILENO);
+		if (*saved_stdout < 0)
+			return (perror("dup"), -1);
+		dup2(output_fd, STDOUT_FILENO);
+		close(output_fd);
+	}
+	return (0);
+}
+
+void restore_stdio(int saved_stdin, int saved_stdout)
+{
+	if (saved_stdin != -1)
+	{
+		dup2(saved_stdin, STDIN_FILENO);
+		close(saved_stdin);
+	}
+	if (saved_stdout != -1)
+	{
+		dup2(saved_stdout, STDOUT_FILENO);
+		close(saved_stdout);
+	}
+}
+
 
 int	exec_ast(t_ast *node, int input_fd, int output_fd, t_token_data *td)
 {
@@ -85,7 +121,12 @@ int	exec_ast(t_ast *node, int input_fd, int output_fd, t_token_data *td)
 	{
 		if (is_builtin(node->args) && !td->in_pipeline)
 		{
+			int saved_stdin = -1;
+			int saved_stdout = -1;
+		
+			setup_redirection(input_fd, output_fd, &saved_stdin, &saved_stdout);
 			td->last_exit = execute_builtins(node, td);
+			restore_stdio(saved_stdin, saved_stdout);
 			return (td->last_exit);
 		}
 		pid = fork();
