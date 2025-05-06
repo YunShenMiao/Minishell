@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:29:30 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/06 13:20:26 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/06 15:54:16 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	command_args(t_ast *node, int *i, t_token_data **token_data)
 	char *rest;
 	int count;
 
-	args = gc_malloc((*token_data)->gc, PARSING, 10 * sizeof(char*));
+	args = gc_malloc((*token_data)->gc, PARSING, 100 * sizeof(char*));
 	count = 0;
 	while (node->args[*i] != NULL)
 	{
