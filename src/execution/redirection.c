@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 20:44:04 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/04 11:42:20 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/06 18:24:17 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ int	write_heredoc_to_file(const char *delimiter, const char *filename)
 			perror("heredoc: warning: EOF before delimiter\n");
 			break;
 		}
-		if (ft_strlen(line) == ft_strlen(delimiter) && ft_strncmp(line, delimiter, ft_strlen(line)) == 0)
+		if (ft_ministrcmp(line, delimiter) == 0)
 		{
 			free(line);
 			break;

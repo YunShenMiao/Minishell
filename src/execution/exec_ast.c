@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 11:12:24 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/06 15:22:45 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/06 18:14:50 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,25 +84,23 @@ int	exec_ast(t_ast *node, int input_fd, int output_fd, t_token_data *td)
 	{
 		if (pipe(pipefd) < 0)
 			return (perror("pipe"), 1);
-		td->in_pipeline = 1;
-		if (fork() == 0)
+
+		pid = fork();
+		if (pid == 0)
 		{
 			close(pipefd[0]);
-			exec_ast(node->left, input_fd, pipefd[1], td);
-			exit(1);
-		}
-		if (fork() == 0)
-		{
+			dup2(pipefd[1], STDOUT_FILENO);
 			close(pipefd[1]);
-			exec_ast(node->right, pipefd[0], output_fd, td);
-			exit(1);
+			exec_ast(node->left, input_fd, STDOUT_FILENO, td);
+			exit(td->last_exit);
 		}
+		close(pipefd[1]);
+		td->in_pipeline = 1;
+		exec_ast(node->right, pipefd[0], output_fd, td);
 		td->in_pipeline = 0;
 		close(pipefd[0]);
-		close(pipefd[1]);
-		wait(NULL);
-		wait(NULL);
-		return (0);
+		waitpid(pid, &status, 0);
+		return (td->last_exit);
 	}
 	else if (node->type == TOK_REDIRECT_IN || node->type == TOK_REDIRECT_OUT || node->type == TOK_APPEND)
 	{
@@ -113,7 +111,13 @@ int	exec_ast(t_ast *node, int input_fd, int output_fd, t_token_data *td)
 		else
 			fd = open(node->right->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fd < 0)
-			return (perror("open redirection"), 1);
+		{
+			perror("open redirection");
+			td->last_exit = 1;
+			if (td->in_pipeline)
+				exit(1);
+			return (1);
+		}
 		if (node->type == TOK_REDIRECT_IN)
 			return exec_ast(node->right, fd, output_fd, td);
 		else
