@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 13:51:18 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/06 17:09:51 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/06 17:24:49 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,13 @@ void	expand_var(t_token_data **token_data, int *i, int *count, char *new)
 	int		start;
 	char	*value;
 	char	*exitcode;
+	if ((*token_data)->expand_str[*i] == '~')
+	{
+		value = search_name_val((*token_data)->env_list, "HOME");
+		(*i)++;
+	}
+	else
+	{
 	if ((*token_data)->expand_str[*i] != '\0')
 	(*i)++;
 	start = (*i);
@@ -28,9 +35,9 @@ void	expand_var(t_token_data **token_data, int *i, int *count, char *new)
 		exitcode = ft_itoa((*token_data)->last_exit);
 		while (*exitcode)
 		{
-		new[*count] = *exitcode;
-		(*count)++;
-		exitcode++;
+			new[*count] = *exitcode;
+			(*count)++;
+			exitcode++;
 		}
 		(*i)++;
 	}
@@ -43,6 +50,7 @@ void	expand_var(t_token_data **token_data, int *i, int *count, char *new)
 	value = search_name_val((*token_data)->env_list,
 			ft_strndup((*token_data)->gc, (*token_data)->expand_str, start,
 				(*i)));
+	}
 	if (value)
 	{
 			// while (*value == ' '  && (*token_data)->in_DQ == 0)
@@ -83,8 +91,8 @@ void	in_dq(t_token_data **token_data, char **new, int *i, int *count)
 {
 	if ((*token_data)->expand_str[*i] != '\0' && (*token_data)->expand_str[*i] == '\"')
 		(*i)++;
-	if ((*token_data)->expand_str[*i] == '$' && (*token_data)->expand_str[*i
-			+ 1] != '\0' && (*token_data)->expand_str[*i + 1] != ' ' && (*token_data)->expand_str[*i + 1] != '\"')
+	if (((*token_data)->expand_str[*i] == '$' && (*token_data)->expand_str[*i
+			+ 1] != '\0' && (*token_data)->expand_str[*i + 1] != ' ' && (*token_data)->expand_str[*i + 1] != '\"'))
 		expand_var(token_data, i, count, *new);
 	if ((*token_data)->expand_str[*i] != '\0' && (*token_data)->expand_str[*i] != '\"')
 	{
@@ -111,8 +119,9 @@ void	in_sq(char **str, char **new, int *i, int *count)
 // handles env var & copies env var or just general values to the new string
 void	in_nq(t_token_data **token_data, char **new, int *i, int *count)
 {
-	if ((*token_data)->expand_str[*i] == '$' && (*token_data)->expand_str[*i
+	if (((*token_data)->expand_str[*i] == '$' && (*token_data)->expand_str[*i
 			+ 1] != '\0' && (*token_data)->expand_str[*i + 1] != ' ')
+			|| (*token_data)->expand_str[*i] == '~')
 	{
 		expand_var(token_data, i, count, *new);
 		return ;
