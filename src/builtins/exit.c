@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:21:25 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/04 10:47:08 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/06 15:45:28 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,12 @@ int	is_numeric(char *str)
 
 int	ft_exit(char **args, t_token_data *td)
 {
+	int	exit_code;
+
 	if (!args[1])
 	{
 		gc_free_all(td->gc, td->heredoc_id);
+		// ft_printf("exit\n");
 		_exit(EXIT_SUCCESS);
 	}
 	if (!is_numeric(args[1]))
@@ -63,6 +66,8 @@ int	ft_exit(char **args, t_token_data *td)
 		ft_putstr_fd("exit: too many arguments\n", 2);
 		return (1);
 	}
+	exit_code = ft_atoi(args[1]) % 256;
 	gc_free_all(td->gc, td->heredoc_id);
-	_exit(ft_atoi(args[1]) % 256);
+	// ft_printf("exit\n");
+	_exit(exit_code);
 }

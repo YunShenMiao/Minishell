@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:14:16 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/30 12:35:07 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/06 13:39:52 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,13 +82,13 @@ int	ft_echo(char **args)
 	int		no_newline;
 	int		i;
 
-	if (ft_strncmp(args[0], "echo-n", 6) == 0 && ft_strlen(args[0]) == 6)
+	if (ft_ministrcmp(args[0], "echo-n") == 0)
 		no_newline = 1;
-	else if (ft_strncmp(args[0], "/bin/echo-n", 11) == 0 && ft_strlen(args[0]) == 11)
+	else if (ft_ministrcmp(args[0], "/bin/echo-n") == 0)
 		no_newline = 1;
-	else if (ft_strncmp(args[0], "echo", 4) == 0)
+	else if (ft_ministrcmp(args[0], "echo") == 0)
 		no_newline = 0;
-	else if (ft_strncmp(args[0], "/bin/echo", 9) == 0 && ft_strlen(args[0]) == 9) // also could be that the validaty of args[0] already get checked in parsing so no need to be checked here
+	else if (ft_ministrcmp(args[0], "/bin/echo") == 0)
 		no_newline = 0;
 	i = 0;
 	while (args[i + 1])
