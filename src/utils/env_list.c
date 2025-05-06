@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_list.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 18:10:25 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/17 18:19:14 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:25:30 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,9 @@ void	ft_env_del(t_env **top, t_env *to_del)
 		if (before)
 			before->next = to_del->next;
 	}
-	free(to_del->name);
-	free(to_del->val);
-	free(to_del);
+	// free(to_del->name);
+	// free(to_del->val);
+	// free(to_del);
 }
 
 t_env	*search_name_node(t_env *top, char *name)
@@ -123,7 +123,7 @@ int	update_env_var(t_env **lst, char *name, char *new_val, t_gc *gc)
 		temp = search_name_node(*lst, name);
 		old_val = temp->val;
 		temp->val = new_val; // or ft_strdup(new_val) ...?
-		free(old_val);
+		// free(old_val);
 	}
 	return (0);
 }

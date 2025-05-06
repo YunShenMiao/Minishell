@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:18:21 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/05 18:48:55 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/06 16:45:34 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	update_PWDs(t_env *top, char *new_pwd, t_gc *gc)
 	char	*old_pwd;
 
 	pwd_node = search_name_node(top, "PWD");
-	old_pwd =  pwd_node->val;
+	old_pwd =  ft_env_strdup(pwd_node->val, gc);
 	if (!pwd_node || !pwd_node->val)
 		return (error_general("PWD not set"));
 	if (update_env_var(&top, "OLDPWD", old_pwd, gc) == 1)
@@ -191,6 +191,8 @@ char	*normalize_path(const char *path, t_gc *gc)
 	else
 	{
 		temp = getcwd(NULL, 0);
+		if (!temp)
+			return (NULL);
 		full_path = ft_env_strdup(temp, gc);
 		free(temp);
 	}

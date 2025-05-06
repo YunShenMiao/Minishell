@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_envp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 12:00:31 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/30 15:43:12 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/06 17:03:34 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ t_env	*init_env(char **envp, t_gc *gc)
 			return (NULL);
 		ft_env_add_back(&top_env, new);
 		i++;
+		// printf("✅ ENV: name='%s', value='%s'\n", name, value);
 	}
 	return (top_env);
 }

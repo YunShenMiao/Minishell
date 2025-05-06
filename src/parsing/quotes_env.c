@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 13:51:18 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/06 16:38:06 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/06 17:32:54 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ void	expand_var(t_token_data **token_data, int *i, int *count, char *new)
 		exitcode = ft_itoa((*token_data)->last_exit);
 		while (*exitcode)
 		{
-		new[*count] = *exitcode;
-		(*count)++;
-		exitcode++;
+			new[*count] = *exitcode;
+			(*count)++;
+			exitcode++;
 		}
 		(*i)++;
 	}
@@ -50,7 +50,7 @@ void	expand_var(t_token_data **token_data, int *i, int *count, char *new)
 	value = search_name_val((*token_data)->env_list,
 			ft_strndup((*token_data)->gc, (*token_data)->expand_str, start,
 				(*i)));
-}
+	}
 	if (value)
 	{
 			// while (*value == ' '  && (*token_data)->in_DQ == 0)
@@ -148,7 +148,8 @@ char	*handle_quotes(t_token_data **token_data, char **str)
 	i = 0;
 	count = 0;
 	(*token_data)->expand_str = (*str);
-	new = (char *)gc_malloc((*token_data)->gc, PARSING, ft_strlen(*str) * 4);
+	// new = (char *)gc_malloc((*token_data)->gc, PARSING, ft_strlen(*str) * 4);
+	new = (char *)gc_malloc((*token_data)->gc, PARSING, 4096);
 	if (!new)
 		return (NULL);
 	if ((*str)[i]!= '\0' && (quote_status(token_data, (*str)[i])) == 1)
