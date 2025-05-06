@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 13:51:18 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/06 13:37:05 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/06 17:09:51 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,8 @@ char	*handle_quotes(t_token_data **token_data, char **str)
 	i = 0;
 	count = 0;
 	(*token_data)->expand_str = (*str);
-	new = (char *)gc_malloc((*token_data)->gc, PARSING, ft_strlen(*str) * 4);
+	// new = (char *)gc_malloc((*token_data)->gc, PARSING, ft_strlen(*str) * 4);
+	new = (char *)gc_malloc((*token_data)->gc, PARSING, 4096);
 	if (!new)
 		return (NULL);
 	if ((*str)[i]!= '\0' && (quote_status(token_data, (*str)[i])) == 1)

@@ -185,6 +185,7 @@ void	parse_execute(char *input, char **envp, t_token_data **token_data)
 		return;
 	}
 		// gc_free_all((*token_data)->gc);
+	// printf("value: %s\n", search_name_val((*token_data)->env_list, "PWD"));
 	handle_all_heredocs((*token_data)->ast, &((*token_data)->heredoc_id), (*token_data));
 	// execution_main(token_data, (*token_data)->ast);
 	exec_ast((*token_data)->ast, STDIN_FILENO, STDOUT_FILENO, (*token_data));
