@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 13:51:18 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/06 13:20:34 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/06 13:37:05 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	expand_var(t_token_data **token_data, int *i, int *count, char *new)
 		&& (((*token_data)->expand_str[*i] < 123
 				&& (*token_data)->expand_str[*i] > 96)
 			|| ((*token_data)->expand_str[*i] < 91
-				&& (*token_data)->expand_str[*i] > 47)))
+				&& (*token_data)->expand_str[*i] > 47) || (*token_data)->expand_str[*i] == '_'))
 		(*i)++;
 	value = search_name_val((*token_data)->env_list,
 			ft_strndup((*token_data)->gc, (*token_data)->expand_str, start,
