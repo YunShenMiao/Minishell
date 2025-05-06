@@ -120,6 +120,7 @@ typedef struct s_token_data
 	int				last_exit;
 	int				heredoc_id;
 	int				in_pipeline;
+	int				env_cmd;
 }				t_token_data;
 
 /****************************************************************************************************/

@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 13:51:18 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/05 14:12:22 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/06 13:10:59 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,35 @@ void	expand_var(t_token_data **token_data, int *i, int *count, char *new)
 				(*i)));
 	if (value)
 	{
+			// while (*value == ' '  && (*token_data)->in_DQ == 0)
+			// value++;
+			// if (*count != 0  && (*token_data)->in_DQ == 0)
+			// {
+			// new[*count] = ' ';
+			// (*count)++;
+			// }
+			if (*count == 0)
+			{
+				while (*value == ' ')
+				value++;
+			}
 		while (*value)
 		{
+			if (*value == ' ' && (*token_data)->in_DQ == 0)
+			{
+			((*token_data)->env_cmd = 1);
 			new[*count] = *value;
 			(*count)++;
 			value++;
+			while (*value && *value == ' ')
+			value++;
+			}
+			if (*value)
+			{
+			new[*count] = *value;
+			(*count)++;
+			value++;
+			}
 		}
 	}
 }
@@ -122,7 +146,7 @@ char	*handle_quotes(t_token_data **token_data, char **str)
 		i++;
 	while ((*str)[i] != '\0')
 	{
-		if (i >= (int)ft_strlen(*str)) // safety check (cast for good measure)
+		if (i >= (int)ft_strlen(*str)) // safety check
 		break;
 		quote_status(token_data, (*str)[i]);
 		if ((*token_data)->in_DQ)

@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:29:30 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/30 15:45:38 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/06 12:36:04 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,17 +61,54 @@ int	valid_cmd(t_token_data **token_data, t_ast *node)
 	return (0);
 }
 
+void handle_env_cmd(char **new, char **rest, t_gc *gc)
+{
+	int count;
+	char *str;
+
+	str = *new;
+	count = 0;
+	while(*str && str[count] != ' ')
+	count++;
+	(*rest) = ft_env_substr(str, count + 1, ft_strlen(*new), gc);
+	str[count] = '\0';
+}
+
 // passes each arg of the command to handle the quotes & checks if arg[0]
 // is a valid command or not
+// need to allocate new 2dstring to handle env avr expansion 
 int	command_args(t_ast *node, int *i, t_token_data **token_data)
 {
+	char **args;
+	char *new;
+	char *rest;
+	int count;
+
+	args = gc_malloc((*token_data)->gc, PARSING, 10 * sizeof(char*));
+	count = 0;
 	while (node->args[*i] != NULL)
 	{
-		node->args[*i] = handle_quotes(token_data, &node->args[*i]);
-		if (node->args[*i] == NULL)
+		// new[count] = handle_quotes(token_data, &node->args[*i]);
+		new = handle_quotes(token_data, &node->args[*i]);
+		if (new == NULL)
 			return (1);
+		if ((*token_data)->env_cmd == 1 && (*i) == 0)
+		{
+			handle_env_cmd(&new, &rest, ((*token_data)->gc));
+			args[count] = new;
+			if (rest)
+			{
+			count++;
+			args[count] = rest;
+			}
+		}
+		else
+		args[count] = new; 
 		(*i)++;
+		count++;
 	}
+	args[count] = NULL;
+	node->args = args;
 	if (valid_cmd(token_data, node) == 1)
 		return (1);
 	return (0);
