@@ -229,7 +229,7 @@ int		red_in(char *filename);
 void	handle_all_heredocs(t_ast *node, int *heredoc_id, t_token_data *td);
 int		write_heredoc_to_file(const char *delimiter, const char *filename);
 void	cleanup_heredoc_tempfiles(int max_id);
-
+//
 
 
 #endif

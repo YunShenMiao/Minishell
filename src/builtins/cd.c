@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:18:21 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/30 16:32:51 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/05 18:48:55 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,14 +99,14 @@ char	*get_parent_dir(char *cur_dir, t_gc *gc)
 	i = find_last_slash(pwd);
 	if (i == 0)
 	{
-		free(pwd);
+		// free(pwd);
 		pwd = ft_env_strdup("/", gc); // no need to protect because it's returning NULL anyways
 	}
 	else
 	{
 		temp = pwd;
 		pwd = ft_env_substr(temp, 0, i + 1, gc);
-		free(temp);
+		// free(temp);
 	}
 	return (pwd);
 }
@@ -129,21 +129,21 @@ int	cd_tilde(t_env *top, char *path, char *home, t_gc *gc)
 		full_path = ft_env_strjoin(home, use_part, gc);
 		if (!full_path)
 		{
-			free(use_part);
+			// free(use_part);
 			return (error_general("malloc: failed to create path"));
 		}
-		free(use_part);
+		// free(use_part);
 		if (chdir(full_path) == -1)
 		{
-			free(full_path);
+			// free(full_path);
 			return (error_general("malloc: failed to create path"));		
 		}
 		if (update_PWDs(top, full_path, gc) == 1)
 		{
-			free(full_path);
+			// free(full_path);
 			return (error_general("malloc: failed to update path"));
 		}
-		free(full_path);
+		// free(full_path);
 	}
 	return (0);
 }
@@ -189,13 +189,17 @@ char	*normalize_path(const char *path, t_gc *gc)
 	if (path[0] == '/')
 		full_path = ft_env_strdup("/", gc);
 	else
-		full_path = getcwd(NULL, 0);
+	{
+		temp = getcwd(NULL, 0);
+		full_path = ft_env_strdup(temp, gc);
+		free(temp);
+	}
 	if (!full_path)
 		return (NULL);
 	tokens = ft_split(path, '/');
 	if (!tokens)
 	{
-		free(full_path);
+		// free(full_path);
 		return (NULL);
 	}
 	current_path = full_path;
@@ -205,7 +209,7 @@ char	*normalize_path(const char *path, t_gc *gc)
 		if (ft_strncmp(tokens[i], "..", 3) == 0)
 		{
 			temp = get_parent_dir(current_path, gc);
-			free(current_path);
+			// free(current_path);
 			current_path = temp;
 		}
 		else if (ft_strncmp(tokens[i], ".", 2) != 0 && tokens[i][0] != '\0')
@@ -214,11 +218,11 @@ char	*normalize_path(const char *path, t_gc *gc)
 				current_path[ft_strlen(current_path) - 1] != '/')
 			{
 				temp = ft_env_strjoin(current_path, "/", gc);
-				free(current_path);
+				// free(current_path);
 				current_path = temp;
 			}
 			temp = ft_env_strjoin(current_path, tokens[i], gc);
-			free(current_path);
+			// free(current_path);
 			current_path = temp;
 		}
 		free(tokens[i]);
@@ -227,7 +231,7 @@ char	*normalize_path(const char *path, t_gc *gc)
 	free(tokens);
 	if (!current_path || ft_strlen(current_path) == 0)
 	{
-		free(current_path);
+		// free(current_path);
 		current_path = ft_env_strdup("/", gc);
 	}
 	return (current_path);
@@ -257,15 +261,15 @@ int	ft_cd(char **args, t_env *top, t_gc *gc)
 				return (error_general("malloc: path normalization failed"));
 			if (chdir(path) == -1)
 			{
-				free(path);
+				// free(path);
 				return (error_general("cd: no such file or directory"));
 			}
 			if (update_PWDs(top, path, gc) == 1)
 			{
-				free(path);
+				// free(path);
 				return (error_general("malloc: failed to update path"));
 			}
-			free(path);
+			// free(path);
 		}
 	}
 	return (0);

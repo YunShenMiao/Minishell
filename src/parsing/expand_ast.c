@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:29:30 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/06 12:36:04 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/06 13:20:26 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 // NEED TO: go through structs and delete unused vars
 // proj-checks: ms1 (safety copy before changes 10.04)
 // NEED TO: maybe combine redirect functions in ast_redirect.c
-// handle ~ ?
+// handle ~ ? xx
 
 // checks if cmd is builtin
 int	token_command(char *value, size_t len)

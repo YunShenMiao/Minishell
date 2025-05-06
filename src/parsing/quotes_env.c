@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 13:51:18 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/06 13:10:59 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/06 13:20:34 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 // checks for env key and if key has an assigned value
 // if so copies the value instead of key to the new string
-// if value invlaid just skips the key
+// if value invlaid just skips the key xx
 void	expand_var(t_token_data **token_data, int *i, int *count, char *new)
 {
 	int		start;

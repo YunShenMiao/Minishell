@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:14:39 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/06 11:52:01 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/06 13:20:43 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // initializes token_data which is passed during tokenization & parsing
 // to acces modified input, set in-quote status, pass start
 // & end position of token_values & pass garbage collector
-// stuff for expand env var
+// stuff for expand env var xx
 int	init_token_data(char *input, t_token_data **token_data, t_gc *gc,
 		char **envp)
 {
