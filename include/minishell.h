@@ -88,6 +88,7 @@ typedef struct s_ast
 	t_tok_type		type;
 	char			**args;
 	char			*file_name;
+	int 			quote;
 	struct s_ast	*left;
 	struct s_ast	*right;
 	char			*cmd_path;
