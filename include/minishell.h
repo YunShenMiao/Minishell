@@ -199,6 +199,7 @@ char	*handle_quotes(t_token_data **token_data, char **str);
 int		valid_cmd(t_token_data **token_data, t_ast *node);
 void	parse_command_args(t_token_data **token_data, t_token **current,
 	t_ast *cmd_node);
+void	expand_var(t_token_data **token_data, int *i, int *count, char *new);
 
 // builtins
 int		ft_echo(char **args);

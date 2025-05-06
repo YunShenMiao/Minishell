@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:41:12 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/22 16:12:54 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:06:38 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,6 @@ t_ast	*parse_redirections(t_token_data **token_data, t_token **current,
 {
 	t_ast	*redir;
 	// t_ast *cmd;
-
 	redir = NULL;
 	// cmd = NULL;
 	while (*current && ((*current)->type == TOK_REDIRECT_IN

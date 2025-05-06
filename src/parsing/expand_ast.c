@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:29:30 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/06 16:47:47 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:48:49 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,18 +75,17 @@ int	valid_cmd(t_token_data **token_data, t_ast *node)
 	return (0);
 }
 
-void	handle_env_cmd(char *new, char *rest, t_gc *gc, char ***args)
+void	handle_env_cmd(char **new, char **rest, t_gc *gc)
 {
 	int	count;
+	char *str;
 
+	str = *new;
 	count = 0;
-	while (*new &&new[count] != ' ')
+	while (str && str[count] != ' ')
 		count++;
-	rest = ft_env_substr(new, count + 1, ft_strlen(new), gc);
-	new[count] = '\0';
-	*args[count] = new;
-	count++;
-	*args[count] = rest;
+	(*rest) = ft_env_substr(str, count + 1, ft_strlen(str), gc);
+	str[count] = '\0';
 }
 
 // passes each arg of the command to handle the quotes & checks if arg[0]
@@ -108,7 +107,13 @@ int	command_args(t_ast *node, int *i, t_token_data **token_data)
 		if (new == NULL)
 			return (1);
 		if ((*token_data)->env_cmd == 1 && (*i) == 0)
-			handle_env_cmd(new, rest, ((*token_data)->gc), &args);
+		{
+			handle_env_cmd(&new, &rest, ((*token_data)->gc));
+			args[count] = new;
+			count++;
+			if (rest)
+			args[count] = rest;
+		}
 		else
 			args[count] = new;
 		(*i)++;
