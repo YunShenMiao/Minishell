@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 18:04:03 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/06 18:19:12 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:53:56 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	handle_var_exitcode(t_token_data **token_data, int *i, int *count,
 // checks for env key and if key has an assigned value
 // if so copies the value instead of key to the new string
 // if value invlaid just skips the key
-// NEED TO: find better way to handle '_' & var_cmd....
+// NEED TO: find better way to handle '_' & var_cmd...
 void	expand_var(t_token_data **token_data, int *i, int *count, char *new)
 {
 	int		start;

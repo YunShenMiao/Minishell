@@ -6,13 +6,13 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:55:26 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/06 18:08:38 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:54:03 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-// // need to use perror
+// // need to use perrors
 void	ft_perror_parsing(t_token_data **token_data, int error_id,
 		char *error_info)
 {

@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:41:12 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/06 18:06:38 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:53:33 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ t_ast	*parse_redirections(t_token_data **token_data, t_token **current,
 		// else if ((*current)->type == TOK_WORD)
 		// {
 		// 	cmd = create_ast_node(token_data, TOK_COMMAND);
-		// 	parse_command_args(token_data, current, cmd);
+		// 	parse_command_args(token_data, current,cmd);
 		// 	redir->left = cmd;
 		// }
 		prev = redir;
