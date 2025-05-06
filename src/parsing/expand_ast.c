@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:29:30 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/06 15:54:16 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:47:47 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // new logic for handling quotes and environment variables
 // NEED TO: check memory leaks
 // NEED TO: handle error returns throughout functions
-// NEED TO: norminette & generally structure and name more 
+// NEED TO: norminette & generally structure and name more
 // logically (cmd | quotes | env var)
 // NEED TO: go to token_list and norminette tokenize (+ check efficiency)
 // NEED TO: go through structs and delete unused vars
@@ -49,7 +49,11 @@ int	token_command(char *value, size_t len)
 // checks if args[0] is a valid cmd or builtin, returns error if not
 int	valid_cmd(t_token_data **token_data, t_ast *node)
 {
-	node->cmd_path = find_path(node->args[0], (*token_data)->envp, (*token_data)->gc);
+	DIR	*dir;
+
+	dir = NULL;
+	node->cmd_path = find_path(node->args[0], (*token_data)->envp,
+			(*token_data)->gc);
 	if (node->cmd_path == NULL && token_command(node->args[0],
 			ft_strlen(node->args[0])) == 1)
 	{
@@ -58,52 +62,55 @@ int	valid_cmd(t_token_data **token_data, t_ast *node)
 		(*token_data)->syntax_error = 1;
 		return (1);
 	}
+	if (node->args[0][0] == '/')
+		dir = opendir(node->cmd_path);
+	if (dir)
+	{
+		closedir(dir);
+		if ((*token_data)->syntax_error == 0)
+			ft_perror_parsing(token_data, IS_DIR, node->args[0]);
+		(*token_data)->syntax_error = 1;
+		return (1);
+	}
 	return (0);
 }
 
-void handle_env_cmd(char **new, char **rest, t_gc *gc)
+void	handle_env_cmd(char *new, char *rest, t_gc *gc, char ***args)
 {
-	int count;
-	char *str;
+	int	count;
 
-	str = *new;
 	count = 0;
-	while(*str && str[count] != ' ')
+	while (*new &&new[count] != ' ')
+		count++;
+	rest = ft_env_substr(new, count + 1, ft_strlen(new), gc);
+	new[count] = '\0';
+	*args[count] = new;
 	count++;
-	(*rest) = ft_env_substr(str, count + 1, ft_strlen(*new), gc);
-	str[count] = '\0';
+	*args[count] = rest;
 }
 
 // passes each arg of the command to handle the quotes & checks if arg[0]
 // is a valid command or not
-// need to allocate new 2dstring to handle env avr expansion 
+// need to allocate new 2dstring to handle env avr expansion
 int	command_args(t_ast *node, int *i, t_token_data **token_data)
 {
-	char **args;
-	char *new;
-	char *rest;
-	int count;
+	char	**args;
+	char	*new;
+	char	*rest;
+	int		count;
 
-	args = gc_malloc((*token_data)->gc, PARSING, 100 * sizeof(char*));
+	args = gc_malloc((*token_data)->gc, PARSING, 100 * sizeof(char *));
+	rest = NULL;
 	count = 0;
 	while (node->args[*i] != NULL)
 	{
-		// new[count] = handle_quotes(token_data, &node->args[*i]);
 		new = handle_quotes(token_data, &node->args[*i]);
 		if (new == NULL)
 			return (1);
 		if ((*token_data)->env_cmd == 1 && (*i) == 0)
-		{
-			handle_env_cmd(&new, &rest, ((*token_data)->gc));
-			args[count] = new;
-			if (rest)
-			{
-			count++;
-			args[count] = rest;
-			}
-		}
+			handle_env_cmd(new, rest, ((*token_data)->gc), &args);
 		else
-		args[count] = new; 
+			args[count] = new;
 		(*i)++;
 		count++;
 	}
@@ -114,7 +121,7 @@ int	command_args(t_ast *node, int *i, t_token_data **token_data)
 	return (0);
 }
 
-// traverses through the ast and handles quotes and 
+// traverses through the ast and handles quotes and
 // environment var expansion for cmd-args & file-names in quotes_env.c
 int	expand_ast_nodes(t_token_data **token_data, t_ast **ast)
 {

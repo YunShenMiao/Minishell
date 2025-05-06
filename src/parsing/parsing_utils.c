@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:55:26 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/05 13:59:47 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:54:03 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,13 @@ void	ft_perror_parsing(t_token_data **token_data, int error_id, char *error_info
 		write(2, error_info, ft_strlen(error_info));
 		write(2, "\n", 2);
 		(*token_data)->last_exit = 2;
+	}
+	else if (error_id == IS_DIR)
+	{
+		write(2, "🐢 minishell: ", 16);
+		write(2, error_info, ft_strlen(error_info));
+		write(2, ": is a directory\n", 17);
+		(*token_data)->last_exit = 126;
 	}
 }
 

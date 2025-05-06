@@ -12,6 +12,7 @@
 # include <unistd.h>
 # include <errno.h>
 # include <string.h>
+# include <dirent.h>
 
 # define GREEN "\033[1;32m"
 # define BLUE "\033[1;34m"
@@ -52,7 +53,8 @@ typedef enum s_error
 {
 	INVALID_COMMAND,
 	SYNTAX_ERROR,
-	UNCLOSED_QUOTES
+	UNCLOSED_QUOTES,
+	IS_DIR
 
 }				t_error;
 
