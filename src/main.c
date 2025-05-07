@@ -21,7 +21,7 @@
 #define BLUE "\033[1;34m"
 #define RESET "\033[0m"
 
-volatile sig_atomic_t glsignal = 0;
+// volatile sig_atomic_t glsignal = 0;
 
 // int	execute_builtins(t_ast *node, t_token_data **token_data)
 // {
@@ -214,6 +214,13 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	prompt = GREEN "minishell" BLUE ">" RESET " ";
 	// start_message();
+	if (isatty(STDIN_FILENO))
+	{
+		disable_echoctl();
+		setup_interactive_signals();
+	}
+	else
+		setup_noninteractive_signals();
 	while (1)
 	{
 		// input = readline(prompt);
@@ -222,6 +229,8 @@ int	main(int argc, char **argv, char **envp)
 		if (isatty(fileno(stdin)))
 		{
 			input = readline(prompt);
+			if (!input)
+				break;
 		}
 		else
 		{

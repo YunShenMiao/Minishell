@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 20:44:04 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/07 15:20:57 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/07 19:24:40 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,31 +54,6 @@ int	red_in(char *filename)
 	return (0);
 }
 
-// int heredoc(char *delimiter)
-// {
-// 	int fd[2];
-// 	char *line;
-
-// 	if (pipe(fd) == -1)
-// 	{
-// 		perror("pipe error");
-// 		return (-1);
-//     }
-// 	while (1)
-// 	{
-// 		line = readline("> ");
-// 		if (!line || (ft_strlen(line) == ft_strlen(delimiter) && ft_strncmp(line, delimiter, ft_strlen(line)) == 0))
-// 		{
-// 			free(line);
-// 			break;
-// 		}
-// 		write(fd[1], line, ft_strlen(line));
-// 		write(fd[1], "\n", 1);
-// 		free(line);
-// 	}
-// 	close(fd[1]);
-// 	return (fd[0]);
-// }
 static void	ft_itoa_simple(int n, char *buf)
 {
 	int		len;

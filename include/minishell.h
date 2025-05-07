@@ -14,14 +14,11 @@
 # include <string.h>
 # include <dirent.h>
 # include <signal.h>
+# include <termios.h>
 
 # define GREEN "\033[1;32m"
 # define BLUE "\033[1;34m"
 # define RESET "\033[0m"
-
-volatile sig_atomic_t glsignal;
-
-
 
 /****************************************************************************************************/
 /*									GARBAGE_COLLECTOR_STRUCTS										*/
@@ -231,8 +228,9 @@ void	cleanup_heredoc_tempfiles(int max_id);
 char	*expand_heredoc(char *line, t_ast *node, t_env *env_list, int last_exit);
 
 // signals
-void    init_sig(void);
-void    handle_signals();
+void	setup_interactive_signals(void);
+void	setup_noninteractive_signals(void);
+void	disable_echoctl(void);
 
 
 #endif
