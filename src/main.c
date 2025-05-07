@@ -21,69 +21,6 @@
 #define BLUE "\033[1;34m"
 #define RESET "\033[0m"
 
-// volatile sig_atomic_t glsignal = 0;
-
-// int	execute_builtins(t_ast *node, t_token_data **token_data)
-// {
-// 	char *value;
-// 	int len;
-// 	int result;
-
-// 	value = node->args[0];
-// 	len = ft_strlen(node->args[0]);
-// 	result = -1;
-// 	if (ft_strncmp(value, "cd", len) == 0)
-// 		result = ft_cd(node->args, (*token_data)->env_list, (*token_data)->gc);
-// 	else if (ft_strncmp(value, "echo", len) == 0 || ft_strncmp(value, "echo-n",
-// 			len) == 0)
-// 		result = ft_echo(node->args);
-// 	else if (ft_strncmp(value, "pwd", len) == 0)
-// 		result = ft_pwd(node->args);
-// 	else if (ft_strncmp(value, "env", len) == 0)
-// 		result = ft_env(node->args, (*token_data)->env_list);
-// 	else if (ft_strncmp(value, "export", len) == 0)
-// 		result = ft_export((*token_data)->env_list, node->args,
-// 				(*token_data)->gc);
-// 	if (ft_strncmp(value, "unset", len) == 0)
-// 		result = ft_unset((*token_data)->env_list, node->args);
-// 	else if (ft_strncmp(value, "exit", len) == 0)
-// 		result = ft_exit((*token_data)->gc);
-// 	return (result);
-// }
-
-// void	execute_cmd(t_ast *node, char **envp)
-// {
-// 	pid_t pid;
-
-// 	pid = fork();
-// 	if (pid == 0)
-// 	{
-// 		execve(node->cmd_path, node->args, envp);
-// 		perror("execve failed");
-// 		exit(1);
-// 	}
-// 	else
-// 	{
-// 		waitpid(pid, NULL, 0);
-// 	}
-// }
-
-// int	exec_redirect(t_ast *node)
-// {
-// 	if (node->type == TOK_APPEND)
-// 	{
-// 		red_out_append(node->file_name);
-// 	}
-// 	else if (node->type == TOK_HEREDOC)
-// 		heredoc();
-// 	else if (node->type == TOK_REDIRECT_IN)
-// 		red_in_overwrite(node->file_name);
-// 	else if (node->type == TOK_REDIRECT_OUT)
-// 	{
-// 		red_out_overwrite(node->filename);
-// 	}
-// }
-
 //
 // either split into if pipes execute everything in pipes and no pipes separate
 int	execution_main(t_token_data **token_data, t_ast *node)
@@ -241,9 +178,20 @@ int	main(int argc, char **argv, char **envp)
 			free(line);
 		}
 		if (!input || ft_strlen(input) == 0)
+		{
+			if (input)
+				free(input);
 			continue ;
+		}
 		else
 		{
+			// if (g_signal == SIGINT)
+			// {
+			// 	token_data->last_exit = 1; // should be 1 here, but somehow not showing
+			// 	// g_signal = 0;
+			// 	// free(input);
+			// 	continue;
+			// }
 			token_data->gc = gc;
 			add_history(input);
 			parse_execute(input, envp, &token_data);
