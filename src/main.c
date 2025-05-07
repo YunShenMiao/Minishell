@@ -21,6 +21,7 @@
 #define BLUE "\033[1;34m"
 #define RESET "\033[0m"
 
+volatile sig_atomic_t glsignal = 0;
 
 // int	execute_builtins(t_ast *node, t_token_data **token_data)
 // {
@@ -216,6 +217,8 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		// input = readline(prompt);
+		// init_sig();
+		// handle_signals();
 		if (isatty(fileno(stdin)))
 		{
 			input = readline(prompt);

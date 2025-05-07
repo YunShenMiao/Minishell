@@ -13,10 +13,13 @@
 # include <errno.h>
 # include <string.h>
 # include <dirent.h>
+# include <signal.h>
 
 # define GREEN "\033[1;32m"
 # define BLUE "\033[1;34m"
 # define RESET "\033[0m"
+
+volatile sig_atomic_t glsignal;
 
 
 
@@ -221,9 +224,13 @@ int		red_out_append(char *filename);
 int		red_in(char *filename);
 // int 	heredoc(char *delimiter);
 void	handle_all_heredocs(t_ast *node, int *heredoc_id, t_token_data *td);
-int		write_heredoc_to_file(const char *delimiter, const char *filename);
+int		write_heredoc_to_file(t_ast *node, const char *filename, t_env *env_list, int last_exit);
 void	cleanup_heredoc_tempfiles(int max_id);
-//
+char	*expand_heredoc(char *line, t_ast *node, t_env *env_list, int last_exit);
+
+// signals
+void    init_sig(void);
+void    handle_signals();
 
 
 #endif

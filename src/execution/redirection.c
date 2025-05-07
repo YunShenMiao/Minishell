@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 20:44:04 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/07 11:33:27 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/07 14:41:26 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ void	handle_all_heredocs(t_ast *node, int *heredoc_id, t_token_data *td)
 			gc_free_all(td->gc, td->heredoc_id);
 			exit(1);
 		}
-		if (write_heredoc_to_file(node->left->file_name, filename) == -1)
+		if (write_heredoc_to_file(node->left, filename, td->env_list, td->last_exit) == -1)
 		{
 			perror("malloc heredoc");
 			gc_free_all(td->gc, td->heredoc_id);
@@ -183,11 +183,12 @@ char	*heredoc_readline(const char *prompt)
 	return (line);
 }
 
-int	write_heredoc_to_file(const char *delimiter, const char *filename)
+int	write_heredoc_to_file(t_ast *node, const char *filename, t_env *env_list, int last_exit)
 {
 	int		fd;
 	char	*line;
-
+	char	*expanded;
+	
 	fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0600);
 	if (fd == -1)
 	{
@@ -209,14 +210,16 @@ int	write_heredoc_to_file(const char *delimiter, const char *filename)
 			perror("heredoc: warning: EOF before delimiter\n");
 			break;
 		}
-		if (ft_ministrcmp(line, delimiter) == 0)
+		expanded = expand_heredoc(line, node, env_list, last_exit);
+		free(line);
+		if (ft_ministrcmp(expanded, node->file_name) == 0)
 		{
-			free(line);
+			free(expanded);
 			break;
 		}
-		write(fd, line, strlen(line));
+		write(fd, expanded, strlen(expanded));
 		write(fd, "\n", 1);
-		free(line);
+		free(expanded);
 	}
 	close(fd);
 	return (0);
