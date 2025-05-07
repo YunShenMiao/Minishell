@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 11:12:24 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/06 18:14:50 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/06 18:44:07 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,9 +113,9 @@ int	exec_ast(t_ast *node, int input_fd, int output_fd, t_token_data *td)
 		if (fd < 0)
 		{
 			perror("open redirection");
-			td->last_exit = 1;
 			if (td->in_pipeline)
 				exit(1);
+			td->last_exit = 1;
 			return (1);
 		}
 		if (node->type == TOK_REDIRECT_IN)

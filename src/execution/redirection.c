@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 20:44:04 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/06 18:24:17 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/07 11:33:27 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,33 @@ void	handle_all_heredocs(t_ast *node, int *heredoc_id, t_token_data *td)
 	handle_all_heredocs(node->right, heredoc_id, td);
 }
 
+char	*heredoc_readline(const char *prompt)
+{
+	static char	**buffered_lines;
+	static int	current_index;
+	char		*line;
+
+	if (buffered_lines && buffered_lines[current_index])
+	{
+		return (ft_strdup(buffered_lines[current_index++]));
+	}
+	if (!isatty(STDIN_FILENO))
+	{
+		return get_next_line(STDIN_FILENO);
+	}
+	line = readline(prompt);
+	if (!line)
+		return NULL;
+	if (find_sign(line, '\n') >= 0)
+	{
+		buffered_lines = ft_split(line, '\n');
+		free(line);
+		current_index = 0;
+		return (ft_strdup(buffered_lines[current_index++]));
+	}
+	return (line);
+}
+
 int	write_heredoc_to_file(const char *delimiter, const char *filename)
 {
 	int		fd;
@@ -169,7 +196,14 @@ int	write_heredoc_to_file(const char *delimiter, const char *filename)
 	}
 	while (1)
 	{
-		line = readline("> ");
+		if (isatty(STDIN_FILENO))
+			line = heredoc_readline("> ");
+		else
+		{
+			line = get_next_line(STDIN_FILENO);
+			if (line && line[ft_strlen(line) - 1] == '\n')
+				line[ft_strlen(line) - 1] = '\0';
+		}
 		if (!line)
 		{
 			perror("heredoc: warning: EOF before delimiter\n");
