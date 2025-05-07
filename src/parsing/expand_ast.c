@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_ast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:29:30 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/07 15:16:36 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/07 15:43:34 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,23 +24,25 @@
 // handle ~ ? 
 
 // checks if cmd is builtin
-int	token_command(char *value, size_t len)
+int	token_command(char *value)
 {
-	if (ft_strncmp(value, "cd", len) == 0)
+	if (ft_ministrcmp(value, "cd") == 0)
 		return (0);
-	else if (ft_strncmp(value, "echo", len) == 0)
+	else if (ft_ministrcmp(value, "echo") == 0)
 		return (0);
-	else if (ft_strncmp(value, "echo-n", len) == 0)
+	else if (ft_ministrcmp(value, "echo-n") == 0)
 		return (0);
-	else if (ft_strncmp(value, "pwd", len) == 0)
+	else if (ft_ministrcmp(value, "/bin/echo-n") == 0)
+		return(0);
+	else if (ft_ministrcmp(value, "pwd") == 0)
 		return (0);
-	else if (ft_strncmp(value, "env", len) == 0)
+	else if (ft_ministrcmp(value, "env") == 0)
 		return (0);
-	else if (ft_strncmp(value, "export", len) == 0)
+	else if (ft_ministrcmp(value, "export") == 0)
 		return (0);
-	if (ft_strncmp(value, "unset", len) == 0)
+	if (ft_ministrcmp(value, "unset") == 0)
 		return (0);
-	else if (ft_strncmp(value, "exit", len) == 0)
+	else if (ft_ministrcmp(value, "exit") == 0)
 		return (0);
 	else
 		return (1);
@@ -54,8 +56,7 @@ int	valid_cmd(t_token_data **token_data, t_ast *node)
 	dir = NULL;
 	node->cmd_path = find_path(node->args[0], (*token_data)->envp,
 			(*token_data)->gc);
-	if (node->cmd_path == NULL && token_command(node->args[0],
-			ft_strlen(node->args[0])) == 1)
+	if (node->cmd_path == NULL && token_command(node->args[0]) == 1)
 	{
 		if ((*token_data)->syntax_error == 0)
 			ft_perror_parsing(token_data, INVALID_COMMAND, node->args[0]);

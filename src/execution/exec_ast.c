@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 11:12:24 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/06 18:44:07 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/07 15:29:13 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int	is_builtin(char **args)
 	return (0);
 }
 
+//Sets up redirections for builtins (which run in the parent), save stdin or stdout for later for restoring
 int setup_redirection(int input_fd, int output_fd, int *saved_stdin, int *saved_stdout)
 {
 	if (input_fd != STDIN_FILENO)
@@ -70,13 +71,83 @@ void restore_stdio(int saved_stdin, int saved_stdout)
 	}
 }
 
+int	resolve_redirections(t_ast *node, int *in_fd, int *out_fd, t_token_data *td, t_ast **cmd_node)
+{
+	int	tmp_fd;
+
+	if (!node)
+		return (1);
+	if (node->type == TOK_COMMAND)
+	{
+		*cmd_node = node;
+		return (0);
+	}
+	if (node->type == TOK_REDIRECT_IN)
+	{
+		if (resolve_redirections(node->right, in_fd, out_fd, td, cmd_node) != 0)
+			return (1);
+		tmp_fd = open(node->left->file_name, O_RDONLY);
+		if (tmp_fd < 0)
+		{
+			perror("open (in)");
+			if (td->in_pipeline)
+				exit(1);
+			td->last_exit = 1;
+			return (1);
+		}
+		if (*in_fd != STDIN_FILENO)
+			close(*in_fd);
+		*in_fd = tmp_fd;
+		return (0);
+	}
+	else if (node->type == TOK_REDIRECT_OUT)
+	{
+		if (resolve_redirections(node->left, in_fd, out_fd, td, cmd_node) != 0)
+			return (1);
+		tmp_fd = open(node->right->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (tmp_fd < 0)
+		{
+			perror("open (out)");
+			if (td->in_pipeline)
+				exit(1);
+			td->last_exit = 1;
+			return (1);
+		}
+		if (*out_fd != STDOUT_FILENO)
+			close(*out_fd);
+		*out_fd = tmp_fd;
+		return (0);
+	}
+	else if (node->type == TOK_APPEND)
+	{
+		if (resolve_redirections(node->left, in_fd, out_fd, td, cmd_node) != 0)
+			return (1);
+
+		tmp_fd = open(node->right->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (tmp_fd < 0)
+		{
+			perror("open (append)");
+			if (td->in_pipeline)
+				exit(1);
+			td->last_exit = 1;
+			return (1);
+		}
+		if (*out_fd != STDOUT_FILENO)
+			close(*out_fd);
+		*out_fd = tmp_fd;
+		return (0);
+	}
+	return (1);
+}
 
 int	exec_ast(t_ast *node, int input_fd, int output_fd, t_token_data *td)
 {
 	pid_t	pid;
 	int		pipefd[2];
 	int		status;
-	int		fd;
+	int		new_in;
+	int		new_out;
+	t_ast	*cmd_node;
 
 	if (!node)
 		return (1);
@@ -84,7 +155,6 @@ int	exec_ast(t_ast *node, int input_fd, int output_fd, t_token_data *td)
 	{
 		if (pipe(pipefd) < 0)
 			return (perror("pipe"), 1);
-
 		pid = fork();
 		if (pid == 0)
 		{
@@ -104,25 +174,13 @@ int	exec_ast(t_ast *node, int input_fd, int output_fd, t_token_data *td)
 	}
 	else if (node->type == TOK_REDIRECT_IN || node->type == TOK_REDIRECT_OUT || node->type == TOK_APPEND)
 	{
-		if (node->type == TOK_REDIRECT_IN)
-			fd = open(node->left->file_name, O_RDONLY);
-		else if (node->type == TOK_REDIRECT_OUT)
-			fd = open(node->right->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		else
-			fd = open(node->right->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (fd < 0)
-		{
-			perror("open redirection");
-			if (td->in_pipeline)
-				exit(1);
-			td->last_exit = 1;
+		new_in = input_fd;
+		new_out = output_fd;
+		cmd_node = NULL;
+		if (resolve_redirections(node, &new_in, &new_out, td, &cmd_node) != 0)
 			return (1);
-		}
-		if (node->type == TOK_REDIRECT_IN)
-			return exec_ast(node->right, fd, output_fd, td);
-		else
-			return exec_ast(node->left, input_fd, fd, td);
-	}
+		return (exec_ast(cmd_node, new_in, new_out, td));
+	}	
 	else if (node->type == TOK_COMMAND)
 	{
 		if (is_builtin(node->args) && !td->in_pipeline)
