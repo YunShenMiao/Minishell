@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 20:44:04 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/07 14:41:26 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/07 15:20:57 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,16 +210,19 @@ int	write_heredoc_to_file(t_ast *node, const char *filename, t_env *env_list, in
 			perror("heredoc: warning: EOF before delimiter\n");
 			break;
 		}
-		expanded = expand_heredoc(line, node, env_list, last_exit);
-		free(line);
-		if (ft_ministrcmp(expanded, node->file_name) == 0)
+		if (ft_ministrcmp(line, node->file_name) == 0)
 		{
-			free(expanded);
+			free(line);
 			break;
 		}
+		else
+		{
+		expanded = expand_heredoc(line, node, env_list, last_exit);
+		free(line);
 		write(fd, expanded, strlen(expanded));
 		write(fd, "\n", 1);
 		free(expanded);
+		}
 	}
 	close(fd);
 	return (0);

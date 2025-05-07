@@ -92,6 +92,7 @@ typedef struct s_ast
 	char			**args;
 	char			*file_name;
 	int 			quote;
+	int				HD;
 	struct s_ast	*left;
 	struct s_ast	*right;
 	char			*cmd_path;
@@ -117,6 +118,7 @@ typedef struct s_token_data
 	int				heredoc_id;
 	int				in_pipeline;
 	int				env_cmd;
+	int				HD;
 }				t_token_data;
 
 /****************************************************************************************************/
