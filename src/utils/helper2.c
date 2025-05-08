@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 15:22:37 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/08 15:41:10 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:06:33 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,24 @@
 
 int	empty_str(char *str)
 {
-	int count;
+	int	count;
 
 	count = 0;
 	while (str[count] != '\0' && (str[count] == ' ' || str[count] == '\t'
-		|| str[count] == '\n' || str[count] == '\r'
-		|| str[count] == '\v' || str[count] == '\f'))
-	count++;
+			|| str[count] == '\n' || str[count] == '\r' || str[count] == '\v'
+			|| str[count] == '\f'))
+		count++;
 	if (str[count] != '\0')
-	return(0);
+		return (0);
 	else
-	return(count);
+		return (count);
 }
 
-int check_empty_ast(t_token_data *token_data)
+int	check_empty_ast(t_token_data *token_data)
 {
-	t_ast *node;
-	int i;
-	int count;
+	t_ast	*node;
+	int		i;
+	int		count;
 
 	node = token_data->ast;
 	i = 0;
@@ -42,13 +42,13 @@ int check_empty_ast(t_token_data *token_data)
 		{
 			count = empty_str(node->args[i]);
 			if (node->args[i][count] != '\0')
-			return(0);
+				return (0);
 			i++;
 		}
 		if (node->args[i] == NULL)
 		{
-		return(2);
+			return (2);
 		}
 	}
-	return(0);
+	return (0);
 }

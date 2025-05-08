@@ -15,47 +15,9 @@
 
 #include "../include/minishell.h"
 
-// error strings for perror function
-
 #define GREEN "\033[1;32m"
 #define BLUE "\033[1;34m"
 #define RESET "\033[0m"
-
-// void	print_ast(t_ast *node, int depth, char *pos)
-// {
-// 	int i;
-
-// 	if (!node)
-// 		return ;
-// 	i = 0;
-// 	while (i < depth)
-// 	{
-// 		printf("  ");
-// 		i++;
-// 	}
-// 	printf("%s ", pos);
-// 	if (node->type == TOK_COMMAND)
-// 	{
-// 		printf("CMD: ");
-// 		i = 0;
-// 		while (node->args[i])
-// 		{
-// 			printf("%s ", node->args[i]);
-// 			i++;
-// 		}
-// 	}
-// 	else if (node->type == TOK_PIPE)
-// 		printf("PIPE");
-// 	else if (node->type == TOK_REDIRECT_IN || node->type == TOK_REDIRECT_OUT
-// 		|| node->type == TOK_APPEND || node->type == TOK_HEREDOC)
-// 		printf("REDIR: %d -> %s", node->type, node->file_name);
-// 	else if (node->type == TOK_FILE)
-// 		printf("FILE: %s", node->file_name);
-// 	printf("\n");
-
-// 	print_ast(node->left, depth + 1, "Left:");
-// 	print_ast(node->right, depth + 1, "Right:");
-// }
 
 // general structure function for parsing
 int	parse_main(char *input, t_token_data **token_data, t_gc *gc, char **envp)
