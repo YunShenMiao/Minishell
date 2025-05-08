@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:51:05 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/22 13:06:05 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/07 19:10:41 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,10 @@ void	merge_echo_n2(char **edited, int *count, int *count2)
 	(*edited)[*count + 1] = 'c';
 	(*edited)[*count + 2] = 'h';
 	(*edited)[*count + 3] = 'o';
-	(*edited)[*count + 4] = '-';
-	(*edited)[*count + 5] = 'n';
-	(*count) += 6;
+	(*edited)[*count + 4] = ' ';
+	(*edited)[*count + 5] = '-';
+	(*edited)[*count + 6] = 'n';
+	(*count) += 7;
 	(*count2) += 7;
 }
 
@@ -29,7 +30,8 @@ void	merge_echo_n2(char **edited, int *count, int *count2)
 void	merge_echo_n(char *input, char **edited, int *count, int *count2)
 {
 	int	i;
-
+	if (*count2 > 0 && input[*count2 - 1] != '/')
+	{
 	if (input[*count2] == 'e' && ft_strncmp(&input[*count2], "echo -n", 7) == 0
 		&& (input[*count2 + 7] == ' ' || input[*count2 + 7] == 'n'
 			|| input[*count2 + 7] == '\0'))
@@ -53,6 +55,7 @@ void	merge_echo_n(char *input, char **edited, int *count, int *count2)
 				break ;
 		}
 	}
+}
 }
 
 // adds extra spaces for redirections, heredoc and pipes which
@@ -125,7 +128,7 @@ int	modify_input(char *input, char **modified_input, t_gc *gc, t_token_data **to
 	while (input[count2] != '\0')
 	{
 		quote_status(token_data, input[count2]);
-		merge_echo_n(input, modified_input, &count, &count2);
+		// merge_echo_n(input, modified_input, &count, &count2);
 		trim_quotes(input, &count2, token_data);
 		edit_spaces(token_data, modified_input, &count, &count2);
 		count++;

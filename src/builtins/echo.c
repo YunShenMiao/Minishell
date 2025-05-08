@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:14:16 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/06 13:39:52 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/08 11:50:36 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,15 +82,18 @@ int	ft_echo(char **args)
 	int		no_newline;
 	int		i;
 
-	if (ft_ministrcmp(args[0], "echo-n") == 0)
+	no_newline = 0;
+	if (ft_ministrcmp(args[0], "echo") == 0 && args[1] != NULL && ft_ministrcmp(args[1], "-n") == 0)
 		no_newline = 1;
-	else if (ft_ministrcmp(args[0], "/bin/echo-n") == 0)
+	else if (ft_ministrcmp(args[0], "/bin/echo") == 0  && args[1] != NULL && ft_ministrcmp(args[1], "-n") == 0)
 		no_newline = 1;
 	else if (ft_ministrcmp(args[0], "echo") == 0)
 		no_newline = 0;
 	else if (ft_ministrcmp(args[0], "/bin/echo") == 0)
 		no_newline = 0;
 	i = 0;
+	if (no_newline == 1)
+	i++;
 	while (args[i + 1])
 	{
 		i++;

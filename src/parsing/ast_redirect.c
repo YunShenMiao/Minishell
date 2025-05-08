@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:41:12 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/07 18:13:42 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/07 18:53:20 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,9 @@ t_ast *add_cmd(t_token_data *token_data, t_tok_type type)
 		{
 		cmd_node = create_ast_node(&token_data, TOK_COMMAND);
 		cmd_node->args = (char**)gc_malloc(token_data->gc, PARSING, sizeof(char**));
-		cmd_node->args[0] = ft_env_strdup("echo-n", token_data->gc);
-		cmd_node->args[1] = NULL;
+		cmd_node->args[0] = ft_env_strdup("echo", token_data->gc);
+		cmd_node->args[1] = ft_env_strdup("-n", token_data->gc);
+		cmd_node->args[2] = NULL;
 		}
 	else
 		{

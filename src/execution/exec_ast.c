@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_ast.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 11:12:24 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/07 15:29:13 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/08 12:22:25 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ int	is_builtin(char **args)
 	if (!args || !args[0])
 		return (0);
 	if (ft_ministrcmp(args[0], "echo") == 0 || ft_ministrcmp(args[0], "/bin/echo") == 0)
-		return (1);
-	if (ft_ministrcmp(args[0], "echo-n") == 0 || ft_ministrcmp(args[0], "/bin/echo-n") == 0)
 		return (1);
 	if (ft_ministrcmp(args[0], "cd") == 0 || ft_ministrcmp(args[0], "/bin/cd") == 0)
 		return (1);

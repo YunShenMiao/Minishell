@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_ast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:29:30 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/07 15:43:34 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/08 12:18:10 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ int	token_command(char *value)
 		return (0);
 	else if (ft_ministrcmp(value, "echo") == 0)
 		return (0);
-	else if (ft_ministrcmp(value, "echo-n") == 0)
-		return (0);
-	else if (ft_ministrcmp(value, "/bin/echo-n") == 0)
-		return(0);
+	// else if (ft_ministrcmp(value, "echo-n") == 0)
+	// 	return (0);
+	// else if (ft_ministrcmp(value, "/bin/echo-n") == 0)
+	// 	return(0);
 	else if (ft_ministrcmp(value, "pwd") == 0)
 		return (0);
 	else if (ft_ministrcmp(value, "env") == 0)
@@ -89,6 +89,34 @@ void	handle_env_cmd(char **new, char **rest, t_gc *gc)
 	str[count] = '\0';
 }
 
+int	bi_echo(t_ast *node, int *i)
+{
+	int	count;
+	int	count2;
+
+	count = *i;
+	while (node->args[count] != NULL)
+	{
+		if (node->args[count][0] != '-')
+			break;
+		count2 = 1;
+		if (node->args[count][count2] == '\0')
+			break;
+		while (node->args[count][count2] == 'n')
+			count2++;
+		if (node->args[count][count2] != '\0')
+			break;
+		count++;
+	}
+	if (count > *i)
+	{
+		*i = count -1;
+		return(2);
+	}
+	*i = count -1;
+	return(0);
+}
+
 // passes each arg of the command to handle the quotes & checks if arg[0]
 // is a valid command or not
 // need to allocate new 2dstring to handle env avr expansion
@@ -102,6 +130,26 @@ int	command_args(t_ast *node, int *i, t_token_data **token_data)
 	args = gc_malloc((*token_data)->gc, PARSING, 100 * sizeof(char *));
 	rest = NULL;
 	count = 0;
+	if (node->args[*i] != NULL && ft_ministrcmp(node->args[*i], "echo") == 0)
+	{
+	new = handle_quotes(token_data, &node->args[*i]);
+	if (new == NULL)
+		return (1);
+	args[count] = new;
+	count++;
+	if (*i == 0 && ft_ministrcmp(node->args[*i], "echo") == 0)
+	{
+	(*i)++;
+	if (bi_echo(node, i) == 2)
+	{
+		args[count] = ft_env_strdup("-n", (*token_data)->gc);
+		count++;
+		(*i)++;
+	}
+	else 
+	(*i)++;
+	}
+	}
 	while (node->args[*i] != NULL)
 	{
 		new = handle_quotes(token_data, &node->args[*i]);
