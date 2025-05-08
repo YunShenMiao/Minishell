@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:21:43 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/30 16:23:15 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/08 12:16:43 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,10 @@ int	ft_export(t_env	*top_env, char **args, t_gc *gc)
 		i = 1;
 		while (args[i])
 		{
+			if (ft_strncmp(args[i], "-", 1) == 0)
+				return (error_general("usage: export not supporting flags"));
+			if (is_numeric(args[i]) == 1 || find_sign(args[i], '-') != -1 )
+				return (error_general("export: not a valid identifier"));
 			assign = args[i];
 			if (find_sign(assign, '=') < 0)
 			{
@@ -106,6 +110,8 @@ int	ft_export(t_env	*top_env, char **args, t_gc *gc)
 					ft_env_add_back(&top_env, new);
 				}
 			}
+			else if (find_sign(assign, '=') == (int)ft_strlen(assign))
+				return (error_general("export: not a valid identifier"));
 			else if (find_sign(assign, '=') == 0)
 				return (error_general("export: not a valid identifier"));
 			else
