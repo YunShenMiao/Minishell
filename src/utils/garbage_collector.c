@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_collector.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 12:22:37 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/05 16:42:26 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/08 17:13:45 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-//initializes the gc struct with the gc_list array for the different program parts using enum as indexes
+// initializes the gc struct with the gc_list array 
+// for the different program parts using enum as indexes
 t_gc	*init_gc(void)
 {
 	int		i;
@@ -30,13 +31,14 @@ t_gc	*init_gc(void)
 	return (gc);
 }
 
-//allocates the garbage node and the ptr which points to allocated memory.
-//calling gc_malloc need to cast memory, since it returns void* eg.: (char *)gc_malloc when allocating char*
-//links the allocated memory to the corresponding category
+// allocates the garbage node and the ptr which points to allocated memory.
+// calling gc_malloc need to cast memory,
+//	since it returns void* eg.: (char *)gc_malloc when allocating char*
+// links the allocated memory to the corresponding category
 void	*gc_malloc(t_gc *gc, t_mem_location category, unsigned long size)
 {
-	void	*ptr;
-	t_garbage *new_node;
+	void		*ptr;
+	t_garbage	*new_node;
 
 	if (!gc || category >= MEM_CAT || size == 0)
 		return (NULL);
@@ -55,8 +57,8 @@ void	*gc_malloc(t_gc *gc, t_mem_location category, unsigned long size)
 	return (new_node->ptr);
 }
 
-//probably no need to divide categories ?? depends on execution/parsing structs
-//frees a single category by going through the garbage list and freeing each value *ptr points to
+// frees a single category by going through the garbage 
+// list and freeing each value *ptr points to
 void	gc_free_category(t_gc *gc, t_mem_location category)
 {
 	t_garbage	*current;
@@ -67,7 +69,7 @@ void	gc_free_category(t_gc *gc, t_mem_location category)
 	current = gc->gc_list[category];
 	while (current)
 	{
-		if (/* category == TOKENS &&  */current->ptr)
+		if (current->ptr)
 		{
 			if (current->ptr != NULL)
 				free(current->ptr);
@@ -81,7 +83,8 @@ void	gc_free_category(t_gc *gc, t_mem_location category)
 	gc->gc_list[category] = NULL;
 }
 
-//goes through all categories in the array and frees it all by calling gc_free_category 
+// goes through all categories in the array and
+// frees it all by calling gc_free_category
 void	gc_free_all(t_gc *gc, int heredoc_id)
 {
 	int	i;

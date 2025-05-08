@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 14:30:12 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/08 15:55:08 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:10:40 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,6 @@
 int	error_general(char *msg)
 {
 	perror(msg);
-	return (1);
-}
-
-int	error_free(char *msg, t_data *shell)
-{
-	perror(msg);
-	// need to write more complete free under the struct
-	if (shell)
-		free(shell);
 	return (1);
 }
 
