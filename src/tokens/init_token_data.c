@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:14:39 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/08 15:50:03 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/08 20:57:36 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,17 @@ int	init_token_data(char *input, t_token_data **token_data, t_gc *gc,
 	(*token_data)->in_pipeline = 0;
 	(*token_data)->env_cmd = 0;
 	(*token_data)->HD = 0;
-	// (*token_data)->env_list = (t_env *)gc_malloc(gc, TOKENS, sizeof(t_env));
-	// if (!(*token_data)->env_list)
-	// 	return (1);
 	return (0);
 }
+
+// int init_td_gc(t_token_data **token_data, t_gc **gc, char **envp)
+// {
+// 	t_gc *gc;
+	
+// 	*token_data = malloc(sizeof(t_token_data));
+// 	if (!token_data)
+// 		return (1);
+// 	*token_data->last_exit = 0;
+// 	*gc = init_gc();
+// 	*token_data->env_list = init_env(envp, gc);
+// }

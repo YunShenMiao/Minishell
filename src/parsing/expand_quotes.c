@@ -6,13 +6,13 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 13:51:18 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/08 13:16:39 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/08 20:52:28 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-// skipping dq, handling env expansion & copying rests
+// skipping dq, handling env expansion & copying rest
 void	in_dq(t_token_data **token_data, char **new, int *i, int *count)
 {
 	if ((*token_data)->expand_str[*i] != '\0'
@@ -20,8 +20,9 @@ void	in_dq(t_token_data **token_data, char **new, int *i, int *count)
 		(*i)++;
 	if (((*token_data)->expand_str[*i] == '$' && (*token_data)->expand_str[*i
 				+ 1] != '\0' && (*token_data)->expand_str[*i + 1] != ' '
-			&& (*token_data)->expand_str[*i + 1] != '\"' 
-			&& (*token_data)->expand_str[*i + 1] != '/' && (*token_data)->HD == 0))
+			&& (*token_data)->expand_str[*i + 1] != '\"'
+			&& (*token_data)->expand_str[*i + 1] != '/'
+			&& (*token_data)->HD == 0))
 		expand_var(token_data, i, count, *new);
 	if ((*token_data)->expand_str[*i] != '\0'
 		&& (*token_data)->expand_str[*i] != '\"')
@@ -51,8 +52,8 @@ void	in_nq(t_token_data **token_data, char **new, int *i, int *count)
 {
 	if (((*token_data)->expand_str[*i] == '$' && (*token_data)->expand_str[*i
 				+ 1] != '\0' && (*token_data)->expand_str[*i + 1] != ' '
-				&& (*token_data)->expand_str[*i + 1] != '/' && (*token_data)->HD == 0)
-		|| ((*token_data)->expand_str[*i] == '~'
+			&& (*token_data)->expand_str[*i + 1] != '/'
+			&& (*token_data)->HD == 0) || ((*token_data)->expand_str[*i] == '~'
 			&& ((*token_data)->expand_str[*i + 1] == '\0'
 				|| (*token_data)->expand_str[*i + 1] == ' ')))
 	{
@@ -95,7 +96,8 @@ char	*handle_quotes(t_token_data **token_data, char **str)
 			in_nq(token_data, &new, &i, &count);
 	}
 	if ((*token_data)->in_DQ == 1 || (*token_data)->in_SQ == 1)
-		return ((ft_perror_parsing(token_data, UNCLOSED_QUOTES,
-					"unclosed quotes")), NULL);
+		return ((*token_data)->HD = 0, (ft_perror_parsing(token_data,
+					UNCLOSED_QUOTES, "unclosed quotes")), NULL);
+	(*token_data)->HD = 0;
 	return (new[count] = '\0', new);
 }

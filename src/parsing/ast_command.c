@@ -6,11 +6,35 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:50:00 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/06 15:53:57 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/08 18:44:59 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+t_ast	*add_cmd(t_token_data *token_data, t_tok_type type)
+{
+	t_ast	*cmd_node;
+
+	if (type == TOK_APPEND || type == TOK_REDIRECT_OUT)
+	{
+		cmd_node = create_ast_node(&token_data, TOK_COMMAND);
+		cmd_node->args = (char **)gc_malloc(token_data->gc, PARSING,
+				sizeof(char **));
+		cmd_node->args[0] = ft_env_strdup("echo", token_data->gc);
+		cmd_node->args[1] = ft_env_strdup("-n", token_data->gc);
+		cmd_node->args[2] = NULL;
+	}
+	else
+	{
+		cmd_node = create_ast_node(&token_data, TOK_COMMAND);
+		cmd_node->args = (char **)gc_malloc(token_data->gc, PARSING,
+				sizeof(char **));
+		cmd_node->args[0] = ft_env_strdup("cat", token_data->gc);
+		cmd_node->args[1] = NULL;
+	}
+	return (cmd_node);
+}
 
 void	parse_command_args(t_token_data **token_data, t_token **current,
 		t_ast *cmd_node)

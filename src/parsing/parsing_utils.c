@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:55:26 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/08 15:51:28 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/08 19:03:44 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,53 @@ int	quote_status(t_token_data **token_data, char input)
 		return (1);
 	else
 		return (0);
+}
+
+// checks if cmd is builtin
+int	token_command(char *value)
+{
+	if (ft_ministrcmp(value, "cd") == 0)
+		return (0);
+	else if (ft_ministrcmp(value, "echo") == 0)
+		return (0);
+	else if (ft_ministrcmp(value, "pwd") == 0)
+		return (0);
+	else if (ft_ministrcmp(value, "env") == 0)
+		return (0);
+	else if (ft_ministrcmp(value, "export") == 0)
+		return (0);
+	if (ft_ministrcmp(value, "unset") == 0)
+		return (0);
+	else if (ft_ministrcmp(value, "exit") == 0)
+		return (0);
+	else
+		return (1);
+}
+
+// checks if args[0] is a valid cmd or builtin, returns error if not
+int	valid_cmd(t_token_data **token_data, t_ast *node)
+{
+	DIR	*dir;
+
+	dir = NULL;
+	node->cmd_path = find_path(node->args[0], (*token_data)->envp,
+			(*token_data)->gc);
+	if (node->cmd_path == NULL && token_command(node->args[0]) == 1)
+	{
+		if ((*token_data)->syntax_error == 0)
+			ft_perror_parsing(token_data, INVALID_COMMAND, node->args[0]);
+		(*token_data)->syntax_error = 1;
+		return (1);
+	}
+	if (node->args[0][0] == '/')
+		dir = opendir(node->cmd_path);
+	if (dir)
+	{
+		closedir(dir);
+		if ((*token_data)->syntax_error == 0)
+			ft_perror_parsing(token_data, IS_DIR, node->args[0]);
+		(*token_data)->syntax_error = 1;
+		return (1);
+	}
+	return (0);
 }
