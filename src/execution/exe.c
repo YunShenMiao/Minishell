@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 20:06:50 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/06 15:22:22 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/08 12:23:55 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	execute_builtins(t_ast *node, t_token_data *token_data)
 	else if (ft_ministrcmp(value, "env") == 0 || ft_ministrcmp(value, "/bin/env") == 0)
 		return (ft_env(node->args, (token_data)->env_list));
 	else if (ft_ministrcmp(value, "export") == 0 || ft_ministrcmp(value, "/bin/export") == 0)
-		return (ft_export((token_data)->env_list, node->args, (token_data)->gc));
+		return (ft_export((token_data)->env_list, node->args, token_data));
 	else if (ft_ministrcmp(value, "unset") == 0 || ft_ministrcmp(value, "/bin/unset") == 0)
 		return (ft_unset((token_data)->env_list, node->args));
 	else if (ft_ministrcmp(value, "exit") == 0 || ft_ministrcmp(value, "/bin/exit") == 0)

@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:21:43 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/08 12:16:43 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/08 12:55:26 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,35 +53,25 @@ int	add_env_var(t_env *top_env, char *assign, t_gc *gc)
 	return (0);
 }
 
-// int	ft_export(t_env	*top_env, t_token *current, t_gc *gc)
-// {
-// 	char	*assign;
-// 	t_env	*new;
+int	is_valid(char *arg)
+{
+	size_t	i;
+	int		in_value;;
 
+	i = 0;
+	in_value = 0;
+	while (i < ft_strlen(arg))
+	{
+		if (arg[i] == 61)
+			in_value = 1;
+		if (in_value == 0 && ((arg[i] != 61 && arg[i] < 65) || (arg[i] > 90 && arg[i] < 97 && arg[i] != 95) || arg[i] > 122))
+			return (-1);
+		i++;
+	}
+	return (1);
+}
 
-// 	if (!current->next)
-// 		print_export(top_env);
-// 	else if (current->next->next)
-// 		return (error_general("export: bad assign"));
-// 	else
-// 	{
-// 		assign = current->next->value;
-// 		if (find_sign(assign, '=') < 0)
-// 		{
-// 			new = create_env(assign, NULL, gc);
-// 			if (!new)
-// 				return (error_general("malloc: env not initiated"));
-// 			ft_env_add_back(&top_env, new);
-// 		}
-// 		else if (find_sign(assign, '=') == 0)
-// 			return (error_general("export: not a valid identifier"));
-// 		else
-// 			return (add_env_var(top_env, assign, gc));
-// 	}
-// 	return (0);
-// }
-
-int	ft_export(t_env	*top_env, char **args, t_gc *gc)
+int	ft_export(t_env	*top_env, char **args, t_token_data *td)
 {
 	char	*assign;
 	t_env	*new;
@@ -96,15 +86,18 @@ int	ft_export(t_env	*top_env, char **args, t_gc *gc)
 		while (args[i])
 		{
 			if (ft_strncmp(args[i], "-", 1) == 0)
-				return (error_general("usage: export not supporting flags"));
-			if (is_numeric(args[i]) == 1 || find_sign(args[i], '-') != -1 )
+			{
+				error_general("usage: export not supporting flags");
+				exit(2);
+			}
+			if (is_valid(args[i]) < 0)
 				return (error_general("export: not a valid identifier"));
 			assign = args[i];
 			if (find_sign(assign, '=') < 0)
 			{
 				if (!search_name_node(top_env, assign))
 				{
-					new = create_env(assign, NULL, gc);
+					new = create_env(assign, NULL, td->gc);
 					if (!new)
 						return (error_general("malloc: env not initiated"));
 					ft_env_add_back(&top_env, new);
@@ -115,7 +108,7 @@ int	ft_export(t_env	*top_env, char **args, t_gc *gc)
 			else if (find_sign(assign, '=') == 0)
 				return (error_general("export: not a valid identifier"));
 			else
-				add_env_var(top_env, assign, gc);
+				add_env_var(top_env, assign, td->gc);
 			i++;
 		}
 	}

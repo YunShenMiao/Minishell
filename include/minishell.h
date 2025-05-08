@@ -202,7 +202,7 @@ int		ft_pwd(char **args);
 int		ft_exit(char **args, t_token_data *td);
 int		ft_cd(char **args, t_env *top, t_gc *gc);
 int		ft_env(char **args, t_env *top_env);
-int		ft_export(t_env	*top_env, char **args, t_gc *gc);
+int		ft_export(t_env	*top_env, char **args, t_token_data *td);
 int		ft_unset(t_env	*top_env, char **args);
 int		is_numeric(char *str);
 
