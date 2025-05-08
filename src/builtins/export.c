@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:21:43 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/08 12:55:26 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/08 13:07:38 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,19 @@ int	is_valid(char *arg)
 	{
 		if (arg[i] == 61)
 			in_value = 1;
-		if (in_value == 0 && ((arg[i] != 61 && arg[i] < 65) || (arg[i] > 90 && arg[i] < 97 && arg[i] != 95) || arg[i] > 122))
-			return (-1);
+		if (arg[i] == '+' && arg[i + 1] == '=')
+			in_value = 1;
+		if (i == 0)
+		{
+			if (in_value == 0 && ((arg[i] != 61 && arg[i] < 65) || (arg[i] > 90 && arg[i] < 97 && arg[i] != 95) || arg[i] > 122))
+				return (-1);
+		}
+		else
+		{
+			if (in_value == 0 && !(arg[i] >=48 && arg[i] <= 57) && ((arg[i] != 61 && arg[i] < 65) || (arg[i] > 90 && arg[i] < 97 && arg[i] != 95) || arg[i] > 122))
+				return (-1);
+		}
+
 		i++;
 	}
 	return (1);
