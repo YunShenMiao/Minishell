@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:21:43 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/08 13:07:38 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/08 17:32:49 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,13 @@ int	add_env_var(t_env *top_env, char *assign, t_gc *gc)
 	t_env	*new;
 	char	*name;
 	char	*value;
+	int		loc;
 
-
-	name = ft_env_substr(assign, 0, find_sign(assign, '='), gc);
+	loc = find_sign(assign, '=');
+	name = ft_env_substr(assign, 0, loc, gc);
 	if (!name)
 		return (error_general("malloc: env not initiated"));
-	value = ft_env_substr(assign, find_sign(assign, '=') + 1, ft_strlen(assign), gc);
+	value = ft_env_substr(assign, loc + 1, ft_strlen(assign), gc);
 	if (!value)
 		return (error_general("malloc: env not initiated"));
 	if (search_name_node(top_env, name))
@@ -56,38 +57,63 @@ int	add_env_var(t_env *top_env, char *assign, t_gc *gc)
 int	is_valid(char *arg)
 {
 	size_t	i;
-	int		in_value;;
+	int		in_value;
 
 	i = 0;
 	in_value = 0;
 	while (i < ft_strlen(arg))
 	{
-		if (arg[i] == 61)
-			in_value = 1;
-		if (arg[i] == '+' && arg[i + 1] == '=')
+		if ((arg[i] == '+' && arg[i + 1] == '=') || arg[i] == 61)
 			in_value = 1;
 		if (i == 0)
 		{
-			if (in_value == 0 && ((arg[i] != 61 && arg[i] < 65) || (arg[i] > 90 && arg[i] < 97 && arg[i] != 95) || arg[i] > 122))
+			if (in_value == 0 && ((arg[i] != 61 && arg[i] < 65) || \
+			(arg[i] > 90 && arg[i] < 97 && arg[i] != 95) || arg[i] > 122))
 				return (-1);
 		}
 		else
 		{
-			if (in_value == 0 && !(arg[i] >=48 && arg[i] <= 57) && ((arg[i] != 61 && arg[i] < 65) || (arg[i] > 90 && arg[i] < 97 && arg[i] != 95) || arg[i] > 122))
+			if (in_value == 0 && !(arg[i] >= 48 && arg[i] <= 57) && \
+			((arg[i] != 61 && arg[i] < 65) || (arg[i] > 90 && arg[i] < 97 \
+				&& arg[i] != 95) || arg[i] > 122))
 				return (-1);
 		}
-
 		i++;
 	}
 	return (1);
 }
 
-int	ft_export(t_env	*top_env, char **args, t_token_data *td)
+int	export_helper(t_env	*top_env, char *arg, t_token_data *td)
 {
+	int		loc;
 	char	*assign;
 	t_env	*new;
-	int		i;
 
+	if (is_valid(arg) < 0)
+		return (error_general("export: not a valid identifier"));
+	assign = arg;
+	loc = find_sign(assign, '=');
+	if (loc < 0)
+	{
+		if (!search_name_node(top_env, assign))
+		{
+			new = create_env(assign, NULL, td->gc);
+			if (!new)
+				return (error_general("malloc: env not initiated"));
+			ft_env_add_back(&top_env, new);
+		}
+	}
+	else if (loc == (int)ft_strlen(assign) || loc == 0)
+		return (error_general("export: not a valid identifier"));
+	else
+		add_env_var(top_env, assign, td->gc);
+	return (0);
+}
+
+int	ft_export(t_env	*top_env, char **args, t_token_data *td)
+{
+	int		i;
+	int		result;
 
 	if (!args[1])
 		print_export(top_env);
@@ -101,25 +127,9 @@ int	ft_export(t_env	*top_env, char **args, t_token_data *td)
 				error_general("usage: export not supporting flags");
 				exit(2);
 			}
-			if (is_valid(args[i]) < 0)
-				return (error_general("export: not a valid identifier"));
-			assign = args[i];
-			if (find_sign(assign, '=') < 0)
-			{
-				if (!search_name_node(top_env, assign))
-				{
-					new = create_env(assign, NULL, td->gc);
-					if (!new)
-						return (error_general("malloc: env not initiated"));
-					ft_env_add_back(&top_env, new);
-				}
-			}
-			else if (find_sign(assign, '=') == (int)ft_strlen(assign))
-				return (error_general("export: not a valid identifier"));
-			else if (find_sign(assign, '=') == 0)
-				return (error_general("export: not a valid identifier"));
-			else
-				add_env_var(top_env, assign, td->gc);
+			result = export_helper(top_env, args[i], td);
+			if (result != 0)
+				return (result);
 			i++;
 		}
 	}

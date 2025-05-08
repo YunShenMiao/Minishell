@@ -20,6 +20,7 @@ SRC			= 	$(SRC_DIR)/main.c \
 				$(SRC_DIR)/builtins/cd.c $(SRC_DIR)/builtins/echo.c $(SRC_DIR)/builtins/env.c \
 				$(SRC_DIR)/builtins/exit.c $(SRC_DIR)/builtins/export.c \
 				$(SRC_DIR)/builtins/pwd.c $(SRC_DIR)/builtins/unset.c \
+				$(SRC_DIR)/builtins/cd_utils.c $(SRC_DIR)/builtins/cd_norm_path.c \
 				src/execution/expand_heredoc.c \
 				src/execution/exe.c src/execution/pipe.c src/execution/redirection.c src/execution/signal.c src/execution/exec_ast.c
 

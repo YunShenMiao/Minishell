@@ -199,13 +199,19 @@ void	expand_var(t_token_data **token_data, int *i, int *count, char *new);
 // builtins
 int		ft_echo(char **args);
 int		ft_pwd(char **args);
-// int		ft_exit(char **args, t_gc *gc);
 int		ft_exit(char **args, t_token_data *td);
 int		ft_cd(char **args, t_env *top, t_gc *gc);
 int		ft_env(char **args, t_env *top_env);
 int		ft_export(t_env	*top_env, char **args, t_token_data *td);
 int		ft_unset(t_env	*top_env, char **args);
 int		is_numeric(char *str);
+//cd utils
+char	*find_home(t_env *top);
+int		update_pwds(t_env *top, char *new_pwd, t_gc *gc);
+int		swap_pwds(t_env *top, t_gc *gc);
+int		find_last_slash(char *path);
+char	*get_parent_dir(char *cur_dir, t_gc *gc);
+char	*normalize_path(const char *path, t_gc *gc);
 
 //execution
 int		do_redir(t_tok_type tp, t_ast *node);
