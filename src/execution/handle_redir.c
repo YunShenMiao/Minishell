@@ -6,13 +6,13 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:15:12 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/08 20:36:02 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/08 21:06:42 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int	handle_redirect_in(t_ast *node, int *in_fd, t_token_data *td)
+static int	handle_redirect_in(t_ast *node, t_redi_ctx *ctx)
 {
 	int	tmp_fd;
 
@@ -20,18 +20,18 @@ static int	handle_redirect_in(t_ast *node, int *in_fd, t_token_data *td)
 	if (tmp_fd < 0)
 	{
 		perror("open (in)");
-		if (td->in_pipeline)
+		if (ctx->td->in_pipeline)
 			exit(1);
-		td->last_exit = 1;
+		ctx->td->last_exit = 1;
 		return (1);
 	}
-	if (*in_fd != STDIN_FILENO)
-		close(*in_fd);
-	*in_fd = tmp_fd;
+	if (*(ctx->in_fd) != STDIN_FILENO)
+		close(*(ctx->in_fd));
+	*(ctx->in_fd) = tmp_fd;
 	return (0);
 }
 
-static int	handle_redirect_out(t_ast *node, int *out_fd, t_token_data *td)
+static int	handle_redirect_out(t_ast *node, t_redi_ctx *ctx)
 {
 	int	tmp_fd;
 
@@ -39,18 +39,18 @@ static int	handle_redirect_out(t_ast *node, int *out_fd, t_token_data *td)
 	if (tmp_fd < 0)
 	{
 		perror("open (out)");
-		if (td->in_pipeline)
+		if (ctx->td->in_pipeline)
 			exit(1);
-		td->last_exit = 1;
+		ctx->td->last_exit = 1;
 		return (1);
 	}
-	if (*out_fd != STDOUT_FILENO)
-		close(*out_fd);
-	*out_fd = tmp_fd;
+	if (*(ctx->out_fd) != STDOUT_FILENO)
+		close(*(ctx->out_fd));
+	*(ctx->out_fd) = tmp_fd;
 	return (0);
 }
 
-static int	handle_append(t_ast *node, int *out_fd, t_token_data *td)
+static int	handle_append(t_ast *node, t_redi_ctx *ctx)
 {
 	int	tmp_fd;
 
@@ -58,43 +58,48 @@ static int	handle_append(t_ast *node, int *out_fd, t_token_data *td)
 	if (tmp_fd < 0)
 	{
 		perror("open (append)");
-		if (td->in_pipeline)
+		if (ctx->td->in_pipeline)
 			exit(1);
-		td->last_exit = 1;
+		ctx->td->last_exit = 1;
 		return (1);
 	}
-	if (*out_fd != STDOUT_FILENO)
-		close(*out_fd);
-	*out_fd = tmp_fd;
+	if (*(ctx->out_fd) != STDOUT_FILENO)
+		close(*(ctx->out_fd));
+	*(ctx->out_fd) = tmp_fd;
 	return (0);
 }
 
-int	resolve_redi(t_ast *node, int *in, int *out, t_token_data *td, t_ast **cmd)
+static int	resolve_redirect_type(t_ast *node, t_redi_ctx *ctx)
+{
+	if (node->type == TOK_REDIRECT_IN)
+	{
+		if (resolve_redirections(node->right, ctx))
+			return (1);
+		return (handle_redirect_in(node, ctx));
+	}
+	else if (node->type == TOK_REDIRECT_OUT)
+	{
+		if (resolve_redirections(node->left, ctx))
+			return (1);
+		return (handle_redirect_out(node, ctx));
+	}
+	else if (node->type == TOK_APPEND)
+	{
+		if (resolve_redirections(node->left, ctx))
+			return (1);
+		return (handle_append(node, ctx));
+	}
+	return (1);
+}
+
+int	resolve_redirections(t_ast *node, t_redi_ctx *ctx)
 {
 	if (!node)
 		return (1);
 	if (node->type == TOK_COMMAND)
 	{
-		*cmd = node;
+		*(ctx->cmd_node) = node;
 		return (0);
 	}
-	if (node->type == TOK_REDIRECT_IN)
-	{
-		if (resolve_redi(node->right, in, out, td, cmd))
-			return (1);
-		return (handle_redirect_in(node, in, td));
-	}
-	else if (node->type == TOK_REDIRECT_OUT)
-	{
-		if (resolve_redi(node->left, in, out, td, cmd))
-			return (1);
-		return (handle_redirect_out(node, out, td));
-	}
-	else if (node->type == TOK_APPEND)
-	{
-		if (resolve_redi(node->left, in, out, td, cmd))
-			return (1);
-		return (handle_append(node, out, td));
-	}
-	return (1);
+	return (resolve_redirect_type(node, ctx));
 }

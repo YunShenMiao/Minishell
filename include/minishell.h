@@ -119,6 +119,14 @@ typedef struct s_token_data
 	int				HD;
 }				t_token_data;
 
+typedef struct s_redi_ctx
+{
+	int				*in_fd;
+	int				*out_fd;
+	t_ast			**cmd_node;
+	t_token_data	*td;
+}	t_redi_ctx;
+
 /****************************************************************************************************/
 /*									ENVIRONMENT VARIABLES											*/
 /****************************************************************************************************/
@@ -219,7 +227,7 @@ int		is_builtin(char **args);
 int		exec_ast(t_ast *node, int input_fd, int output_fd, t_token_data *td);
 int		setup_redirection(int input_fd, int output_fd, int *s_stdin, int *s_stdout);
 void	restore_stdio(int saved_stdin, int saved_stdout);
-int		resolve_redi(t_ast *node, int *in, int *out, t_token_data *td, t_ast **cmd);
+int		resolve_redirections(t_ast *node, t_redi_ctx *ctx);
 int		exec_pipe(t_ast *node, int input_fd, int output_fd, t_token_data *td);
 
 //redirections
@@ -233,6 +241,7 @@ char	*expand_heredoc(char *line, t_ast *node, t_env *env_list, int last_exit);
 // heredoc utils
 void	ft_itoa_simple(int n, char *buf);
 char	*generate_heredoc_filename(t_gc *gc, int id);
+int		process_heredoc_line(int fd, char *line, t_ast *node, t_token_data *td);
 
 // signals
 void	setup_interactive_signals(void);

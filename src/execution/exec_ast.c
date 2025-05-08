@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 11:12:24 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/08 19:55:17 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/08 21:05:49 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,19 @@
 
 int	exec_with_redirection(t_ast *node, int in, int out, t_token_data *td)
 {
-	int		new_in;
-	int		new_out;
-	t_ast	*cmd_node;
+	int			new_in;
+	int			new_out;
+	t_ast		*cmd_node;
+	t_redi_ctx	ctx;
 
 	new_in = in;
 	new_out = out;
 	cmd_node = NULL;
-	if (resolve_redi(node, &new_in, &new_out, td, &cmd_node) != 0)
+	ctx.in_fd = &new_in;
+	ctx.out_fd = &new_out;
+	ctx.cmd_node = &cmd_node;
+	ctx.td = td;
+	if (resolve_redirections(node, &ctx) != 0)
 		return (1);
 	return (exec_ast(cmd_node, new_in, new_out, td));
 }

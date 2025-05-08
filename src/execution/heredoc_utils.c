@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:22:54 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/08 19:40:55 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/08 21:09:53 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,20 @@ char	*heredoc_readline(const char *prompt)
 		return (ft_strdup(buffered_lines[current_index++]));
 	}
 	return (line);
+}
+
+int	process_heredoc_line(int fd, char *line, t_ast *node, t_token_data *td)
+{
+	char	*expanded;
+
+	expanded = expand_heredoc(line, node, td->env_list, td->last_exit);
+	free(line);
+	if (!expanded)
+		return (-1);
+	write(fd, expanded, strlen(expanded));
+	write(fd, "\n", 1);
+	free(expanded);
+	return (0);
 }
 
 void	cleanup_heredoc_tempfiles(int max_id)

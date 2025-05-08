@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:18:55 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/08 19:50:55 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/08 21:09:57 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,31 +59,10 @@ char	*read_heredoc_line(void)
 	return (line);
 }
 
-int	process_heredoc_line(int fd, char *line, t_ast *node, t_token_data *td)
+static int	write_heredoc_loop(int fd, t_ast *node, t_token_data *td)
 {
-	char	*expanded;
-
-	expanded = expand_heredoc(line, node, td->env_list, td->last_exit);
-	free(line);
-	if (!expanded)
-		return (-1);
-	write(fd, expanded, strlen(expanded));
-	write(fd, "\n", 1);
-	free(expanded);
-	return (0);
-}
-
-int	write_to_file(t_ast *node, char *file, t_token_data *td)
-{
-	int		fd;
 	char	*line;
 
-	fd = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0600);
-	if (fd == -1)
-	{
-		perror("heredoc: open");
-		return (-1);
-	}
 	while (1)
 	{
 		line = read_heredoc_line();
@@ -100,6 +79,20 @@ int	write_to_file(t_ast *node, char *file, t_token_data *td)
 		if (process_heredoc_line(fd, line, node, td) == -1)
 			break ;
 	}
+	return (0);
+}
+
+int	write_to_file(t_ast *node, char *file, t_token_data *td)
+{
+	int	fd;
+
+	fd = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0600);
+	if (fd == -1)
+	{
+		perror("heredoc: open");
+		return (-1);
+	}
+	write_heredoc_loop(fd, node, td);
 	close(fd);
 	return (0);
 }
