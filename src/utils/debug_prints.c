@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:55:18 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/08 15:21:11 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/08 16:56:04 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,36 +29,38 @@ void	print_list(t_token *head)
 	}
 }
 
-void print_ast(t_ast *node, int depth, char *pos)
+void	print_ast(t_ast *node, int depth, char *pos)
 {
-    int i; 
+	int i;
 
 	if (!node)
-        return;
+		return ;
 	i = 0;
-    while (i < depth)
+	while (i < depth)
 	{
-        printf("  ");
+		printf("  ");
 		i++;
 	}
 	printf("%s ", pos);
-    if (node->type == TOK_COMMAND)
-    {
-        printf("CMD: ");
+	if (node->type == TOK_COMMAND)
+	{
+		printf("CMD: ");
 		i = 0;
-        while(node->args[i])
+		while (node->args[i])
 		{
-            printf("%s ", node->args[i]);
+			printf("%s ", node->args[i]);
 			i++;
 		}
-    }
-    else if (node->type == TOK_PIPE)
-        printf("PIPE");
-    else if (node->type == TOK_REDIRECT_IN || node->type == TOK_REDIRECT_OUT
-			|| node->type == TOK_APPEND || node->type == TOK_HEREDOC)
-        printf("REDIR: %d (fd=%d) -> %s", node->type, node->fd, node->file_name);
-    printf("\n");
+	}
+	else if (node->type == TOK_PIPE)
+		printf("PIPE");
+	else if (node->type == TOK_REDIRECT_IN || node->type == TOK_REDIRECT_OUT
+		|| node->type == TOK_APPEND || node->type == TOK_HEREDOC)
+		printf("REDIR: %d -> %s", node->type, node->file_name);
+	else if (node->type == TOK_FILE)
+		printf("FILE: %s", node->file_name);
+	printf("\n");
 
-    print_ast(node->left, depth + 1, "Left:");
-    print_ast(node->right, depth + 1, "Right:");
+	print_ast(node->left, depth + 1, "Left:");
+	print_ast(node->right, depth + 1, "Right:");
 }

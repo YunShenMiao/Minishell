@@ -9,6 +9,7 @@ OBJ_DIR		= obj
 
 SRC			= 	$(SRC_DIR)/main.c \
 				src/utils/env_list.c src/utils/error_handling.c src/utils/garbage_collector.c src/utils/helper.c src/utils/init_envp.c\
+				src/utils/gc_libft.c src/utils/helper2.c \
 				$(SRC_DIR)/tokens/init_token_data.c $(SRC_DIR)/tokens/modify_input.c \
 				$(SRC_DIR)/tokens/token_list.c \
 				$(SRC_DIR)/parsing/parsing_utils.c $(SRC_DIR)/parsing/ast.c \
