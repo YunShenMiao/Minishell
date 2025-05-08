@@ -21,8 +21,8 @@ SRC			= 	$(SRC_DIR)/main.c \
 				$(SRC_DIR)/builtins/exit.c $(SRC_DIR)/builtins/export.c \
 				$(SRC_DIR)/builtins/pwd.c $(SRC_DIR)/builtins/unset.c \
 				$(SRC_DIR)/builtins/cd_utils.c $(SRC_DIR)/builtins/cd_norm_path.c \
-				src/execution/expand_heredoc.c \
-				src/execution/exe.c src/execution/pipe.c src/execution/redirection.c src/execution/signal.c src/execution/exec_ast.c
+				src/execution/exe_utils.c src/execution/exec_ast.c src/execution/expand_heredoc.c \
+				src/execution/handle_redir.c src/execution/heredoc_utils.c src/execution/heredoc.c src/execution/redirection.c src/execution/signal.c
 
 OBJ			= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 

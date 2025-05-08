@@ -214,32 +214,31 @@ char	*get_parent_dir(char *cur_dir, t_gc *gc);
 char	*normalize_path(const char *path, t_gc *gc);
 
 //execution
-int		do_redir(t_tok_type tp, t_ast *node);
-int		exec_redir_normal(t_ast *node, t_token_data **td, t_tok_type tp);
-int		exec_redir_pipe(t_ast *node, t_token_data **td, t_tok_type tp, int prev_read);
 int		execute_builtins(t_ast *node, t_token_data *token_data);
-char	**env_to_array(t_env *top, t_gc *gc);
-void	exec_cmd(t_ast *node, int prev_read, t_token_data *td);
-int		run_simple_cmd(t_ast *node, t_token_data *td);
+int		is_builtin(char **args);
 int		exec_ast(t_ast *node, int input_fd, int output_fd, t_token_data *td);
-
-//pipe
-int		exec_pipe(t_ast *node, int prev_read, t_token_data *td);
+int		setup_redirection(int input_fd, int output_fd, int *s_stdin, int *s_stdout);
+void	restore_stdio(int saved_stdin, int saved_stdout);
+int		resolve_redi(t_ast *node, int *in, int *out, t_token_data *td, t_ast **cmd);
+int		exec_pipe(t_ast *node, int input_fd, int output_fd, t_token_data *td);
 
 //redirections
 int		red_out_overwrite(char *filename);
 int		red_out_append(char *filename);
 int		red_in(char *filename);
-// int 	heredoc(char *delimiter);
 void	handle_all_heredocs(t_ast *node, int *heredoc_id, t_token_data *td);
-int		write_heredoc_to_file(t_ast *node, const char *filename, t_env *env_list, int last_exit);
+int		write_to_file(t_ast *node, char *file, t_token_data *td);
 void	cleanup_heredoc_tempfiles(int max_id);
 char	*expand_heredoc(char *line, t_ast *node, t_env *env_list, int last_exit);
+// heredoc utils
+void	ft_itoa_simple(int n, char *buf);
+char	*generate_heredoc_filename(t_gc *gc, int id);
 
 // signals
 void	setup_interactive_signals(void);
 void	setup_noninteractive_signals(void);
 void	disable_echoctl(void);
-
+char	*heredoc_readline(const char *prompt);
+void	cleanup_heredoc_tempfiles(int max_id);
 
 #endif
