@@ -6,45 +6,11 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:55:26 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/07 15:00:16 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/08 15:51:28 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-// // need to use perrors
-void	ft_perror_parsing(t_token_data **token_data, int error_id,
-		char *error_info)
-{
-	if (error_id == INVALID_COMMAND)
-	{
-		write(2, "🐢 minishell: ", 16);
-		write(2, error_info, ft_strlen(error_info));
-		write(2, ": command not found\n", 21);
-		(*token_data)->last_exit = 127;
-	}
-	else if (error_id == SYNTAX_ERROR)
-	{
-		write(2, "🐢 minishell: syntax error near unexpected token '", 52);
-		write(2, error_info, ft_strlen(error_info));
-		write(2, "'\n", 2);
-		(*token_data)->last_exit = 2;
-	}
-	else if (error_id == UNCLOSED_QUOTES)
-	{
-		write(2, "🐢 minishell: syntax error ", 29);
-		write(2, error_info, ft_strlen(error_info));
-		write(2, "\n", 2);
-		(*token_data)->last_exit = 2;
-	}
-	else if (error_id == IS_DIR)
-	{
-		write(2, "🐢 minishell: ", 16);
-		write(2, error_info, ft_strlen(error_info));
-		write(2, ": is a directory\n", 17);
-		(*token_data)->last_exit = 126;
-	}
-}
 
 // creates ast nodes and setting its variables + linking them to
 // left and right node -> aststructure
@@ -65,29 +31,6 @@ t_ast	*create_ast_node(t_token_data **token_data, t_tok_type type)
 	new_node->HD = 0;
 	new_node->gc = (*token_data)->gc;
 	return (new_node);
-}
-
-// modified strndup to use gc_malloc
-// & have starting and end position for allocating
-char	*ft_strndup(t_gc *gc, const char *src, int start, int end)
-{
-	char	*address;
-	char	*old_dest;
-
-	if (end - start < 0)
-		return (NULL);
-	address = (char *)gc_malloc(gc, TOKENS, end - start + 1);
-	old_dest = address;
-	if (address == NULL)
-		return (NULL);
-	while (src[start] != '\0' && start < end)
-	{
-		*address = src[start];
-		address++;
-		start++;
-	}
-	*address = '\0';
-	return (old_dest);
 }
 
 // checks for current quote status & when encountering a quote

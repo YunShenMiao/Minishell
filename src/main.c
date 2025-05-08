@@ -21,33 +21,6 @@
 #define BLUE "\033[1;34m"
 #define RESET "\033[0m"
 
-//
-// either split into if pipes execute everything in pipes and no pipes separate
-int	execution_main(t_token_data **token_data, t_ast *node)
-{
-	if (node->type == TOK_PIPE)
-	{
-		// printf("pipe\n");
-		return (exec_pipe(node, -1, (*token_data)));
-	}
-	else if (node->type == TOK_COMMAND)
-	{
-		// printf("cmd\n");
-		return (run_simple_cmd(node, (*token_data)));
-	}
-	else if (node->type == TOK_APPEND || node->type == TOK_HEREDOC
-		|| node->type == TOK_REDIRECT_IN || node->type == TOK_REDIRECT_OUT)
-	{
-		// printf("redirect\n");
-		return (exec_redir_normal(node, token_data, node->type));
-	}
-	if (node->left != NULL)
-		execution_main(token_data, node->left);
-	if (node->right != NULL)
-		execution_main(token_data, node->right);
-	return (0);
-}
-
 void	print_ast(t_ast *node, int depth, char *pos)
 {
 	int i;
@@ -108,26 +81,20 @@ int	parse_main(char *input, t_token_data **token_data, t_gc *gc, char **envp)
 
 void	parse_execute(char *input, char **envp, t_token_data **token_data)
 {
-	// t_token_data *token_data;
-	// t_gc *gc;
-
-	// token_data = NULL;
-	// gc = init_gc();
-
-	// parse_main(input, token_data, (*token_data)->gc, envp);
-	// execution_main(token_data, (*token_data)->ast);
 	if (parse_main(input, token_data, (*token_data)->gc, envp) == 1)
 	{
 		gc_free_category((*token_data)->gc, TOKENS);
 		gc_free_category((*token_data)->gc, PARSING);
 		return;
 	}
-		// gc_free_all((*token_data)->gc);
-	// printf("value: %s\n", search_name_val((*token_data)->env_list, "PWD"));
+	if (check_empty_ast(*token_data) == 2)
+	{
+		gc_free_category((*token_data)->gc, TOKENS);
+		gc_free_category((*token_data)->gc, PARSING);
+		return;
+	}
 	handle_all_heredocs((*token_data)->ast, &((*token_data)->heredoc_id), (*token_data));
-	// execution_main(token_data, (*token_data)->ast);
 	exec_ast((*token_data)->ast, STDIN_FILENO, STDOUT_FILENO, (*token_data));
-		// gc_free_all((*token_data)->gc);
 		gc_free_category((*token_data)->gc, TOKENS);
 		gc_free_category((*token_data)->gc, PARSING);
 }
@@ -177,7 +144,7 @@ int	main(int argc, char **argv, char **envp)
 			input = ft_strtrim(line, "\n"); //input is not freed here!!
 			free(line);
 		}
-		if (!input || ft_strlen(input) == 0)
+		if (!input || ft_strlen(input) == 0 || empty_str(input) != 0)
 		{
 			if (input)
 				free(input);

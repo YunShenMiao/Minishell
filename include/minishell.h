@@ -137,19 +137,26 @@ typedef struct s_data
 	t_env	*top_env;
 }			t_data;
 
+// utils //
+//debug_prints
+void 	print_ast(t_ast *node, int depth, char *pos);
 // helper
 void	start_message(void);
 void	free_array(char **arr);
 int		ft_put_to_fd(char *str, int fd);
 int		ft_ministrcmp(const char *s1, const char *s2);
+// helper2
+int		empty_str(char *str);
+int 	check_empty_ast(t_token_data *token_data);
+// gc_libft
 char	*ft_env_substr(char const *s, unsigned int start, size_t len, t_gc *gc);
 char	*ft_env_strdup(const char *src, t_gc *gc);
 char	*ft_env_strjoin(char const *s1, char const *s2, t_gc *gc);
-
+char	*ft_strndup(t_gc *gc, const char *src, int start, int end);
 // error_handling
 int		error_general(char *msg);
 int		error_free(char *msg, t_data *shell);
-
+void 	ft_perror_parsing(t_token_data **token_data, int error_id, char* error_info);
 //env_list
 t_env	*create_env(char *name, char *value, t_gc *gc);
 t_env	*ft_env_last(t_env *lst);
@@ -158,30 +165,24 @@ void	ft_env_del(t_env **top, t_env *to_del);
 t_env	*search_name_node(t_env *top, char *name);
 char	*search_name_val(t_env *top, char *name);
 int		update_env_var(t_env **lst, char *name, char *new_val, t_gc *gc);
-
 //init_envp
 int		count_arr_row(char **arr);
 int		find_sign(char *str, char c);
 // int		init_env(char **envp, t_gc *gc);
 t_env	*init_env(char **envp, t_gc *gc);
-
 // garbage collector
 t_gc    *init_gc(void);
 void 	*gc_malloc(t_gc *gc, t_mem_location category, unsigned long size);
 void	gc_free_category(t_gc *gc, t_mem_location category);
-// void	gc_free_all(t_gc *gc);
 void	gc_free_all(t_gc *gc, int heredoc_id);
 
-// tokens
+// tokens //
 int			modify_input(char *input, char **modified_input, t_gc *gc, t_token_data **token_data);
 int 		tokenize(t_token_data *token_data);
 int 		init_token_data(char *input, t_token_data **token_data, t_gc *gc, char **envp);
-t_tok_type	token_type(t_token *token);
 
-// parsing
-void 	ft_perror_parsing(t_token_data **token_data, int error_id, char* error_info);
+// parsing //
 t_ast 	*build_ast(t_token_data **token_data);
-char	*ft_strndup(t_gc *gc, const char *src, int start, int end);
 t_ast 	*create_ast_node(t_token_data **token_data, t_tok_type type);
 t_ast	*parse_redirections(t_token_data **token_data, t_token **current, t_ast *prev);
 t_ast	*parse_command(t_token_data **token_data, t_token **current);
