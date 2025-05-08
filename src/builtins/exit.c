@@ -6,28 +6,15 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:21:25 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/06 15:45:28 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/08 17:34:15 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-// int	ft_exit(t_token *current, t_gc *gc)
-// {
-// 	if (current->type == TOK_COMMAND)
-// 	{
-// 		gc_free_all(gc);
-// 		exit(EXIT_SUCCESS);
-// 	}
-// }
-
-// how is ast deal with invalid arguments right now?
-//exit foo: 255
-//exit 1 2: return 1
-
 int	is_numeric(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!str || !str[0])
@@ -50,7 +37,6 @@ int	ft_exit(char **args, t_token_data *td)
 	if (!args[1])
 	{
 		gc_free_all(td->gc, td->heredoc_id);
-		// ft_printf("exit\n");
 		_exit(EXIT_SUCCESS);
 	}
 	if (!is_numeric(args[1]))
@@ -68,6 +54,5 @@ int	ft_exit(char **args, t_token_data *td)
 	}
 	exit_code = ft_atoi(args[1]) % 256;
 	gc_free_all(td->gc, td->heredoc_id);
-	// ft_printf("exit\n");
 	_exit(exit_code);
 }

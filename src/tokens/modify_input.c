@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:51:05 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/08 15:45:51 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/08 18:40:49 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,32 @@
 
 // adds extra spaces for redirections, heredoc and pipes which
 // if inputted without space as delimiter
-void	edit_spaces(t_token_data **token_data, char **edited, int *count, int *count2)
+void	edit_spaces(t_token_data *t, char **e, int *c, int *c2)
 {
-	char *input;
+	char	*in;
 
-	input = (*token_data)->input;
-	if ((input[*count2] == '>' || input[*count2] == '<' || input[*count2] == '|') && (*token_data)->in_DQ == 0 && (*token_data)->in_SQ == 0)
+	in = t->input;
+	if ((in[*c2] == '>' || in[*c2] == '<' || in[*c2] == '|')
+		&& t->in_DQ == 0 && t->in_SQ == 0)
 	{
-		if (input[*count2 - 1] != '\"' && input[*count2 - 1] != '\'')
+		if (in[*c2 - 1] != '\"' && in[*c2 - 1] != '\'')
 		{
-			(*edited)[*count] = ' ';
-			(*count)++;
+			(*e)[*c] = ' ';
+			(*c)++;
 		}
-		if (input[*count2] == input[*count2 + 1])
+		if (in[*c2] == in[*c2 + 1])
 		{
-			(*edited)[*count] = input[*count2];
-			(*count2)++;
-			(*count)++;
+			(*e)[*c] = in[*c2];
+			(*c2)++;
+			(*c)++;
 		}
 	}
-	(*edited)[*count] = input[*count2];
-	if (((*edited)[*count] == '>' || (*edited)[*count] == '<'
-			|| (*edited)[*count] == '|') && (input[*count2 + 1] != '\"'
-			&& input[*count2 + 1] != '\'') && (*token_data)->in_DQ == 0 && (*token_data)->in_SQ == 0)
+	(*e)[*c] = in[*c2];
+	if (((*e)[*c] == '>' || (*e)[*c] == '<' || (*e)[*c] == '|') && (in[*c2 + 1]
+		!= '\"' && in[*c2 + 1] != '\'') && t->in_DQ == 0 && t->in_SQ == 0)
 	{
-		(*count)++;
-		(*edited)[*count] = ' ';
+		(*c)++;
+		(*e)[*c] = ' ';
 	}
 }
 
@@ -69,7 +69,8 @@ void	trim_quotes(char *input, int *count2, t_token_data **token_data)
 // and parsing, cases being handled: "echo -n"/"echo -n -nn"
 // | missing spaces: eg "miao>>output.txt"
 // | quotes to ignore: eg """""" -> ""
-int	modify_input(char *input, char **modified_input, t_gc *gc, t_token_data **token_data)
+int	modify_input(char *input, char **modified_input, t_gc *gc,
+		t_token_data **token_data)
 {
 	int	count;
 	int	count2;
@@ -83,7 +84,7 @@ int	modify_input(char *input, char **modified_input, t_gc *gc, t_token_data **to
 	{
 		quote_status(token_data, input[count2]);
 		trim_quotes(input, &count2, token_data);
-		edit_spaces(token_data, modified_input, &count, &count2);
+		edit_spaces(*token_data, modified_input, &count, &count2);
 		count++;
 		count2++;
 	}

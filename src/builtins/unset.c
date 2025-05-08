@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:21:36 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/15 22:18:07 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/08 17:06:57 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,73 +14,57 @@
 
 int	is_valid_name(char *name)
 {
+	int	i;
+
+	i = 0;
 	if (*name != 95 && !(*name >= 65 && *name <= 90) && \
-	 !(*name >= 97 && *name <= 122))
+	!(*name >= 97 && *name <= 122))
 		return (-1);
-	while(*name)
+	if (name[0] == '-')
 	{
-		if (*name != 95 && !(*name >= 65 && *name <= 90) && \
-		!(*name >= 97 && *name <= 122) && !(*name >= 48 && *name <= 57))
+		error_general("unset: usage: not supporting flags");
+		exit(2);
+	}
+	while (name[i])
+	{
+		if (name[i] != 95 && !(name[i] >= 65 && name[i] <= 90) && \
+		!(name[i] >= 97 && name[i] <= 122) && !(name[i] >= 48 && name[i] <= 57))
 			return (-1);
-		name++;
+		i++;
 	}
 	return (0);
 }
 
-// int	ft_unset(t_env	*top_env, t_token *current)
-// {
-// 	t_env	*to_del;
-// 	int		invalid_count;
+void	unset_helper(char **args, t_env	*top_env, int *invalid_count)
+{
+	t_env	*to_del;
+	int		i;
 
-
-// 	if (!current->next)
-// 		return (0);
-// 	else
-// 	{
-// 		invalid_count = 0;
-// 		while (current->next)
-// 		{
-// 			current = current->next;
-// 			if (is_valid_name(current->value) == 0)
-// 			{
-// 				to_del = search_name_node(&top_env, current->value);
-// 				if (to_del)
-// 					ft_env_del(top_env, to_del);
-// 			}
-// 			else
-// 				invalid_count++;
-// 		}
-// 		if (invalid_count > 0)
-// 			return (error_general("unset: not a valid identifier"));
-// 	}
-// 	return (0);
-// }
+	i = 0;
+	while (args[i + 1])
+	{
+		i++;
+		if (is_valid_name(args[i]) == 0)
+		{
+			to_del = search_name_node(top_env, args[i]);
+			if (to_del)
+				ft_env_del(&top_env, to_del);
+		}
+		else
+			(*invalid_count)++;
+	}
+}
 
 int	ft_unset(t_env	*top_env, char **args)
 {
-	t_env	*to_del;
-	int		invalid_count;
-	int		i;
-
+	int	invalid_count;
 
 	if (!args[1])
 		return (0);
 	else
 	{
-		i = 0;
 		invalid_count = 0;
-		while (args[i + 1])
-		{
-			i++;
-			if (is_valid_name(args[i]) == 0)
-			{
-				to_del = search_name_node(top_env, args[i]);
-				if (to_del)
-					ft_env_del(&top_env, to_del);
-			}
-			else
-				invalid_count++;
-		}
+		unset_helper(args, top_env, &invalid_count);
 		if (invalid_count > 0)
 			return (error_general("unset: not a valid identifier"));
 	}
