@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:15:12 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/08 19:55:23 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/08 20:36:02 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,19 +80,19 @@ int	resolve_redi(t_ast *node, int *in, int *out, t_token_data *td, t_ast **cmd)
 	}
 	if (node->type == TOK_REDIRECT_IN)
 	{
-		if (resolve_redirections(node->right, in, out, td, cmd))
+		if (resolve_redi(node->right, in, out, td, cmd))
 			return (1);
 		return (handle_redirect_in(node, in, td));
 	}
 	else if (node->type == TOK_REDIRECT_OUT)
 	{
-		if (resolve_redirections(node->left, in, out, td, cmd))
+		if (resolve_redi(node->left, in, out, td, cmd))
 			return (1);
 		return (handle_redirect_out(node, out, td));
 	}
 	else if (node->type == TOK_APPEND)
 	{
-		if (resolve_redirections(node->left, in, out, td, cmd))
+		if (resolve_redi(node->left, in, out, td, cmd))
 			return (1);
 		return (handle_append(node, out, td));
 	}
