@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 15:17:27 by xueyang           #+#    #+#             */
-/*   Updated: 2025/04/17 14:22:21 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/08 11:47:47 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ int	ft_pwd(char **args)
 {
 	char	*cwd;
 
-	if (args && args[1])
-		return (error_general("pwd: too many arguments"));
+	if (ft_ministrcmp(args[0], "pwd") != 0)
+		return (-1);
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{
