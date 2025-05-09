@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:17:16 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/07 14:41:02 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/08 21:28:33 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*ft_strnndup(const char *src, int start, int end)
 	return (old_dest);
 }
 
-void	handle_hv_exitcode(char *expanded, int last_exit, int *count)
+void	handle_hv_exitcode(char *expanded, int last_exit, int *count, int *i)
 {
 	char	*exitcode;
 
@@ -44,6 +44,7 @@ void	handle_hv_exitcode(char *expanded, int last_exit, int *count)
 		(*count)++;
 		exitcode++;
 	}
+	(*i)++;
 }
 
 char	*handle_here_var(char *line, t_env *env_list, int *i)
@@ -71,38 +72,21 @@ char	*expand_heredoc(char *line, t_ast *node, t_env *env_list, int last_exit)
     if (node->quote == 1)
 		return (ft_strdup(line));
 	expanded = malloc(ft_strlen(line) * 10);
-	while (line[count] != '\0')
+	if (!expanded)
+	return(NULL);
+	while (line[i] != '\0')
 	{
 		if (line[i] == '$' && (line[i + 1] != '\0' && line[i + 1] != ' '
 				&& line[i + 1] != '$'))
 		{
-			i++;
-			if (line[i] == '?')
-			{
-				handle_hv_exitcode(expanded, last_exit, &count);
-				i++;
-			}
-			else
-			{
-				value = handle_here_var(line, env_list, &i);
-				if (value)
-				{
+			if (line[++i] == '?')
+				handle_hv_exitcode(expanded, last_exit, &count, &i);
+			else if ((value = handle_here_var(line, env_list, &i)))
 					while (*value)
-					{
-						expanded[count] = *value;
-						count++;
-						value++;
-					}
-				}
-			}
+						expanded[count++] = *value++;
 		}
 		else
-		{
-			expanded[count] = line[i];
-			count++;
-			i++;
-		}
+			expanded[count++] = line[i++];
 	}
-	expanded[count] = '\0';
-	return (expanded);
+	return (expanded[count] = '\0', expanded);
 }
