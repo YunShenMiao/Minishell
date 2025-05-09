@@ -37,7 +37,7 @@ int	parse_main(char *input, t_token_data **token_data, t_gc *gc, char **envp)
 		return (1);
 	if (expand_ast_nodes(token_data, &(*token_data)->ast) == 1)
 		return (1);
-	print_ast((*token_data)->ast, 0, "Root: ");
+	// print_ast((*token_data)->ast, 0, "Root: ");
 	return (0);
 }
 
@@ -61,25 +61,18 @@ void	parse_execute(char *input, char **envp, t_token_data **td)
 	gc_free_category((*td)->gc, PARSING);
 }
 
-// if string only space or tab -> just new prompt
-int	main(int argc, char **argv, char **envp)
+static t_token_data	*init_and_setup(char **envp, char **prompt, t_gc **gc)
 {
-	char			*input;
-	char			*prompt;
-	t_token_data	*token_data;
-	t_gc			*gc;
-	int				le;
-	char			*line;
+	t_token_data	*td;
 
-	token_data = malloc(sizeof(t_token_data));
-	if (!token_data)
-		return (1);
-	token_data->last_exit = 0;
-	gc = init_gc();
-	token_data->env_list = init_env(envp, gc);
-	if (argc < 1 || argv[0] == NULL)
-		return (1);
-	prompt = GREEN "minishell" BLUE ">" RESET " ";
+	td = malloc(sizeof(t_token_data));
+	if (!td)
+		return (NULL);
+	td->last_exit = 0;
+	*gc = init_gc();
+	td->env_list = init_env(envp, *gc);
+	td->gc = *gc;
+	*prompt = GREEN "minishell" BLUE ">" RESET " ";
 	// start_message();
 	if (isatty(STDIN_FILENO))
 	{
@@ -88,14 +81,18 @@ int	main(int argc, char **argv, char **envp)
 	}
 	else
 		setup_noninteractive_signals();
+	return (td);
+}
+
+static void	input_loop(char *prompt, char **envp, t_token_data *td)
+{
+	char	*input;
+	char	*line;
+
 	while (1)
 	{
 		if (isatty(fileno(stdin)))
-		{
 			input = readline(prompt);
-			if (!input)
-				break ;
-		}
 		else
 		{
 			line = get_next_line(fileno(stdin));
@@ -104,24 +101,36 @@ int	main(int argc, char **argv, char **envp)
 			input = ft_strtrim(line, "\n");
 			free(line);
 		}
-		if (!input || ft_strlen(input) == 0 || empty_str(input) != 0)
+		if (!input)
+			break ;
+		if (ft_strlen(input) == 0 || empty_str(input) != 0)
 		{
-			if (input)
-				free(input);
+			free(input);
 			continue ;
 		}
-		else
-		{
-			token_data->gc = gc;
-			add_history(input);
-			parse_execute(input, envp, &token_data);
-			// gc = init_gc();
-		}
+		add_history(input);
+		parse_execute(input, envp, &td);
+		//gc = init_gc();
 	}
-	le = (token_data->last_exit);
-	free(token_data);
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	t_token_data	*td;
+	t_gc			*gc;
+	char			*prompt;
+	int				le;
+
+	if (argc < 1 || argv[0] == NULL)
+		return (1);
+	td = init_and_setup(envp, &prompt, &gc);
+	if (!td)
+		return (1);
+	input_loop(prompt, envp, td);
+	le = td->last_exit;
+	// gc_free_all(gc, td->heredoc_id);
+	free(td);
 	if (gc)
 		free(gc);
 	exit(le);
-	return (0);
 }
