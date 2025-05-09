@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:10:15 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/08 18:42:16 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/09 10:49:03 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@ int	add_token(t_token_data **token_data)
 void	in_token(t_token_data **token_data, int *i)
 {
 	quote_status(token_data, (*token_data)->input[*i]);
-	while ((*token_data)->input[*i] != '\0' && ((*token_data)->in_DQ == 1
-			|| (*token_data)->in_SQ == 1))
+	while ((*token_data)->input[*i] != '\0' && ((*token_data)->dq == 1
+			|| (*token_data)->sq == 1))
 	{
 		(*i)++;
 		if ((*token_data)->input[*i] != '\0')
