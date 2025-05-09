@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:21:25 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/08 17:34:15 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/09 16:37:46 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int	ft_exit(char **args, t_token_data *td)
 	if (!args[1])
 	{
 		gc_free_all(td->gc, td->heredoc_id);
+		free(td);
 		_exit(EXIT_SUCCESS);
 	}
 	if (!is_numeric(args[1]))
@@ -45,6 +46,7 @@ int	ft_exit(char **args, t_token_data *td)
 		ft_putstr_fd(args[1], 2);
 		ft_putendl_fd(": numeric argument required", 2);
 		gc_free_all(td->gc, td->heredoc_id);
+		free(td);
 		_exit(255);
 	}
 	if (args[2])
@@ -54,5 +56,6 @@ int	ft_exit(char **args, t_token_data *td)
 	}
 	exit_code = ft_atoi(args[1]) % 256;
 	gc_free_all(td->gc, td->heredoc_id);
+	free(td);
 	_exit(exit_code);
 }

@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 15:18:30 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/08 17:05:38 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/09 16:23:42 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*ft_env_substr(char const *s, unsigned int start, size_t len, t_gc *gc)
 	return (sub);
 }
 
-char	*ft_env_strdup(const char *src, t_gc *gc)
+char	*ft_env_strdup(const char *src, t_gc *gc, t_mem_location loc)
 {
 	char	*address;
 	char	*old_dest;
@@ -51,7 +51,7 @@ char	*ft_env_strdup(const char *src, t_gc *gc)
 	{
 		len++;
 	}
-	address = gc_malloc(gc, ENV, len + 1);
+	address = gc_malloc(gc, loc, len + 1);
 	old_dest = address;
 	if (address == NULL)
 		return (NULL);

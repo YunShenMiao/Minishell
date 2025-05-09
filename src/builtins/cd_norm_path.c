@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_norm_path.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:51:06 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/08 18:46:12 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/09 16:26:39 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ static char	*get_initial_path(const char *path, t_gc *gc)
 	char	*result;
 
 	if (path[0] == '/')
-		return (ft_env_strdup("/", gc));
+		return (ft_env_strdup("/", gc, BUILT_IN));
 	temp = getcwd(NULL, 0);
 	if (!temp)
 		return (NULL);
-	result = ft_env_strdup(temp, gc);
+	result = ft_env_strdup(temp, gc, BUILT_IN);
 	free(temp);
 	return (result);
 }
@@ -70,6 +70,6 @@ char	*normalize_path(const char *path, t_gc *gc)
 	}
 	free(tokens);
 	if (!current_path || ft_strlen(current_path) == 0)
-		current_path = ft_env_strdup("/", gc);
+		current_path = ft_env_strdup("/", gc, BUILT_IN);
 	return (current_path);
 }

@@ -59,6 +59,7 @@ void	parse_execute(char *input, char **envp, t_token_data **td)
 	exec_ast((*td)->ast, STDIN_FILENO, STDOUT_FILENO, (*td));
 	gc_free_category((*td)->gc, TOKENS);
 	gc_free_category((*td)->gc, PARSING);
+	// gc_free_category((*td)->gc, BUILT_IN);
 }
 
 static t_token_data	*init_and_setup(char **envp, char **prompt, t_gc **gc)

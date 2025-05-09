@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:29:30 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/09 10:50:35 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/09 16:25:23 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ int	command_args(t_ast *node, int *i, t_token_data **token_data)
 			(*i)++;
 			if (bi_echo(node, i) == 2)
 			{
-				args[count] = ft_env_strdup("-n", (*token_data)->gc);
+				args[count] = ft_env_strdup("-n", (*token_data)->gc, PARSING);
 				count++;
 			}
 		}
