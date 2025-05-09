@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/09 10:16:27 by xueyang           #+#    #+#             */
+/*   Updated: 2025/05/09 10:26:53 by xueyang          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -20,10 +32,10 @@
 # define BLUE "\033[1;34m"
 # define RESET "\033[0m"
 
-extern volatile sig_atomic_t	g_signal;
-/****************************************************************************************************/
-/*									GARBAGE_COLLECTOR_STRUCTS										*/
-/****************************************************************************************************/
+// extern volatile sig_atomic_t	g_signal;
+/**************************************************************************/
+/*							GARBAGE_COLLECTOR_STRUCTS				      */
+/**************************************************************************/
 
 typedef enum s_mem_location
 {
@@ -43,12 +55,12 @@ typedef struct s_garbage
 
 typedef struct s_gc
 {
-	t_garbage *gc_list[MEM_CAT];
+	t_garbage	*gc_list[MEM_CAT];
 }						t_gc;
 
-/****************************************************************************************************/
-/*											TOKEN_STRUCTS											*/
-/****************************************************************************************************/
+/**************************************************************************/
+/*							TOKEN_STRUCTS				  				  */
+/**************************************************************************/
 
 typedef enum s_error
 {
@@ -56,7 +68,6 @@ typedef enum s_error
 	SYNTAX_ERROR,
 	UNCLOSED_QUOTES,
 	IS_DIR
-
 }				t_error;
 
 typedef enum s_tok_type
@@ -89,7 +100,7 @@ typedef struct s_ast
 	t_tok_type		type;
 	char			**args;
 	char			*file_name;
-	int 			quote;
+	int				quote;
 	int				HD;
 	struct s_ast	*left;
 	struct s_ast	*right;
@@ -109,7 +120,7 @@ typedef struct s_token_data
 	int				finish;
 	int				syntax_error;
 	char			**envp;
-	char 			*expand_str;
+	char			*expand_str;
 	struct s_env	*env_list;
 	t_gc			*gc;
 	int				last_exit;
@@ -127,9 +138,9 @@ typedef struct s_redi_ctx
 	t_token_data	*td;
 }	t_redi_ctx;
 
-/****************************************************************************************************/
-/*									ENVIRONMENT VARIABLES											*/
-/****************************************************************************************************/
+/**************************************************************************/
+/*							ENVIRONMENT VARIABLES				  		  */
+/**************************************************************************/
 
 typedef struct s_env
 {
@@ -147,7 +158,7 @@ typedef struct s_data
 
 // utils //
 //debug_prints
-void 	print_ast(t_ast *node, int depth, char *pos);
+void	print_ast(t_ast *node, int depth, char *pos);
 // helper
 void	start_message(void);
 void	free_array(char **arr);
@@ -155,7 +166,7 @@ int		ft_put_to_fd(char *str, int fd);
 int		ft_ministrcmp(const char *s1, const char *s2);
 // helper2
 int		empty_str(char *str);
-int 	check_empty_ast(t_token_data *token_data);
+int		check_empty_ast(t_token_data *token_data);
 // gc_libft
 char	*ft_env_substr(char const *s, unsigned int start, size_t len, t_gc *gc);
 char	*ft_env_strdup(const char *src, t_gc *gc);
@@ -164,7 +175,7 @@ char	*ft_strndup(t_gc *gc, const char *src, int start, int end);
 // error_handling
 int		error_general(char *msg);
 int		error_free(char *msg, t_data *shell);
-void 	ft_perror_parsing(t_token_data **token_data, int error_id, char* error_info);
+void	ft_perror_parsing(t_token_data **token_data, int error_id, char *error_info);
 //env_list
 t_env	*create_env(char *name, char *value, t_gc *gc);
 t_env	*ft_env_last(t_env *lst);
@@ -179,29 +190,29 @@ int		find_sign(char *str, char c);
 // int		init_env(char **envp, t_gc *gc);
 t_env	*init_env(char **envp, t_gc *gc);
 // garbage collector
-t_gc    *init_gc(void);
-void 	*gc_malloc(t_gc *gc, t_mem_location category, unsigned long size);
+t_gc	*init_gc(void);
+void	*gc_malloc(t_gc *gc, t_mem_location category, unsigned long size);
 void	gc_free_category(t_gc *gc, t_mem_location category);
 void	gc_free_all(t_gc *gc, int heredoc_id);
 
 // tokens //
-int			modify_input(char *input, char **modified_input, t_gc *gc, t_token_data **token_data);
-int 		tokenize(t_token_data *token_data);
-int 		init_token_data(char *input, t_token_data **token_data, t_gc *gc, char **envp);
+int		modify_input(char *input, char **modified_input, t_gc *gc, t_token_data **token_data);
+int		tokenize(t_token_data *token_data);
+int		init_token_data(char *input, t_token_data **token_data, t_gc *gc, char **envp);
 
 // parsing //
-t_ast 	*build_ast(t_token_data **token_data);
-t_ast 	*create_ast_node(t_token_data **token_data, t_tok_type type);
+t_ast	*build_ast(t_token_data **token_data);
+t_ast	*create_ast_node(t_token_data **token_data, t_tok_type type);
 t_ast	*parse_redirections(t_token_data **token_data, t_token **current, t_ast *prev);
 t_ast	*parse_command(t_token_data **token_data, t_token **current);
 t_ast	*parse_pipes(t_token_data **token_data, t_token **current);
 char	*find_path(char *cmd, char **envp, t_gc *gc);
 int		quote_status(t_token_data **token_data, char input);
-int 	expand_ast_nodes(t_token_data **token_data, t_ast **ast);
+int		expand_ast_nodes(t_token_data **token_data, t_ast **ast);
 char	*handle_quotes(t_token_data **token_data, char **str);
 int		valid_cmd(t_token_data **token_data, t_ast *node);
 void	parse_command_args(t_token_data **token_data, t_token **current,
-	t_ast *cmd_node);
+t_ast	*cmd_node);
 void	expand_var(t_token_data **token_data, int *i, int *count, char *new);
 t_ast	*add_cmd(t_token_data *token_data, t_tok_type type);
 
