@@ -15,14 +15,17 @@
 
 #include "../include/minishell.h"
 
-#define GREEN "\033[1;32m"
-#define BLUE "\033[1;34m"
-#define RESET "\033[0m"
+// #define GREEN "\033[1;32m"
+// #define BLUE "\033[1;34m"
+// #define RESET "\033[0m"
 
 // general structure function for parsing
+// print_list((*token_data)->token_list);
+// print_ast((*token_data)->ast, 0, "Root: ");
+// test(token_data, envp);
 int	parse_main(char *input, t_token_data **token_data, t_gc *gc, char **envp)
 {
-	char *modified_input;
+	char	*modified_input;
 
 	if (init_token_data(input, token_data, gc, envp) == 1)
 		return (printf("Allocation Error\n"), 1);
@@ -35,40 +38,38 @@ int	parse_main(char *input, t_token_data **token_data, t_gc *gc, char **envp)
 		return (1);
 	if (expand_ast_nodes(token_data, &(*token_data)->ast) == 1)
 		return (1);
-	// print_list((*token_data)->token_list);
-	// print_ast((*token_data)->ast, 0, "Root: ");
-	// test(token_data, envp);
 	return (0);
 }
 
-void	parse_execute(char *input, char **envp, t_token_data **token_data)
+void	parse_execute(char *input, char **envp, t_token_data **td)
 {
-	if (parse_main(input, token_data, (*token_data)->gc, envp) == 1)
+	if (parse_main(input, td, (*td)->gc, envp) == 1)
 	{
-		gc_free_category((*token_data)->gc, TOKENS);
-		gc_free_category((*token_data)->gc, PARSING);
-		return;
+		gc_free_category((*td)->gc, TOKENS);
+		gc_free_category((*td)->gc, PARSING);
+		return ;
 	}
-	if (check_empty_ast(*token_data) == 2)
+	if (check_empty_ast(*td) == 2)
 	{
-		gc_free_category((*token_data)->gc, TOKENS);
-		gc_free_category((*token_data)->gc, PARSING);
-		return;
+		gc_free_category((*td)->gc, TOKENS);
+		gc_free_category((*td)->gc, PARSING);
+		return ;
 	}
-	handle_all_heredocs((*token_data)->ast, &((*token_data)->heredoc_id), (*token_data));
-	exec_ast((*token_data)->ast, STDIN_FILENO, STDOUT_FILENO, (*token_data));
-		gc_free_category((*token_data)->gc, TOKENS);
-		gc_free_category((*token_data)->gc, PARSING);
+	handle_all_heredocs((*td)->ast, &((*td)->heredoc_id), (*td));
+	exec_ast((*td)->ast, STDIN_FILENO, STDOUT_FILENO, (*td));
+	gc_free_category((*td)->gc, TOKENS);
+	gc_free_category((*td)->gc, PARSING);
 }
 
 // if string only space or tab -> just new prompt
 int	main(int argc, char **argv, char **envp)
 {
-	char *input;
-	char *prompt;
-	t_token_data *token_data;
-	t_gc *gc;
-	int le;
+	char			*input;
+	char			*prompt;
+	t_token_data	*token_data;
+	t_gc			*gc;
+	int				le;
+	char			*line;
 
 	token_data = malloc(sizeof(t_token_data));
 	if (!token_data)
@@ -89,21 +90,18 @@ int	main(int argc, char **argv, char **envp)
 		setup_noninteractive_signals();
 	while (1)
 	{
-		// input = readline(prompt);
-		// init_sig();
-		// handle_signals();
 		if (isatty(fileno(stdin)))
 		{
 			input = readline(prompt);
 			if (!input)
-				break;
+				break ;
 		}
 		else
 		{
-			char *line = get_next_line(fileno(stdin));
+			line = get_next_line(fileno(stdin));
 			if (!line)
-				break;
-			input = ft_strtrim(line, "\n"); //input is not freed here!!
+				break ;
+			input = ft_strtrim(line, "\n");
 			free(line);
 		}
 		if (!input || ft_strlen(input) == 0 || empty_str(input) != 0)
@@ -114,13 +112,6 @@ int	main(int argc, char **argv, char **envp)
 		}
 		else
 		{
-			// if (g_signal == SIGINT)
-			// {
-			// 	token_data->last_exit = 1; // should be 1 here, but somehow not showing
-			// 	// g_signal = 0;
-			// 	// free(input);
-			// 	continue;
-			// }
 			token_data->gc = gc;
 			add_history(input);
 			parse_execute(input, envp, &token_data);
@@ -130,7 +121,7 @@ int	main(int argc, char **argv, char **envp)
 	le = (token_data->last_exit);
 	free(token_data);
 	if (gc)
-	free(gc);
+		free(gc);
 	exit(le);
 	return (0);
 }
