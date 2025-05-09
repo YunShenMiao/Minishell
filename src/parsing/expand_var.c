@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 18:04:03 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/07 10:29:25 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/09 10:45:13 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	handle_var_cmd(t_token_data **token_data, int *count, char *value,
 	}
 	while (*value)
 	{
-		if (*value == ' ' && (*token_data)->in_DQ == 0)
+		if (*value == ' ' && (*token_data)->dq == 0)
 		{
 			((*token_data)->env_cmd = 1);
 			new[*count] = *value;

@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 13:51:18 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/08 20:52:28 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/09 10:51:03 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	in_dq(t_token_data **token_data, char **new, int *i, int *count)
 				+ 1] != '\0' && (*token_data)->expand_str[*i + 1] != ' '
 			&& (*token_data)->expand_str[*i + 1] != '\"'
 			&& (*token_data)->expand_str[*i + 1] != '/'
-			&& (*token_data)->HD == 0))
+			&& (*token_data)->hd == 0))
 		expand_var(token_data, i, count, *new);
 	if ((*token_data)->expand_str[*i] != '\0'
 		&& (*token_data)->expand_str[*i] != '\"')
@@ -53,7 +53,7 @@ void	in_nq(t_token_data **token_data, char **new, int *i, int *count)
 	if (((*token_data)->expand_str[*i] == '$' && (*token_data)->expand_str[*i
 				+ 1] != '\0' && (*token_data)->expand_str[*i + 1] != ' '
 			&& (*token_data)->expand_str[*i + 1] != '/'
-			&& (*token_data)->HD == 0) || ((*token_data)->expand_str[*i] == '~'
+			&& (*token_data)->hd == 0) || ((*token_data)->expand_str[*i] == '~'
 			&& ((*token_data)->expand_str[*i + 1] == '\0'
 				|| (*token_data)->expand_str[*i + 1] == ' ')))
 	{
@@ -88,16 +88,16 @@ char	*handle_quotes(t_token_data **token_data, char **str)
 	while ((*str)[i] != '\0')
 	{
 		quote_status(token_data, (*str)[i]);
-		if ((*token_data)->in_DQ)
+		if ((*token_data)->dq)
 			in_dq(token_data, &new, &i, &count);
-		else if ((*token_data)->in_SQ)
+		else if ((*token_data)->sq)
 			in_sq(str, &new, &i, &count);
 		else
 			in_nq(token_data, &new, &i, &count);
 	}
-	if ((*token_data)->in_DQ == 1 || (*token_data)->in_SQ == 1)
-		return ((*token_data)->HD = 0, (ft_perror_parsing(token_data,
+	if ((*token_data)->dq == 1 || (*token_data)->sq == 1)
+		return ((*token_data)->hd = 0, (ft_perror_parsing(token_data,
 					UNCLOSED_QUOTES, "unclosed quotes")), NULL);
-	(*token_data)->HD = 0;
+	(*token_data)->hd = 0;
 	return (new[count] = '\0', new);
 }

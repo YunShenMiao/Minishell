@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:41:12 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/08 18:44:50 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/09 10:50:23 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ t_ast	*parse_heredoc(t_token_data **token_data, t_token **current,
 	file_node = create_ast_node(token_data, TOK_FILE);
 	file_node->file_name = ft_strndup((*token_data)->gc, (*current)->value, 0,
 			ft_strlen((*current)->value));
-	file_node->HD = 1;
+	file_node->hd = 1;
 	re_node->left = file_node;
 	*current = (*current)->next;
 	re_node->right = prev;

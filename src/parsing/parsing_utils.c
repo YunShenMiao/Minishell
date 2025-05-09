@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:55:26 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/08 19:03:44 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/09 10:51:21 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_ast	*create_ast_node(t_token_data **token_data, t_tok_type type)
 	new_node->left = NULL;
 	new_node->right = NULL;
 	new_node->cmd_path = NULL;
-	new_node->HD = 0;
+	new_node->hd = 0;
 	new_node->gc = (*token_data)->gc;
 	return (new_node);
 }
@@ -37,19 +37,19 @@ t_ast	*create_ast_node(t_token_data **token_data, t_tok_type type)
 // either sets it to "in quote (1)" or "outside quote (0)"")
 int	quote_status(t_token_data **token_data, char input)
 {
-	if (input == '\'' && ((*token_data)->in_SQ) == 0
-		&& ((*token_data)->in_DQ) == 0)
-		(*token_data)->in_SQ = 1;
-	else if (input == '\"' && ((*token_data)->in_SQ) == 0
-		&& ((*token_data)->in_DQ) == 0)
-		(*token_data)->in_DQ = 1;
-	else if (input == '\'' && (*token_data)->in_SQ == 1
-		&& ((*token_data)->in_DQ) == 0)
-		(*token_data)->in_SQ = 0;
-	else if (input == '\"' && ((*token_data)->in_SQ) == 0
-		&& ((*token_data)->in_DQ) == 1)
-		(*token_data)->in_DQ = 0;
-	if ((*token_data)->in_DQ == 1 || (*token_data)->in_SQ == 1)
+	if (input == '\'' && ((*token_data)->sq) == 0
+		&& ((*token_data)->dq) == 0)
+		(*token_data)->sq = 1;
+	else if (input == '\"' && ((*token_data)->sq) == 0
+		&& ((*token_data)->dq) == 0)
+		(*token_data)->dq = 1;
+	else if (input == '\'' && (*token_data)->sq == 1
+		&& ((*token_data)->dq) == 0)
+		(*token_data)->sq = 0;
+	else if (input == '\"' && ((*token_data)->sq) == 0
+		&& ((*token_data)->dq) == 1)
+		(*token_data)->dq = 0;
+	if ((*token_data)->dq == 1 || (*token_data)->sq == 1)
 		return (1);
 	else
 		return (0);

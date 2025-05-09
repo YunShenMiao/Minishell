@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:29:30 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/08 20:51:13 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/09 10:50:35 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,8 +142,8 @@ int	expand_ast_nodes(t_token_data **td, t_ast **ast)
 	{
 		if (node->file_name[0] == '\'' || node->file_name[0] == '\"')
 			node->quote = 1;
-		if (node->HD == 1)
-			(*td)->HD = 1;
+		if (node->hd == 1)
+			(*td)->hd = 1;
 		node->file_name = handle_quotes(td, &node->file_name);
 		if (node->file_name == NULL)
 			return (1);

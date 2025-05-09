@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:51:05 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/08 18:40:49 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/09 10:48:34 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	edit_spaces(t_token_data *t, char **e, int *c, int *c2)
 
 	in = t->input;
 	if ((in[*c2] == '>' || in[*c2] == '<' || in[*c2] == '|')
-		&& t->in_DQ == 0 && t->in_SQ == 0)
+		&& t->dq == 0 && t->sq == 0)
 	{
 		if (in[*c2 - 1] != '\"' && in[*c2 - 1] != '\'')
 		{
@@ -36,7 +36,7 @@ void	edit_spaces(t_token_data *t, char **e, int *c, int *c2)
 	}
 	(*e)[*c] = in[*c2];
 	if (((*e)[*c] == '>' || (*e)[*c] == '<' || (*e)[*c] == '|') && (in[*c2 + 1]
-		!= '\"' && in[*c2 + 1] != '\'') && t->in_DQ == 0 && t->in_SQ == 0)
+		!= '\"' && in[*c2 + 1] != '\'') && t->dq == 0 && t->sq == 0)
 	{
 		(*c)++;
 		(*e)[*c] = ' ';
@@ -49,12 +49,12 @@ void	trim_quotes(char *input, int *count2, t_token_data **token_data)
 	int	count2cp;
 
 	count2cp = 0;
-	if (input[count2cp + *count2] == '\"' && (*token_data)->in_SQ == 0)
+	if (input[count2cp + *count2] == '\"' && (*token_data)->sq == 0)
 	{
 		while (input[count2cp + *count2] == '\"')
 			count2cp++;
 	}
-	else if (input[*count2] == '\'' && (*token_data)->in_DQ == 0)
+	else if (input[*count2] == '\'' && (*token_data)->dq == 0)
 	{
 		while (input[count2cp] == '\'')
 			count2cp++;

@@ -6,12 +6,16 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 10:16:27 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/09 10:47:20 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/09 11:07:11 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+/**************************************************************************/
+/*							INCLUDES&DEFINES						      */
+/**************************************************************************/
 
 # include "../libft/libft.h"
 # include <fcntl.h>
@@ -32,7 +36,6 @@
 # define BLUE "\033[1;34m"
 # define RESET "\033[0m"
 
-// extern volatile sig_atomic_t	g_signal;
 /**************************************************************************/
 /*							GARBAGE_COLLECTOR_STRUCTS				      */
 /**************************************************************************/
@@ -59,7 +62,7 @@ typedef struct s_gc
 }						t_gc;
 
 /**************************************************************************/
-/*							TOKEN_STRUCTS				  				  */
+/*								ENUMS					  				  */
 /**************************************************************************/
 
 typedef enum s_error
@@ -82,10 +85,11 @@ typedef enum s_tok_type
 	TOK_WORD,
 	TOK_FILE,
 	TOK_END
-	// TOK_ENV
-	// TOK_AND,
-	// TOK_OR
 }					t_tok_type;
+
+/**************************************************************************/
+/*								STRUCTS					  				  */
+/**************************************************************************/
 
 typedef struct s_token
 {
@@ -101,7 +105,7 @@ typedef struct s_ast
 	char			**args;
 	char			*file_name;
 	int				quote;
-	int				HD;
+	int				hd;
 	struct s_ast	*left;
 	struct s_ast	*right;
 	char			*cmd_path;
@@ -113,8 +117,8 @@ typedef struct s_token_data
 	char			*input;
 	t_token			*token_list;
 	t_ast			*ast;
-	int				in_SQ;
-	int				in_DQ;
+	int				sq;
+	int				dq;
 	int				start;
 	int				end;
 	int				finish;
@@ -127,7 +131,7 @@ typedef struct s_token_data
 	int				heredoc_id;
 	int				in_pipeline;
 	int				env_cmd;
-	int				HD;
+	int				hd;
 }				t_token_data;
 
 typedef struct s_redi_ctx
@@ -156,53 +160,22 @@ typedef struct s_data
 	t_env	*top_env;
 }			t_data;
 
-// utils //
-//debug_prints
-void	print_ast(t_ast *node, int depth, char *pos);
-// helper
-void	start_message(void);
-void	free_array(char **arr);
-int		ft_put_to_fd(char *str, int fd);
-int		ft_ministrcmp(const char *s1, const char *s2);
-// helper2
-int		empty_str(char *str);
-int		check_empty_ast(t_token_data *token_data);
-// gc_libft
-char	*ft_env_substr(char const *s, unsigned int start, size_t len, t_gc *gc);
-char	*ft_env_strdup(const char *src, t_gc *gc);
-char	*ft_env_strjoin(char const *s1, char const *s2, t_gc *gc);
-char	*ft_strndup(t_gc *gc, const char *src, int start, int end);
-// error_handling
-int		error_general(char *msg);
-void	ft_perror_parsing(t_token_data **token_data, int error_id, char *error_info);
-//env_list
-t_env	*create_env(char *name, char *value, t_gc *gc);
-t_env	*ft_env_last(t_env *lst);
-void	ft_env_add_back(t_env **lst, t_env *new);
-void	ft_env_del(t_env **top, t_env *to_del);
-t_env	*search_name_node(t_env *top, char *name);
-char	*search_name_val(t_env *top, char *name);
-int		update_env_var(t_env **lst, char *name, char *new_val, t_gc *gc);
-//init_envp
-int		count_arr_row(char **arr);
-int		find_sign(char *str, char c);
-// int		init_env(char **envp, t_gc *gc);
-t_env	*init_env(char **envp, t_gc *gc);
-// garbage collector
-t_gc	*init_gc(void);
-void	*gc_malloc(t_gc *gc, t_mem_location category, unsigned long size);
-void	gc_free_category(t_gc *gc, t_mem_location category);
-void	gc_free_all(t_gc *gc, int heredoc_id);
+/**************************************************************************/
+/*							FUNCTIONS							  		  */
+/**************************************************************************/
 
 // tokens //
-int		modify_input(char *input, char **modified_input, t_gc *gc, t_token_data **token_data);
+int		modify_input(char *input, char **modified_input, t_gc *gc,
+			t_token_data **token_data);
 int		tokenize(t_token_data *token_data);
-int		init_token_data(char *input, t_token_data **token_data, t_gc *gc, char **envp);
+int		init_token_data(char *input, t_token_data **token_data,
+			t_gc *gc, char **envp);
 
 // parsing //
 t_ast	*build_ast(t_token_data **token_data);
 t_ast	*create_ast_node(t_token_data **token_data, t_tok_type type);
-t_ast	*parse_redirections(t_token_data **token_data, t_token **current, t_ast *prev);
+t_ast	*parse_redirections(t_token_data **token_data, t_token **current,
+			t_ast *prev);
 t_ast	*parse_command(t_token_data **token_data, t_token **current);
 t_ast	*parse_pipes(t_token_data **token_data, t_token **current);
 char	*find_path(char *cmd, char **envp, t_gc *gc);
@@ -211,7 +184,7 @@ int		expand_ast_nodes(t_token_data **token_data, t_ast **ast);
 char	*handle_quotes(t_token_data **token_data, char **str);
 int		valid_cmd(t_token_data **token_data, t_ast *node);
 void	parse_command_args(t_token_data **token_data, t_token **current,
-		t_ast	*cmd_node);
+			t_ast	*cmd_node);
 void	expand_var(t_token_data **token_data, int *i, int *count, char *new);
 t_ast	*add_cmd(t_token_data *token_data, t_tok_type type);
 
@@ -248,7 +221,7 @@ int		red_in(char *filename);
 void	handle_all_heredocs(t_ast *node, int *heredoc_id, t_token_data *td);
 int		write_to_file(t_ast *node, char *file, t_token_data *td);
 void	cleanup_heredoc_tempfiles(int max_id);
-char	*expand_heredoc(char *line, t_ast *node, t_env *env_list, int last_exit);
+char	*expand_heredoc(char *line, t_env *env_list, int last_exit);
 // heredoc utils
 void	ft_itoa_simple(int n, char *buf);
 char	*generate_heredoc_filename(t_gc *gc, int id);
@@ -260,5 +233,47 @@ void	setup_noninteractive_signals(void);
 void	disable_echoctl(void);
 char	*heredoc_readline(const char *prompt);
 void	cleanup_heredoc_tempfiles(int max_id);
+
+/**************************************************************************/
+/*							HELPER-FUNCTIONS					  		  */
+/**************************************************************************/
+
+//debug_prints
+void	print_ast(t_ast *node, int depth, char *pos);
+// helper
+void	start_message(void);
+void	free_array(char **arr);
+int		ft_put_to_fd(char *str, int fd);
+int		ft_ministrcmp(const char *s1, const char *s2);
+// helper2
+int		empty_str(char *str);
+int		check_empty_ast(t_token_data *token_data);
+// gc_libft
+char	*ft_env_substr(char const *s, unsigned int start, size_t len, t_gc *gc);
+char	*ft_env_strdup(const char *src, t_gc *gc);
+char	*ft_env_strjoin(char const *s1, char const *s2, t_gc *gc);
+char	*ft_strndup(t_gc *gc, const char *src, int start, int end);
+// error_handling
+int		error_general(char *msg);
+void	ft_perror_parsing(t_token_data **token_data, int error_id,
+			char *error_info);
+//env_list
+t_env	*create_env(char *name, char *value, t_gc *gc);
+t_env	*ft_env_last(t_env *lst);
+void	ft_env_add_back(t_env **lst, t_env *new);
+void	ft_env_del(t_env **top, t_env *to_del);
+t_env	*search_name_node(t_env *top, char *name);
+char	*search_name_val(t_env *top, char *name);
+int		update_env_var(t_env **lst, char *name, char *new_val, t_gc *gc);
+//init_envp
+int		count_arr_row(char **arr);
+int		find_sign(char *str, char c);
+// int		init_env(char **envp, t_gc *gc);
+t_env	*init_env(char **envp, t_gc *gc);
+// garbage collector
+t_gc	*init_gc(void);
+void	*gc_malloc(t_gc *gc, t_mem_location category, unsigned long size);
+void	gc_free_category(t_gc *gc, t_mem_location category);
+void	gc_free_all(t_gc *gc, int heredoc_id);
 
 #endif
