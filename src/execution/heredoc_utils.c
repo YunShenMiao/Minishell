@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:22:54 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/08 21:09:53 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/09 10:39:21 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,10 @@ int	process_heredoc_line(int fd, char *line, t_ast *node, t_token_data *td)
 {
 	char	*expanded;
 
-	expanded = expand_heredoc(line, node, td->env_list, td->last_exit);
+	if (node->quote == 1)
+		expanded = ft_strdup(line);
+	else
+		expanded = expand_heredoc(line, td->env_list, td->last_exit);
 	free(line);
 	if (!expanded)
 		return (-1);

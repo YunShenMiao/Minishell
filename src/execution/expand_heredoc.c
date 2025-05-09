@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:17:16 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/08 21:28:33 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/09 10:39:08 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*handle_here_var(char *line, t_env *env_list, int *i)
 	return (value);
 }
 
-char	*expand_heredoc(char *line, t_ast *node, t_env *env_list, int last_exit)
+char	*expand_heredoc(char *line, t_env *env_list, int last_exit)
 {
 	int		count;
 	int		i;
@@ -69,11 +69,9 @@ char	*expand_heredoc(char *line, t_ast *node, t_env *env_list, int last_exit)
 
 	count = 0;
 	i = 0;
-    if (node->quote == 1)
-		return (ft_strdup(line));
 	expanded = malloc(ft_strlen(line) * 10);
 	if (!expanded)
-	return(NULL);
+		return (NULL);
 	while (line[i] != '\0')
 	{
 		if (line[i] == '$' && (line[i + 1] != '\0' && line[i + 1] != ' '
@@ -81,9 +79,9 @@ char	*expand_heredoc(char *line, t_ast *node, t_env *env_list, int last_exit)
 		{
 			if (line[++i] == '?')
 				handle_hv_exitcode(expanded, last_exit, &count, &i);
-			else if ((value = handle_here_var(line, env_list, &i)))
-					while (*value)
-						expanded[count++] = *value++;
+			value = handle_here_var(line, env_list, &i);
+			while (value && *value)
+				expanded[count++] = *value++;
 		}
 		else
 			expanded[count++] = line[i++];
