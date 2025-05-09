@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 11:12:24 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/08 21:05:49 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/09 10:45:36 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	exec_builtin_direct(t_ast *node, int in, int out, t_token_data *td)
 
 	saved_stdin = -1;
 	saved_stdout = -1;
-	setup_redirection(in, out, &saved_stdin, &saved_stdout);
+	setup_redi(in, out, &saved_stdin, &saved_stdout);
 	td->last_exit = execute_builtins(node, td);
 	restore_stdio(saved_stdin, saved_stdout);
 	return (td->last_exit);

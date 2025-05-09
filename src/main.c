@@ -21,7 +21,6 @@
 
 // general structure function for parsing
 // print_list((*token_data)->token_list);
-// print_ast((*token_data)->ast, 0, "Root: ");
 // test(token_data, envp);
 int	parse_main(char *input, t_token_data **token_data, t_gc *gc, char **envp)
 {
@@ -38,6 +37,7 @@ int	parse_main(char *input, t_token_data **token_data, t_gc *gc, char **envp)
 		return (1);
 	if (expand_ast_nodes(token_data, &(*token_data)->ast) == 1)
 		return (1);
+	print_ast((*token_data)->ast, 0, "Root: ");
 	return (0);
 }
 

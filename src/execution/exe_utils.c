@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 20:06:50 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/08 19:36:51 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/09 10:45:11 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	is_builtin(char **args)
 }
 
 //Sets up redirections for builtins (which run in the parent)
-int	setup_redirection(int input_fd, int output_fd, int *s_stdin, int *s_stdout)
+int	setup_redi(int input_fd, int output_fd, int *s_stdin, int *s_stdout)
 {
 	if (input_fd != STDIN_FILENO)
 	{

@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 10:16:27 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/09 10:26:53 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/09 10:47:20 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,6 @@ char	*ft_env_strjoin(char const *s1, char const *s2, t_gc *gc);
 char	*ft_strndup(t_gc *gc, const char *src, int start, int end);
 // error_handling
 int		error_general(char *msg);
-int		error_free(char *msg, t_data *shell);
 void	ft_perror_parsing(t_token_data **token_data, int error_id, char *error_info);
 //env_list
 t_env	*create_env(char *name, char *value, t_gc *gc);
@@ -212,7 +211,7 @@ int		expand_ast_nodes(t_token_data **token_data, t_ast **ast);
 char	*handle_quotes(t_token_data **token_data, char **str);
 int		valid_cmd(t_token_data **token_data, t_ast *node);
 void	parse_command_args(t_token_data **token_data, t_token **current,
-t_ast	*cmd_node);
+		t_ast	*cmd_node);
 void	expand_var(t_token_data **token_data, int *i, int *count, char *new);
 t_ast	*add_cmd(t_token_data *token_data, t_tok_type type);
 
@@ -237,7 +236,7 @@ char	*normalize_path(const char *path, t_gc *gc);
 int		execute_builtins(t_ast *node, t_token_data *token_data);
 int		is_builtin(char **args);
 int		exec_ast(t_ast *node, int input_fd, int output_fd, t_token_data *td);
-int		setup_redirection(int input_fd, int output_fd, int *s_stdin, int *s_stdout);
+int		setup_redi(int input_fd, int output_fd, int *s_stdin, int *s_stdout);
 void	restore_stdio(int saved_stdin, int saved_stdout);
 int		resolve_redirections(t_ast *node, t_redi_ctx *ctx);
 int		exec_pipe(t_ast *node, int input_fd, int output_fd, t_token_data *td);
