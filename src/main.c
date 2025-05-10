@@ -93,7 +93,11 @@ static void	input_loop(char *prompt, char **envp, t_token_data *td)
 	while (1)
 	{
 		if (isatty(fileno(stdin)))
+		{
 			input = readline(prompt);
+			if (!input)
+				break ;
+		}
 		else
 		{
 			line = get_next_line(fileno(stdin));
