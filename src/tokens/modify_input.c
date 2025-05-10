@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:51:05 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/09 10:48:34 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/10 14:44:40 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,9 @@ void	trim_quotes(char *input, int *count2, t_token_data **token_data)
 }
 
 // edits input string to pre-handle some cases and simplify tokenization
-// and parsing, cases being handled: "echo -n"/"echo -n -nn"
-// | missing spaces: eg "miao>>output.txt"
-// | quotes to ignore: eg """""" -> ""
+// and parsing, cases being handled: 
+// missing spaces: eg "miao>>output.txt"
+// quotes to ignore: eg """""" -> ""
 int	modify_input(char *input, char **modified_input, t_gc *gc,
 		t_token_data **token_data)
 {

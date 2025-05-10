@@ -6,14 +6,14 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:55:26 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/09 10:51:21 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/10 12:20:13 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 // creates ast nodes and setting its variables + linking them to
-// left and right node -> aststructure
+// left and right node
 t_ast	*create_ast_node(t_token_data **token_data, t_tok_type type)
 {
 	t_ast	*new_node;
@@ -76,7 +76,8 @@ int	token_command(char *value)
 		return (1);
 }
 
-// checks if args[0] is a valid cmd or builtin, returns error if not
+// checks if args[0] is a valid cmd or builtin. Checks cmd by checking
+// for valid path and also checking that the path is not a directory
 int	valid_cmd(t_token_data **token_data, t_ast *node)
 {
 	DIR	*dir;

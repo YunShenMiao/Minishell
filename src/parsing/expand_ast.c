@@ -6,22 +6,11 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:29:30 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/09 16:25:23 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/10 14:50:19 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-// new logic for handling quotes and environment variables
-// NEED TO: check memory leaks
-// NEED TO: handle error returns throughout functions
-// NEED TO: norminette & generally structure and name more
-// logically (cmd | quotes | env var)
-// NEED TO: go to token_list and norminette tokenize (+ check efficiency)
-// NEED TO: go through structs and delete unused vars
-// proj-checks: ms1 (safety copy before changes 10.04)
-// NEED TO: maybe combine redirect functions in ast_redirect.c
-// handle ~ ?
 
 void	handle_env_cmd(char **new, char **rest, t_gc *gc)
 {
@@ -64,6 +53,7 @@ int	bi_echo(t_ast *node, int *i)
 	return (0);
 }
 
+// here could implement wildcard check and then realloc
 int	command_args_loop(t_ast *node, int *i,
 	t_token_data **token_data, char **args)
 {
@@ -101,7 +91,7 @@ int	command_args(t_ast *node, int *i, t_token_data **token_data)
 	char	**args;
 	int		count;
 
-	args = gc_malloc((*token_data)->gc, PARSING, 100 * sizeof(char *));
+	args = (char**)gc_malloc((*token_data)->gc, PARSING, 1000 * sizeof(char *));
 	count = 0;
 	if (node->args[*i] != NULL && ft_ministrcmp(node->args[*i], "echo") == 0)
 	{

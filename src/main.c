@@ -106,7 +106,7 @@ static void	input_loop(char *prompt, char **envp, t_token_data *td)
 			line = get_next_line(fileno(stdin));
 			if (!line)
 			{
-				td->last_exit = 0;
+				// td->last_exit = 0;
 				break ;
 			}
 			input = ft_strtrim(line, "\n");

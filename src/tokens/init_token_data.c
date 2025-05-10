@@ -6,16 +6,13 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:14:39 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/09 10:51:29 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/10 12:25:04 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-// initializes token_data which is passed during tokenization & parsing
-// to acces modified input, set in-quote status, pass start
-// & end position of token_values & pass garbage collector
-// stuff for expand env var xx
+// initializes token_data which is passed during whole proccess
 int	init_token_data(char *input, t_token_data **token_data, t_gc *gc,
 		char **envp)
 {
@@ -37,14 +34,3 @@ int	init_token_data(char *input, t_token_data **token_data, t_gc *gc,
 	(*token_data)->hd = 0;
 	return (0);
 }
-
-// int init_td_gc(t_token_data **token_data, t_gc **gc, char **envp)
-// {
-// 	t_gc *gc;
-// 	*token_data = malloc(sizeof(t_token_data));
-// 	if (!token_data)
-// 		return (1);
-// 	*token_data->last_exit = 0;
-// 	*gc = init_gc();
-// 	*token_data->env_list = init_env(envp, gc);
-// }

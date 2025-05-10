@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:50:00 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/09 16:24:20 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/10 14:47:32 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ t_ast	*parse_command(t_token_data **token_data, t_token **current)
 	}
 	cmd_node = create_ast_node(token_data, TOK_COMMAND);
 	cmd_node->args = (char **)gc_malloc((*token_data)->gc, PARSING,
-			sizeof(char *) * 100);
+			sizeof(char *) * 1000);
 	parse_command_args(token_data, current, cmd_node);
 	re_node = parse_redirections(token_data, current, cmd_node);
 	if (re_node)

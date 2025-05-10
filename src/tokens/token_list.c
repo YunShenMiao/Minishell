@@ -6,13 +6,11 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:10:15 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/09 10:49:03 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/10 14:40:57 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-// change **
 
 // decides on token_type using ft_strncmp
 t_tok_type	token_type(t_token *token)
