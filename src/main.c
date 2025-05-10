@@ -96,13 +96,19 @@ static void	input_loop(char *prompt, char **envp, t_token_data *td)
 		{
 			input = readline(prompt);
 			if (!input)
+			{
+				td->last_exit = 0;
 				break ;
+			}
 		}
 		else
 		{
 			line = get_next_line(fileno(stdin));
 			if (!line)
+			{
+				td->last_exit = 0;
 				break ;
+			}
 			input = ft_strtrim(line, "\n");
 			free(line);
 		}
@@ -133,9 +139,8 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	input_loop(prompt, envp, td);
 	le = td->last_exit;
-	// gc_free_all(gc, td->heredoc_id);
+	gc_free_all(gc, td->heredoc_id);
 	free(td);
-	if (gc)
-		free(gc);
+	rl_clear_history();
 	exit(le);
 }
