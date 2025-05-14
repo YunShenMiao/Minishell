@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_handling.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 14:30:12 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/08 17:10:40 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/14 16:48:19 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	error_general(char *msg)
 {
-	perror(msg);
+	write(2, msg, ft_strlen(msg));
 	return (1);
 }
 

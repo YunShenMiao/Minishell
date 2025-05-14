@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:55:26 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/10 12:20:13 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/14 18:39:19 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	valid_cmd(t_token_data **token_data, t_ast *node)
 	DIR	*dir;
 
 	dir = NULL;
-	node->cmd_path = find_path(node->args[0], (*token_data)->envp,
+	node->cmd_path = find_path(node->args[0], (*token_data)->env_list,
 			(*token_data)->gc);
 	if (node->cmd_path == NULL && token_command(node->args[0]) == 1)
 	{

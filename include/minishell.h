@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 10:16:27 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/09 16:24:56 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/14 18:38:48 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 # define BLUE "\033[1;34m"
 # define RESET "\033[0m"
 
+extern volatile sig_atomic_t	g_signal;
 /**************************************************************************/
 /*							GARBAGE_COLLECTOR_STRUCTS				      */
 /**************************************************************************/
@@ -178,7 +179,7 @@ t_ast	*parse_redirections(t_token_data **token_data, t_token **current,
 			t_ast *prev);
 t_ast	*parse_command(t_token_data **token_data, t_token **current);
 t_ast	*parse_pipes(t_token_data **token_data, t_token **current);
-char	*find_path(char *cmd, char **envp, t_gc *gc);
+char	*find_path(char *cmd, t_env *top, t_gc *gc);
 int		quote_status(t_token_data **token_data, char input);
 int		expand_ast_nodes(t_token_data **token_data, t_ast **ast);
 char	*handle_quotes(t_token_data **token_data, char **str);
@@ -197,6 +198,7 @@ int		ft_env(char **args, t_env *top_env);
 int		ft_export(t_env	*top_env, char **args, t_token_data *td);
 int		ft_unset(t_env	*top_env, char **args);
 int		is_numeric(char *str);
+
 //cd utils
 char	*find_home(t_env *top);
 int		update_pwds(t_env *top, char *new_pwd, t_gc *gc);
@@ -222,17 +224,20 @@ void	handle_all_heredocs(t_ast *node, int *heredoc_id, t_token_data *td);
 int		write_to_file(t_ast *node, char *file, t_token_data *td);
 void	cleanup_heredoc_tempfiles(int max_id);
 char	*expand_heredoc(char *line, t_env *env_list, int last_exit);
+
 // heredoc utils
 void	ft_itoa_simple(int n, char *buf);
 char	*generate_heredoc_filename(t_gc *gc, int id);
 int		process_heredoc_line(int fd, char *line, t_ast *node, t_token_data *td);
+char	*heredoc_readline(const char *prompt);
+void	cleanup_heredoc_tempfiles(int max_id);
 
 // signals
 void	setup_interactive_signals(void);
 void	setup_noninteractive_signals(void);
 void	disable_echoctl(void);
-char	*heredoc_readline(const char *prompt);
-void	cleanup_heredoc_tempfiles(int max_id);
+void	reset_signal(void);
+void	set_signal_heredoc(void);
 
 /**************************************************************************/
 /*							HELPER-FUNCTIONS					  		  */
@@ -248,6 +253,7 @@ int		ft_ministrcmp(const char *s1, const char *s2);
 // helper2
 int		empty_str(char *str);
 int		check_empty_ast(t_token_data *token_data);
+void	handle_empty_envp(char **envp, t_gc **gc);
 // gc_libft
 char	*ft_env_substr(char const *s, unsigned int start, size_t len, t_gc *gc);
 char	*ft_env_strdup(const char *src, t_gc *gc, t_mem_location loc);

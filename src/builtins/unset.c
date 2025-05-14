@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:21:36 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/08 17:06:57 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/14 16:50:16 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	is_valid_name(char *name)
 		return (-1);
 	if (name[0] == '-')
 	{
-		error_general("unset: usage: not supporting flags");
+		error_general("unset: usage: not supporting flags\n");
 		exit(2);
 	}
 	while (name[i])
@@ -66,7 +66,7 @@ int	ft_unset(t_env	*top_env, char **args)
 		invalid_count = 0;
 		unset_helper(args, top_env, &invalid_count);
 		if (invalid_count > 0)
-			return (error_general("unset: not a valid identifier"));
+			return (error_general("unset: not a valid identifier\n"));
 	}
 	return (0);
 }

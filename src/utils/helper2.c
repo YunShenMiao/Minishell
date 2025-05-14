@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 15:22:37 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/08 17:06:33 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/14 17:13:08 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,24 @@ int	check_empty_ast(t_token_data *token_data)
 		}
 	}
 	return (0);
+}
+
+void	handle_empty_envp(char **envp, t_gc **gc)
+{
+	if (!envp[0])
+	{
+		char *pwd;
+		char *temp;
+
+		pwd = getcwd(NULL, 0);
+		temp = ft_strjoin("PWD=", pwd);
+		envp[0] = ft_env_strdup(temp, (*gc), ENV);
+		free(pwd);
+		free(temp);
+		pwd = getcwd(NULL, 0);
+		temp = ft_strjoin("OLDPWD=", pwd);
+		envp[1] = ft_env_strdup(temp, (*gc), ENV);
+		free(pwd);
+		free(temp);
+	}
 }

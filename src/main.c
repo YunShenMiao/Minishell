@@ -71,6 +71,7 @@ static t_token_data	*init_and_setup(char **envp, char **prompt, t_gc **gc)
 		return (NULL);
 	td->last_exit = 0;
 	*gc = init_gc();
+	handle_empty_envp(envp, gc);
 	td->env_list = init_env(envp, *gc);
 	td->gc = *gc;
 	*prompt = GREEN "minishell" BLUE ">" RESET " ";
@@ -94,7 +95,14 @@ static void	input_loop(char *prompt, char **envp, t_token_data *td)
 	{
 		if (isatty(fileno(stdin)))
 		{
-			input = readline(prompt);
+			if (g_signal != 0)
+			{
+				reset_signal();
+				input = readline(NULL);
+				g_signal = 0;
+			}
+			else
+				input = readline(prompt);
 			if (!input)
 			{
 				td->last_exit = 0;
@@ -105,10 +113,7 @@ static void	input_loop(char *prompt, char **envp, t_token_data *td)
 		{
 			line = get_next_line(fileno(stdin));
 			if (!line)
-			{
-				// td->last_exit = 0;
 				break ;
-			}
 			input = ft_strtrim(line, "\n");
 			free(line);
 		}
@@ -121,7 +126,6 @@ static void	input_loop(char *prompt, char **envp, t_token_data *td)
 		}
 		add_history(input);
 		parse_execute(input, envp, &td);
-		//gc = init_gc();
 	}
 }
 

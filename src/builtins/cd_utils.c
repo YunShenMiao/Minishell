@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:45:08 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/09 16:30:42 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/14 16:51:40 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*find_home(t_env *top)
 	home = search_name_val(top, "HOME");
 	if (!home)
 	{
-		perror("HOME not set\n");
+		write(2, "minishell: HOME not set\n", 24);
 		return (NULL);
 	}
 	return (home);
@@ -33,7 +33,7 @@ int	update_pwds(t_env *top, char *new_pwd, t_gc *gc)
 	pwd_node = search_name_node(top, "PWD");
 	old_pwd = ft_env_strdup(pwd_node->val, gc, BUILT_IN);
 	if (!pwd_node || !pwd_node->val)
-		return (error_general("PWD not set"));
+		return (error_general("PWD not set\n"));
 	if (update_env_var(&top, "OLDPWD", old_pwd, gc) == 1)
 		return (1);
 	if (update_env_var(&top, "PWD", new_pwd, gc) == 1)
@@ -50,7 +50,7 @@ int	swap_pwds(t_env *top, t_gc *gc)
 
 	pwd_node = search_name_node(top, "PWD");
 	if (!pwd_node || !pwd_node->val)
-		return (error_general("PWD not set"));
+		return (error_general("PWD not set\n"));
 	pwd = ft_env_strdup(pwd_node->val, gc, BUILT_IN);
 	if (!pwd)
 		return (1);

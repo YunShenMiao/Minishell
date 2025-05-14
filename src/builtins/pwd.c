@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 15:17:27 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/08 17:08:23 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/14 16:50:04 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	ft_pwd(char **args)
 	if (!cwd)
 	{
 		perror("getcwd");
-		return (error_general("getcwd failed"));
+		return (error_general("getcwd failed\n"));
 	}
 	if (ft_put_to_fd(cwd, 1) == 1 || ft_put_to_fd("\n", 1) == 1)
 	{
