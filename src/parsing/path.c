@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 21:06:35 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/14 18:39:30 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/14 19:21:40 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,12 +99,12 @@ char	*find_path(char *cmd, t_env *top, t_gc *gc)
 		}
 		i++;
 	}
-	// if (envp == NULL || !*envp)ßß
+	// if (search_name_node(top, "PATH") == NULL)
 	// 	return (fallback(cmd, gc));
 	i = 0;
 	while (top)
 	{
-		if (!ft_strncmp(top->name, "PATH=", 5))
+		if (!ft_strncmp(top->name, "PATH", 4))
 			return (handle_path(cmd, top->val, gc));
 		top = top->next;
 	}
