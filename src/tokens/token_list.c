@@ -6,13 +6,13 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:10:15 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/10 14:40:57 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/14 18:50:55 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-// decides on token_type using ft_strncmp
+// decides on token_type
 t_tok_type	token_type(t_token *token)
 {
 	int	len;
@@ -59,7 +59,7 @@ t_token	*create_token(t_token_data **token_data)
 	return (token);
 }
 
-// creates the simple token list out of the modified input string
+// adds token to the token-list
 int	add_token(t_token_data **token_data)
 {
 	t_token	*new_token;
@@ -81,7 +81,8 @@ int	add_token(t_token_data **token_data)
 	return (0);
 }
 
-//increasing count while inside a token
+//increasing count while inside a token 
+//to know which part of str is value of single token
 void	in_token(t_token_data **token_data, int *i)
 {
 	quote_status(token_data, (*token_data)->input[*i]);
