@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 21:06:35 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/14 19:21:40 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/14 19:43:48 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,13 @@ static char	*handle_path(char *cmd, char *part_env, t_gc *gc)
 char	*find_path(char *cmd, t_env *top, t_gc *gc)
 {
 	int	i;
+	char *temp;
+	char *path;
 
 	i = 0;
+	temp = getcwd(NULL, 0);
+	path = ft_env_strdup(temp, gc, ENV);
+	free(temp);
 	while (cmd[i])
 	{
 		if (cmd[i] == '/')
@@ -99,14 +104,11 @@ char	*find_path(char *cmd, t_env *top, t_gc *gc)
 		}
 		i++;
 	}
-	// if (search_name_node(top, "PATH") == NULL)
-	// 	return (fallback(cmd, gc));
-	i = 0;
 	while (top)
 	{
 		if (!ft_strncmp(top->name, "PATH", 4))
 			return (handle_path(cmd, top->val, gc));
 		top = top->next;
 	}
-	return (NULL);
+	return (handle_path(cmd, path, gc));
 }
