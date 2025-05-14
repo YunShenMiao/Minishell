@@ -18,18 +18,16 @@
 // #define GREEN "\033[1;32m"
 // #define BLUE "\033[1;34m"
 // #define RESET "\033[0m"
+// print_ast((*token_data)->ast, 0, "Root: ");
 
 // general structure function for parsing
-// print_list((*token_data)->token_list);
-// test(token_data, envp);
 int	parse_main(char *input, t_token_data **token_data, t_gc *gc, char **envp)
 {
 	char	*modified_input;
 
-	if (init_token_data(input, token_data, gc, envp) == 1)
-		return (printf("Allocation Error\n"), 1);
+	init_token_data(input, token_data, gc, envp);
 	if (modify_input(input, &modified_input, gc, token_data) == 1)
-		return (printf("Allocation Error\n"), 1);
+		return (1);
 	(*token_data)->input = modified_input;
 	if (tokenize(*token_data) == 1)
 		return (1);
@@ -37,7 +35,6 @@ int	parse_main(char *input, t_token_data **token_data, t_gc *gc, char **envp)
 		return (1);
 	if (expand_ast_nodes(token_data, &(*token_data)->ast) == 1)
 		return (1);
-	// print_ast((*token_data)->ast, 0, "Root: ");
 	return (0);
 }
 
@@ -59,7 +56,6 @@ void	parse_execute(char *input, char **envp, t_token_data **td)
 	exec_ast((*td)->ast, STDIN_FILENO, STDOUT_FILENO, (*td));
 	gc_free_category((*td)->gc, TOKENS);
 	gc_free_category((*td)->gc, PARSING);
-	// gc_free_category((*td)->gc, BUILT_IN);
 }
 
 static t_token_data	*init_and_setup(char **envp, char **prompt, t_gc **gc)
@@ -138,6 +134,11 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc < 1 || argv[0] == NULL)
 		return (1);
+	else if (argc > 1)
+	{
+		write(2, "🐢 minishell: input error: arguments not supported\n", 53);
+		return(1);
+	}
 	td = init_and_setup(envp, &prompt, &gc);
 	if (!td)
 		return (1);
