@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 10:16:27 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/15 16:52:00 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/16 03:00:21 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ typedef struct s_token_data
 	int				in_pipeline;
 	int				env_cmd;
 	int				hd;
+	int				heredoc_failed;
 }				t_token_data;
 
 typedef struct s_redi_ctx
@@ -239,7 +240,7 @@ void	setup_interactive_signals(void);
 void	setup_noninteractive_signals(void);
 void	disable_echoctl(void);
 void	reset_signal(void);
-void	set_signal_heredoc(void);
+// void	set_signal_heredoc(void);
 
 /**************************************************************************/
 /*							HELPER-FUNCTIONS					  		  */

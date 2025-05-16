@@ -53,6 +53,11 @@ void	parse_execute(char *input, char **envp, t_token_data **td)
 		return ;
 	}
 	handle_all_heredocs((*td)->ast, &((*td)->heredoc_id), (*td));
+	if ((*td)->heredoc_failed)
+	{
+		(*td)->heredoc_failed = 0;
+		return ;
+	}
 	exec_ast((*td)->ast, STDIN_FILENO, STDOUT_FILENO, (*td));
 	gc_free_category((*td)->gc, TOKENS);
 	gc_free_category((*td)->gc, PARSING);
@@ -93,7 +98,7 @@ static void	input_loop(char *prompt, char **envp, t_token_data *td)
 		{
 			if (g_signal != 0)
 			{
-				reset_signal();
+				// reset_signal();
 				input = readline(NULL);
 				g_signal = 0;
 			}
