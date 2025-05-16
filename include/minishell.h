@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 10:16:27 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/16 18:53:36 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/16 19:45:52 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -269,6 +269,7 @@ char	*ft_env_substr(char const *s, unsigned int start, size_t len, t_gc *gc);
 char	*ft_env_strdup(const char *src, t_gc *gc, t_mem_location loc);
 char	*ft_env_strjoin(char const *s1, char const *s2, t_gc *gc);
 char	*ft_strndup(t_gc *gc, const char *src, int start, int end);
+char	*ft_env_itoa(t_gc *gc, int n);
 // error_handling
 int		error_general(char *msg);
 void	ft_perror_parsing(t_token_data **token_data, int error_id,

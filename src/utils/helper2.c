@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 15:22:37 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/16 18:53:15 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/16 19:49:36 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,4 +97,27 @@ char	*read_shell_input(char *prompt, t_token_data *td)
 	input = ft_strtrim(line, "\n");
 	free(line);
 	return (input);
+}
+
+// modified strndup to use gc_malloc
+// & have starting and end position for allocating
+char	*ft_strndup(t_gc *gc, const char *src, int start, int end)
+{
+	char	*address;
+	char	*old_dest;
+
+	if (end - start < 0)
+		return (NULL);
+	address = (char *)gc_malloc(gc, TOKENS, end - start + 1);
+	old_dest = address;
+	if (address == NULL)
+		return (NULL);
+	while (src[start] != '\0' && start < end)
+	{
+		*address = src[start];
+		address++;
+		start++;
+	}
+	*address = '\0';
+	return (old_dest);
 }

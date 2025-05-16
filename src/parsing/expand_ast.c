@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:29:30 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/16 17:07:29 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/16 21:03:02 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	command_args_loop(t_ast *node, int *i,
 
 	count = 0;
 	rest = NULL;
-	while (node->args[*i] != NULL)
+	while (node != NULL && node->args[*i] != NULL)
 	{
 		new = handle_quotes(token_data, &node->args[*i]);
 		if (new == NULL)

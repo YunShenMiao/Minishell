@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:14:39 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/10 12:25:04 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/16 19:41:32 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	init_token_data(char *input, t_token_data **token_data, t_gc *gc,
 	(*token_data)->expand_str = NULL;
 	(*token_data)->syntax_error = 0;
 	(*token_data)->heredoc_id = 0;
+	(*token_data)->heredoc_failed = 0;
 	(*token_data)->in_pipeline = 0;
 	(*token_data)->env_cmd = 0;
 	(*token_data)->hd = 0;

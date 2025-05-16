@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 15:18:30 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/09 16:23:42 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/16 19:49:28 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,25 +90,42 @@ char	*ft_env_strjoin(char const *s1, char const *s2, t_gc *gc)
 	return (new);
 }
 
-// modified strndup to use gc_malloc
-// & have starting and end position for allocating
-char	*ft_strndup(t_gc *gc, const char *src, int start, int end)
+static	int	num_len(int n)
 {
-	char	*address;
-	char	*old_dest;
+	int	len;
 
-	if (end - start < 0)
-		return (NULL);
-	address = (char *)gc_malloc(gc, TOKENS, end - start + 1);
-	old_dest = address;
-	if (address == NULL)
-		return (NULL);
-	while (src[start] != '\0' && start < end)
+	len = 0;
+	if (n == 0)
+		len = 1;
+	if (n < 0)
+		len++;
+	while (n != 0)
 	{
-		*address = src[start];
-		address++;
-		start++;
+		n = n / 10;
+		len++;
 	}
-	*address = '\0';
-	return (old_dest);
+	return (len);
+}
+
+char	*ft_env_itoa(t_gc *gc, int n)
+{
+	char	*str;
+	int		len;
+
+	len = num_len(n);
+	str = gc_malloc(gc, ENV, len + 1);
+	if (str == NULL)
+		return (NULL);
+	if (n < 0)
+	{
+		n = -n;
+		str[0] = '-';
+	}
+	str[len] = '\0';
+	while (n > 0)
+	{
+		str[--len] = (n % 10) + '0';
+		n = n / 10;
+	}
+	return (str);
 }

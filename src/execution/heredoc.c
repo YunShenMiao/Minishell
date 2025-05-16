@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:18:55 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/16 18:48:53 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/16 21:23:20 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,23 +52,48 @@ void	handle_all_heredocs(t_ast *node, int *heredoc_id, t_token_data *td)
 char	*read_heredoc_line(t_token_data *td)
 {
 	char	*line;
+	char	*temp;
 
 	if (isatty(STDIN_FILENO))
 	{
 		write(1, "> ", 2);
-		line = get_next_line(STDIN_FILENO);
-		if (!line)
+		temp = get_next_line(STDIN_FILENO);
+		if (!temp)
 			return (NULL);
-		line = ft_env_substr(line, 0, ft_strlen(line) - 1, td->gc);
+		line = ft_env_substr(temp, 0, ft_strlen(temp) - 1, td->gc);
+		free(temp);
 	}
 	else
 	{
-		line = get_next_line(STDIN_FILENO);
-		if (line && line[ft_strlen(line) - 1] == '\n')
-			line[ft_strlen(line) - 1] = '\0';
+		temp = get_next_line(STDIN_FILENO);
+		if (temp && temp[ft_strlen(temp) - 1] == '\n')
+			temp[ft_strlen(temp) - 1] = '\0';
+		line = ft_env_strdup(temp, td->gc, ENV);
+		free(temp);
 	}
 	return (line);
 }
+
+// char	*read_heredoc_line(t_token_data *td)
+// {
+// 	char	*line;
+
+// 	if (isatty(STDIN_FILENO))
+// 	{
+// 		write(1, "> ", 2);
+// 		line = get_next_line(STDIN_FILENO);
+// 		if (!line)
+// 			return (NULL);
+// 		line = ft_env_substr(line, 0, ft_strlen(line) - 1, td->gc);
+// 	}
+// 	else
+// 	{
+// 		line = get_next_line(STDIN_FILENO);
+// 		if (line && line[ft_strlen(line) - 1] == '\n')
+// 			line[ft_strlen(line) - 1] = '\0';
+// 	}
+// 	return (line);
+// }
 
 int	write_heredoc_loop(int fd, t_ast *node, t_token_data *td)
 {
@@ -80,10 +105,7 @@ int	write_heredoc_loop(int fd, t_ast *node, t_token_data *td)
 		if (!line)
 			break ;
 		if (ft_ministrcmp(line, node->file_name) == 0)
-		{
-			free(line);
 			break ;
-		}
 		if (process_heredoc_line(fd, line, node, td) == -1)
 			break ;
 	}
