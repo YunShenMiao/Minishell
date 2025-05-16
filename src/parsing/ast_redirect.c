@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:41:12 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/16 13:22:58 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/16 17:05:26 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,8 @@ t_ast	*parse_re_in(t_token_data **token_data, t_token **current, t_ast *prev)
 	return (re_node);
 }
 
-// prev either cmd node or other redirect (to handle echo miao > out >> out > out)
+// prev either cmd node or other redirect 
+// (to handle echo miao > out >> out > out)
 t_ast	*parse_redirections(t_token_data **token_data, t_token **current,
 		t_ast *prev)
 {

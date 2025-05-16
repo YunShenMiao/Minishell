@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 13:51:18 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/16 13:40:09 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/16 17:11:43 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	in_dq(t_token_data **token_data, char **new, int *i, int *count)
 		&& (*token_data)->expand_str[*i] == '\"')
 		(*i)++;
 	if (((*token_data)->expand_str[*i] == '$' && (*token_data)->expand_str[*i
-			+ 1] != '\0' && (*token_data)->expand_str[*i + 1] != ' '
+				+ 1] != '\0' && (*token_data)->expand_str[*i + 1] != ' '
 			&& (*token_data)->expand_str[*i + 1] != '\t'
 			&& (*token_data)->expand_str[*i + 1] != '\"'
 			&& (*token_data)->expand_str[*i + 1] != '/'
@@ -52,7 +52,7 @@ void	in_sq(char **str, char **new, int *i, int *count)
 void	in_nq(t_token_data **token_data, char **new, int *i, int *count)
 {
 	if (((*token_data)->expand_str[*i] == '$' && (*token_data)->expand_str[*i
-			+ 1] != '\0' && (*token_data)->expand_str[*i + 1] != ' '
+				+ 1] != '\0' && (*token_data)->expand_str[*i + 1] != ' '
 			&& (*token_data)->expand_str[*i + 1] != '/'
 			&& (*token_data)->expand_str[*i + 1] != '\t'
 			&& (*token_data)->hd == 0) || ((*token_data)->expand_str[*i] == '~'

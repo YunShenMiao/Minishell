@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 21:06:35 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/14 19:43:48 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/16 17:12:01 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,9 @@ static char	*handle_path(char *cmd, char *part_env, t_gc *gc)
 
 char	*find_path(char *cmd, t_env *top, t_gc *gc)
 {
-	int	i;
-	char *temp;
-	char *path;
+	int		i;
+	char	*temp;
+	char	*path;
 
 	i = 0;
 	temp = getcwd(NULL, 0);

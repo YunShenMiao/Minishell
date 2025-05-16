@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 15:22:37 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/14 18:45:37 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/16 17:13:11 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,11 @@ int	check_empty_ast(t_token_data *token_data)
 
 void	handle_empty_envp(char **envp, t_gc **gc)
 {
+	char	*pwd;
+	char	*temp;
+
 	if (!envp[0])
 	{
-		char *pwd;
-		char *temp;
-
 		pwd = getcwd(NULL, 0);
 		temp = ft_strjoin("PWD=", pwd);
 		envp[0] = ft_env_strdup(temp, (*gc), ENV);

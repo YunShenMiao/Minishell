@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:50:00 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/16 13:22:31 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/16 17:04:56 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,11 @@ void	parse_command_args(t_token_data **token_data, t_token **current,
 	cmd_node->args[i] = NULL;
 }
 
-// if no cmd, call redirections (to handle '> out') [couldve added cat/echo here instead]
+// if no cmd, call redirections (to handle '> out') 
+// [couldve added cat/echo here instead]
 // otherwise creates cmd_node with args and then creates re_node
-// if we have a re_node we return the re_node with cmd added to it in ast_redirect
-// else just cmd
+// if we have a re_node we return the re_node 
+// with cmd added to it in ast_redirect, else just cmd
 // a little mixed up logically
 t_ast	*parse_command(t_token_data **token_data, t_token **current)
 {

@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:29:30 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/16 13:34:44 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/16 17:07:29 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,16 +86,16 @@ int	command_args_loop(t_ast *node, int *i,
 // passes each arg of the command to handle the quotes & checks if arg[0]
 // is a valid command or not
 // need to allocate new 2dstring to handle env avr expansion
-int	command_args(t_ast *node, int *i, t_token_data **token_data)
+int	command_args(t_ast *node, int *i, t_token_data **td)
 {
 	char	**args;
 	int		count;
 
-	args = (char**)gc_malloc((*token_data)->gc, PARSING, 1000 * sizeof(char *));
+	args = (char **)gc_malloc((*td)->gc, PARSING, 1000 * sizeof(char *));
 	count = 0;
 	if (node->args[*i] != NULL && ft_ministrcmp(node->args[*i], "echo") == 0)
 	{
-		args[count] = handle_quotes(token_data, &node->args[*i]);
+		args[count] = handle_quotes(td, &node->args[*i]);
 		if (args[count] == NULL)
 			return (1);
 		count++;
@@ -104,12 +104,12 @@ int	command_args(t_ast *node, int *i, t_token_data **token_data)
 			(*i)++;
 			if (bi_echo(node, i) == 2)
 			{
-				args[count] = ft_env_strdup("-n", (*token_data)->gc, PARSING);
+				args[count] = ft_env_strdup("-n", (*td)->gc, PARSING);
 				count++;
 			}
 		}
 	}
-	if (command_args_loop(node, i, token_data, args + count) == 1)
+	if (command_args_loop(node, i, td, args + count) == 1)
 		return (1);
 	return (node->args = args, 0);
 }

@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:10:15 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/16 13:27:23 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/16 17:03:12 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,12 @@ t_token	*create_token(t_token_data **token_data)
 }
 
 // adds token to the token-list
-int	add_token(t_token_data **token_data)
+int	add_token(t_token_data **token_data, int i)
 {
 	t_token	*new_token;
 	t_token	*temp;
 
+	(*token_data)->end = i;
 	new_token = create_token(token_data);
 	if (!new_token)
 		return (1);
@@ -96,8 +97,8 @@ void	in_token(t_token_data **token_data, int *i)
 	if ((*token_data)->input[*i] != '\0')
 		(*i)++;
 	while ((*token_data)->input[*i] != '\0' && (*token_data)->input[*i] != ' '
-		&& (*token_data)->input[*i] != '\'' && (*token_data)->input[*i] != '\"')
-			// && (*token_data)->input[*i] == '\t')
+		&& (*token_data)->input[*i] != '\'' && (*token_data)->input[*i] != '\"'
+		&& (*token_data)->input[*i] != '\t')
 		(*i)++;
 }
 
@@ -121,8 +122,7 @@ int	tokenize(t_token_data *token_data)
 				if (token_data->input[i] == ' ' || token_data->input[i] == '\0'
 					|| token_data->input[i] == '\t')
 				{
-					token_data->end = i;
-					if (add_token(&token_data) == 1)
+					if (add_token(&token_data, i) == 1)
 						return (1);
 					break ;
 				}
@@ -130,5 +130,5 @@ int	tokenize(t_token_data *token_data)
 		}
 	}
 	token_data->finish = 1;
-	return (add_token(&token_data));
+	return (add_token(&token_data, i));
 }
