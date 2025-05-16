@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 18:04:03 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/09 10:45:13 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/16 13:39:33 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	handle_var_cmd(t_token_data **token_data, int *count, char *value,
 	}
 }
 
-void	handle_var_exitcode(t_token_data **token_data, int *i, int *count,
+int	handle_var_exitcode(t_token_data **token_data, int *i, int *count,
 		char *new)
 {
 	char	*exitcode;
@@ -55,7 +55,9 @@ void	handle_var_exitcode(t_token_data **token_data, int *i, int *count,
 			exitcode++;
 		}
 		(*i)++;
+		return (0);
 	}
+	return (1);
 }
 
 // checks for env key and if key has an assigned value
@@ -77,10 +79,8 @@ void	expand_var(t_token_data **token_data, int *i, int *count, char *new)
 		start = ++(*i);
 		handle_var_exitcode(token_data, i, count, new);
 		while ((*token_data)->expand_str[*i] != '\0'
-			&& (((*token_data)->expand_str[*i] < 123
-					&& (*token_data)->expand_str[*i] > 96)
-				|| ((*token_data)->expand_str[*i] < 91
-					&& (*token_data)->expand_str[*i] > 47)
+			&& (ft_isalpha((*token_data)->expand_str[*i])
+				|| ft_isdigit((*token_data)->expand_str[*i])
 				|| (*token_data)->expand_str[*i] == '_'))
 			(*i)++;
 		value = search_name_val((*token_data)->env_list,

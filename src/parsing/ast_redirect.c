@@ -6,12 +6,16 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:41:12 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/09 10:50:23 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/16 13:22:58 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+// for: parse_append, parse_heredoc, parse_re_in & parse_re_out
+// checks if there is redirect, checks syntax (redirect needs file/delim)
+// creates file node and left if re_in, right if re_out
+// + prev -> cmd or other redirect
 t_ast	*parse_append(t_token_data **token_data, t_token **current, t_ast *prev)
 {
 	t_ast	*re_node;
@@ -119,6 +123,7 @@ t_ast	*parse_re_in(t_token_data **token_data, t_token **current, t_ast *prev)
 	return (re_node);
 }
 
+// prev either cmd node or other redirect (to handle echo miao > out >> out > out)
 t_ast	*parse_redirections(t_token_data **token_data, t_token **current,
 		t_ast *prev)
 {

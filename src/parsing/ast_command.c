@@ -6,12 +6,14 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:50:00 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/10 14:47:32 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/16 13:22:31 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+// handles (> out && < in by adding cat && echo -n as cmd)
+// is called in ast_redirect.c
 t_ast	*add_cmd(t_token_data *token_data, t_tok_type type)
 {
 	t_ast	*cmd_node;
@@ -36,6 +38,7 @@ t_ast	*add_cmd(t_token_data *token_data, t_tok_type type)
 	return (cmd_node);
 }
 
+// adds all word_tokens as cmd arguments, arg[0] is cmd
 void	parse_command_args(t_token_data **token_data, t_token **current,
 		t_ast *cmd_node)
 {
@@ -52,6 +55,11 @@ void	parse_command_args(t_token_data **token_data, t_token **current,
 	cmd_node->args[i] = NULL;
 }
 
+// if no cmd, call redirections (to handle '> out') [couldve added cat/echo here instead]
+// otherwise creates cmd_node with args and then creates re_node
+// if we have a re_node we return the re_node with cmd added to it in ast_redirect
+// else just cmd
+// a little mixed up logically
 t_ast	*parse_command(t_token_data **token_data, t_token **current)
 {
 	t_ast	*cmd_node;

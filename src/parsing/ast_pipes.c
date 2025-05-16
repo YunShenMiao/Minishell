@@ -6,12 +6,16 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:54:32 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/04/21 16:56:07 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/16 13:21:52 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+// creates AST, root node if(pipe) is pipe,
+// if (multiple pipes) last pipe
+// if no pipe redir (with cmd + file/delim)
+// if no redir -> just cmd with argos
 t_ast	*parse_pipes(t_token_data **token_data, t_token **current)
 {
 	t_ast	*right;

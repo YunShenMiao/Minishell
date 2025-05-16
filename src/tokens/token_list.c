@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:10:15 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/14 18:50:55 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/16 13:27:23 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ void	in_token(t_token_data **token_data, int *i)
 		(*i)++;
 	while ((*token_data)->input[*i] != '\0' && (*token_data)->input[*i] != ' '
 		&& (*token_data)->input[*i] != '\'' && (*token_data)->input[*i] != '\"')
+			// && (*token_data)->input[*i] == '\t')
 		(*i)++;
 }
 
@@ -117,7 +118,8 @@ int	tokenize(t_token_data *token_data)
 			while (1)
 			{
 				in_token(&token_data, &i);
-				if (token_data->input[i] == ' ' || token_data->input[i] == '\0')
+				if (token_data->input[i] == ' ' || token_data->input[i] == '\0'
+					|| token_data->input[i] == '\t')
 				{
 					token_data->end = i;
 					if (add_token(&token_data) == 1)
