@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 20:43:58 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/07 19:37:38 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/16 02:36:34 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,22 @@ void	disable_echoctl(void)
 	{
 		perror("tcsetattr");
 	}
+}
+
+void	reset_signal(void)
+{
+	struct termios	term;
+
+	if (tcgetattr(STDIN_FILENO, &term) == -1)
+	{
+		perror("tcgetattr");
+		return ;
+	}
+	term.c_lflag |= (ECHO | ICANON);
+	term.c_lflag &= ~ECHOCTL;
+	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
+	{
+		perror("tcsetattr");
+	}
+	setup_interactive_signals();
 }

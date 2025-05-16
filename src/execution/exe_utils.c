@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 20:06:50 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/09 10:45:11 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/16 02:24:27 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ int	execute_builtins(t_ast *node, t_token_data *token_data)
 		return (ft_unset((token_data)->env_list, node->args));
 	else if (ft_ministrcmp(value, "exit") == 0)
 		return (ft_exit(node->args, (token_data)));
+	else if (ft_ministrcmp(value, "./minishell") == 0)
+		return (shell_level(token_data));
 	return (-1);
 }
 
@@ -51,6 +53,8 @@ int	is_builtin(char **args)
 	if (ft_ministrcmp(args[0], "env") == 0)
 		return (1);
 	if (ft_ministrcmp(args[0], "exit") == 0)
+		return (1);
+	if (ft_ministrcmp(args[0], "./minishell") == 0)
 		return (1);
 	return (0);
 }

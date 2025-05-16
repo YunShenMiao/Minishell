@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 11:12:24 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/09 10:45:36 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/16 02:24:26 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,14 @@ void	exec_cmd_child(t_ast *node, int in, int out, t_token_data *td)
 	}
 	if (is_builtin(node->args))
 		exit(execute_builtins(node, td));
-	execve(node->cmd_path, node->args, td->envp);
+	// if (ft_ministrcmp(node->args[0], "./minishell") == 0)
+	// {
+	// 	shell_level(td);
+	// 	td->envp = convert_to_envp(td->env_list, td->gc);
+	// 	execve("./minishell", node->args, td->envp);
+	// }
+	else
+		execve(node->cmd_path, node->args, td->envp);
 	perror("execve");
 	exit(127);
 }

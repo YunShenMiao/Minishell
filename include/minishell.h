@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 10:16:27 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/14 18:38:48 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/15 16:52:00 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,6 +198,8 @@ int		ft_env(char **args, t_env *top_env);
 int		ft_export(t_env	*top_env, char **args, t_token_data *td);
 int		ft_unset(t_env	*top_env, char **args);
 int		is_numeric(char *str);
+int		shell_level(t_token_data *td);
+char	**convert_to_envp(t_env *env_list, t_gc *gc);
 
 //cd utils
 char	*find_home(t_env *top);
