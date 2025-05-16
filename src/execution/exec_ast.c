@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 11:12:24 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/16 18:14:03 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/16 18:27:29 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ void	exec_cmd_child(t_ast *node, int in, int out, t_token_data *td)
 	char	**new_envp;
 
 	signal(SIGQUIT, SIG_DFL);
-	// signal(SIGINT, SIG_DFL);
 	if (in != STDIN_FILENO)
 	{
 		dup2(in, STDIN_FILENO);
@@ -77,6 +76,7 @@ int	exec_command(t_ast *node, int in, int out, t_token_data *td)
 {
 	pid_t	pid;
 	int		status;
+	int		sig;
 
 	pid = fork();
 	if (pid == 0)
@@ -87,7 +87,7 @@ int	exec_command(t_ast *node, int in, int out, t_token_data *td)
 		td->last_exit = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
 	{
-		int sig = WTERMSIG(status);
+		sig = WTERMSIG(status);
 		td->last_exit = 128 + sig;
 		if (sig == SIGQUIT)
 			write(STDERR_FILENO, "^\\Quit: 3\n", 10);

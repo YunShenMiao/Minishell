@@ -59,7 +59,6 @@ void	parse_execute(char *input, char **envp, t_token_data **td)
 		return ;
 	}
 	exec_ast((*td)->ast, STDIN_FILENO, STDOUT_FILENO, (*td));
-	// print_ast((*td)->ast, 0, "Root: ");
 	gc_free_category((*td)->gc, TOKENS);
 	gc_free_category((*td)->gc, PARSING);
 }
@@ -88,38 +87,13 @@ static t_token_data	*init_and_setup(char **envp, char **prompt, t_gc **gc)
 	return (td);
 }
 
-static void	input_loop(char *prompt, char **envp, t_token_data *td)
+void	input_loop(char *prompt, char **envp, t_token_data *td)
 {
 	char	*input;
-	char	*line;	
 
 	while (1)
 	{
-		// printf("x\n");
-		if (isatty(fileno(stdin)))
-		{
-			if (g_signal != 0)
-			{
-				// reset_signal();
-				input = readline(NULL);
-				g_signal = 0;
-			}
-			else
-				input = readline(prompt);
-			if (!input)
-			{
-				td->last_exit = 0;
-				break ;
-			}
-		}
-		else
-		{
-			line = get_next_line(fileno(stdin));
-			if (!line)
-				break ;
-			input = ft_strtrim(line, "\n");
-			free(line);
-		}
+		input = read_shell_input(prompt, td);
 		if (!input)
 			break ;
 		if (ft_strlen(input) == 0 || empty_str(input) != 0)
@@ -138,21 +112,20 @@ int	main(int argc, char **argv, char **envp)
 	t_gc			*gc;
 	char			*prompt;
 	int				le;
-	t_env	*node;
+	t_env			*node;
 
 	if (argc < 1 || argv[0] == NULL)
 		return (1);
 	else if (argc > 1)
 	{
 		write(2, "🐢 minishell: input error: arguments not supported\n", 53);
-		return(1);
+		return (1);
 	}
 	td = init_and_setup(envp, &prompt, &gc);
 	if (!td)
 		return (1);
 	node = search_name_node(td->env_list, "SHLVL");
 	node->val = ft_itoa(ft_atoi(node->val) + 1); //memory
-	// printf("val%s\n", node->val);
 	input_loop(prompt, envp, td);
 	le = td->last_exit;
 	gc_free_all(gc, td->heredoc_id);

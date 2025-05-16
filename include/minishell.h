@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 10:16:27 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/16 16:56:06 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/16 18:53:36 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,6 @@ int		ft_env(char **args, t_env *top_env);
 int		ft_export(t_env	*top_env, char **args, t_token_data *td);
 int		ft_unset(t_env	*top_env, char **args);
 int		is_numeric(char *str);
-int		shell_level(t_token_data *td);
 char	**convert_to_envp(t_env *env_list);
 
 //cd utils
@@ -209,6 +208,12 @@ int		swap_pwds(t_env *top, t_gc *gc);
 int		find_last_slash(char *path);
 char	*get_parent_dir(char *cur_dir, t_gc *gc);
 char	*normalize_path(const char *path, t_gc *gc);
+
+//export utils
+void	print_export(t_env	*top_env);
+int		extract_env_pair(char *assign, t_gc *gc, char **name, char **value);
+int		add_env_var(t_env *top_env, char *assign, t_gc *gc);
+int		is_valid(char *arg);
 
 //execution
 int		execute_builtins(t_ast *node, t_token_data *token_data);
@@ -232,14 +237,15 @@ char	*expand_heredoc(char *line, t_env *env_list, int last_exit);
 void	ft_itoa_simple(int n, char *buf);
 char	*generate_heredoc_filename(t_gc *gc, int id);
 int		process_heredoc_line(int fd, char *line, t_ast *node, t_token_data *td);
-char	*heredoc_readline(const char *prompt);
 void	cleanup_heredoc_tempfiles(int max_id);
+int		write_heredoc_interactive(int fd, t_ast *node, t_token_data *td);
+int		write_heredoc_loop(int fd, t_ast *node, t_token_data *td);
 
 // signals
 void	setup_interactive_signals(void);
 void	setup_noninteractive_signals(void);
 void	disable_echoctl(void);
-void	reset_signal(void);
+// void	reset_signal(void);
 // void	set_signal_heredoc(void);
 
 /**************************************************************************/
@@ -257,6 +263,7 @@ int		ft_ministrcmp(const char *s1, const char *s2);
 int		empty_str(char *str);
 int		check_empty_ast(t_token_data *token_data);
 void	handle_empty_envp(char **envp, t_gc **gc);
+char	*read_shell_input(char *prompt, t_token_data *td);
 // gc_libft
 char	*ft_env_substr(char const *s, unsigned int start, size_t len, t_gc *gc);
 char	*ft_env_strdup(const char *src, t_gc *gc, t_mem_location loc);

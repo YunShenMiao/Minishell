@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_redirect.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:41:12 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/16 17:28:45 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/16 18:26:16 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_ast	*parse_append(t_token_data **token_data, t_token **current, t_ast *prev)
 			ft_strlen((*current)->value));
 	re_node->right = file_node;
 	while ((*current)->type == TOK_WORD)
-	*current = (*current)->next;
+		*current = (*current)->next;
 	if (!prev)
 		re_node->left = add_cmd(*token_data, TOK_APPEND);
 	else
@@ -66,7 +66,7 @@ t_ast	*parse_heredoc(t_token_data **token_data, t_token **current,
 	file_node->hd = 1;
 	re_node->left = file_node;
 	while ((*current)->type == TOK_WORD)
-	*current = (*current)->next;
+		*current = (*current)->next;
 	re_node->right = prev;
 	return (re_node);
 }
@@ -91,7 +91,7 @@ t_ast	*parse_re_out(t_token_data **token_data, t_token **current, t_ast *prev)
 			ft_strlen((*current)->value));
 	re_node->right = file_node;
 	while ((*current)->type == TOK_WORD)
-	*current = (*current)->next;
+		*current = (*current)->next;
 	if (!prev)
 		re_node->left = add_cmd(*token_data, TOK_REDIRECT_OUT);
 	else
@@ -119,7 +119,7 @@ t_ast	*parse_re_in(t_token_data **token_data, t_token **current, t_ast *prev)
 			ft_strlen((*current)->value));
 	re_node->left = file_node;
 	while ((*current)->type == TOK_WORD)
-	*current = (*current)->next;
+		*current = (*current)->next;
 	if (!prev)
 		re_node->right = add_cmd(*token_data, TOK_REDIRECT_IN);
 	else

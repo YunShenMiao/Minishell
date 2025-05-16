@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:22:54 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/09 10:39:21 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/16 18:49:19 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,33 +59,6 @@ char	*generate_heredoc_filename(t_gc *gc, int id)
 	return (filename);
 }
 
-char	*heredoc_readline(const char *prompt)
-{
-	static char	**buffered_lines;
-	static int	current_index;
-	char		*line;
-
-	if (buffered_lines && buffered_lines[current_index])
-	{
-		return (ft_strdup(buffered_lines[current_index++]));
-	}
-	if (!isatty(STDIN_FILENO))
-	{
-		return (get_next_line(STDIN_FILENO));
-	}
-	line = readline(prompt);
-	if (!line)
-		return (NULL);
-	if (find_sign(line, '\n') >= 0)
-	{
-		buffered_lines = ft_split(line, '\n');
-		free(line);
-		current_index = 0;
-		return (ft_strdup(buffered_lines[current_index++]));
-	}
-	return (line);
-}
-
 int	process_heredoc_line(int fd, char *line, t_ast *node, t_token_data *td)
 {
 	char	*expanded;
@@ -120,4 +93,26 @@ void	cleanup_heredoc_tempfiles(int max_id)
 		unlink(name);
 		i++;
 	}
+}
+
+int	write_heredoc_interactive(int fd, t_ast *node, t_token_data *td)
+{
+	pid_t	pid;
+	int		status;
+
+	pid = fork();
+	if (pid == -1)
+		return (perror("heredoc: fork"), -1);
+	if (pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		write_heredoc_loop(fd, node, td);
+		close(fd);
+		exit(0);
+	}
+	close(fd);
+	waitpid(pid, &status, 0);
+	if (WIFSIGNALED(status))
+		return (-1);
+	return (0);
 }

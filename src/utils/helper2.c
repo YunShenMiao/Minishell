@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 15:22:37 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/16 17:13:11 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/16 18:53:15 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,30 @@ void	handle_empty_envp(char **envp, t_gc **gc)
 		free(pwd);
 		free(temp);
 	}
+}
+
+char	*read_shell_input(char *prompt, t_token_data *td)
+{
+	char	*input;
+	char	*line;
+
+	if (isatty(fileno(stdin)))
+	{
+		if (g_signal != 0)
+		{
+			input = readline(NULL);
+			g_signal = 0;
+		}
+		else
+			input = readline(prompt);
+		if (!input)
+			td->last_exit = 0;
+		return (input);
+	}
+	line = get_next_line(fileno(stdin));
+	if (!line)
+		return (NULL);
+	input = ft_strtrim(line, "\n");
+	free(line);
+	return (input);
 }
