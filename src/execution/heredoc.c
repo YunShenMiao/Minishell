@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:18:55 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/16 14:21:55 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/16 17:48:14 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ int	write_to_file(t_ast *node, char *file, t_token_data *td)
 		return (perror("heredoc: fork"), -1);
 	if (pid == 0)
 	{
-		signal(SIGINT, SIG_DFL);  // allow Ctrl-C to kill heredoc input
+		signal(SIGINT, SIG_DFL);
 		write_heredoc_loop(fd, node, td);
 		close(fd);
 		exit(0);
