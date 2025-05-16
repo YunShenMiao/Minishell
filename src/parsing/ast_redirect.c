@@ -6,7 +6,7 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:41:12 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/16 17:05:26 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/16 17:28:45 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ t_ast	*parse_append(t_token_data **token_data, t_token **current, t_ast *prev)
 	file_node->file_name = ft_strndup((*token_data)->gc, (*current)->value, 0,
 			ft_strlen((*current)->value));
 	re_node->right = file_node;
+	while ((*current)->type == TOK_WORD)
 	*current = (*current)->next;
 	if (!prev)
 		re_node->left = add_cmd(*token_data, TOK_APPEND);
@@ -64,6 +65,7 @@ t_ast	*parse_heredoc(t_token_data **token_data, t_token **current,
 			ft_strlen((*current)->value));
 	file_node->hd = 1;
 	re_node->left = file_node;
+	while ((*current)->type == TOK_WORD)
 	*current = (*current)->next;
 	re_node->right = prev;
 	return (re_node);
@@ -88,6 +90,7 @@ t_ast	*parse_re_out(t_token_data **token_data, t_token **current, t_ast *prev)
 	file_node->file_name = ft_strndup((*token_data)->gc, (*current)->value, 0,
 			ft_strlen((*current)->value));
 	re_node->right = file_node;
+	while ((*current)->type == TOK_WORD)
 	*current = (*current)->next;
 	if (!prev)
 		re_node->left = add_cmd(*token_data, TOK_REDIRECT_OUT);
@@ -115,6 +118,7 @@ t_ast	*parse_re_in(t_token_data **token_data, t_token **current, t_ast *prev)
 	file_node->file_name = ft_strndup((*token_data)->gc, (*current)->value, 0,
 			ft_strlen((*current)->value));
 	re_node->left = file_node;
+	while ((*current)->type == TOK_WORD)
 	*current = (*current)->next;
 	if (!prev)
 		re_node->right = add_cmd(*token_data, TOK_REDIRECT_IN);
