@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:21:43 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/14 18:23:39 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/16 15:35:12 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ void	print_export(t_env	*top_env)
 	while (temp->next)
 	{
 		if (temp->val && ft_ministrcmp(temp->val, "(null)") != 0)
-			printf("declare -x %s=%s\n", temp->name, temp->val);
+			printf("declare -x %s=\"%s\"\n", temp->name, temp->val);
 		else
 			printf("declare -x %s\n", temp->name);
 		temp = temp->next;
 	}
 	if (temp->val && ft_ministrcmp(temp->val, "(null)") != 0)
-		printf("declare -x %s=%s\n", temp->name, temp->val);
+		printf("declare -x %s=\"%s\"\n", temp->name, temp->val);
 	else
 		printf("declare -x %s\n", temp->name);
 }

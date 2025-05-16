@@ -59,6 +59,7 @@ void	parse_execute(char *input, char **envp, t_token_data **td)
 		return ;
 	}
 	exec_ast((*td)->ast, STDIN_FILENO, STDOUT_FILENO, (*td));
+	// print_ast((*td)->ast, 0, "Root: ");
 	gc_free_category((*td)->gc, TOKENS);
 	gc_free_category((*td)->gc, PARSING);
 }
@@ -90,10 +91,11 @@ static t_token_data	*init_and_setup(char **envp, char **prompt, t_gc **gc)
 static void	input_loop(char *prompt, char **envp, t_token_data *td)
 {
 	char	*input;
-	char	*line;
+	char	*line;	
 
 	while (1)
 	{
+		// printf("x\n");
 		if (isatty(fileno(stdin)))
 		{
 			if (g_signal != 0)
@@ -136,6 +138,7 @@ int	main(int argc, char **argv, char **envp)
 	t_gc			*gc;
 	char			*prompt;
 	int				le;
+	t_env	*node;
 
 	if (argc < 1 || argv[0] == NULL)
 		return (1);
@@ -147,6 +150,9 @@ int	main(int argc, char **argv, char **envp)
 	td = init_and_setup(envp, &prompt, &gc);
 	if (!td)
 		return (1);
+	node = search_name_node(td->env_list, "SHLVL");
+	node->val = ft_itoa(ft_atoi(node->val) + 1); //memory
+	// printf("val%s\n", node->val);
 	input_loop(prompt, envp, td);
 	le = td->last_exit;
 	gc_free_all(gc, td->heredoc_id);

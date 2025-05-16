@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 11:12:24 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/16 02:24:26 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/16 17:11:55 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,31 @@ int	exec_builtin_direct(t_ast *node, int in, int out, t_token_data *td)
 	return (td->last_exit);
 }
 
+// void	copy_binary(const char *src, const char *dest)
+// {
+// 	char	buf[4096];
+// 	int		in, out;
+// 	ssize_t	read_bytes;
+
+// 	in = open(src, O_RDONLY);
+// 	if (in < 0)
+// 		return ;
+// 	out = open(dest, O_WRONLY | O_CREAT | O_TRUNC, 0755);
+// 	if (out < 0)
+// 	{
+// 		close(in);
+// 		return ;
+// 	}
+// 	while ((read_bytes = read(in, buf, sizeof(buf))) > 0)
+// 		write(out, buf, read_bytes);
+// 	close(in);
+// 	close(out);
+// }
+
 void	exec_cmd_child(t_ast *node, int in, int out, t_token_data *td)
 {
+	char	**new_envp;
+
 	if (in != STDIN_FILENO)
 	{
 		dup2(in, STDIN_FILENO);
@@ -58,12 +81,11 @@ void	exec_cmd_child(t_ast *node, int in, int out, t_token_data *td)
 	}
 	if (is_builtin(node->args))
 		exit(execute_builtins(node, td));
-	// if (ft_ministrcmp(node->args[0], "./minishell") == 0)
-	// {
-	// 	shell_level(td);
-	// 	td->envp = convert_to_envp(td->env_list, td->gc);
-	// 	execve("./minishell", node->args, td->envp);
-	// }
+	if (ft_ministrcmp(node->args[0], "./minishell") == 0)
+	{
+		new_envp = convert_to_envp(td->env_list);
+		execve("./minishell", node->args, new_envp);
+	}
 	else
 		execve(node->cmd_path, node->args, td->envp);
 	perror("execve");

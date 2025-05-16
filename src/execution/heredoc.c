@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:18:55 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/16 03:57:05 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/16 14:21:55 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,44 +88,6 @@ char	*read_heredoc_line(void)
 	return (line);
 }
 
-// static int	write_heredoc_loop(int fd, t_ast *node, t_token_data *td)
-// {
-// 	char	*line;
-
-// 	while (1)
-// 	{
-// 		line = read_heredoc_line();
-// 		if (!line)
-// 		{
-// 			perror("heredoc: warning: EOF before delimiter\n");
-// 			break ;
-// 		}
-// 		if (ft_ministrcmp(line, node->file_name) == 0)
-// 		{
-// 			free(line);
-// 			break ;
-// 		}
-// 		if (process_heredoc_line(fd, line, node, td) == -1)
-// 			break ;
-// 	}
-// 	return (0);
-// }
-
-// int	write_to_file(t_ast *node, char *file, t_token_data *td)
-// {
-// 	int	fd;
-
-// 	fd = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0600);
-// 	if (fd == -1)
-// 	{
-// 		perror("heredoc: open");
-// 		return (-1);
-// 	}
-// 	write_heredoc_loop(fd, node, td);
-// 	close(fd);
-// 	return (0);
-// }
-
 int	write_heredoc_loop(int fd, t_ast *node, t_token_data *td)
 {
 	char	*line;
@@ -136,6 +98,7 @@ int	write_heredoc_loop(int fd, t_ast *node, t_token_data *td)
 		{
 			write(1, "> ", 2);
 			line = get_next_line(STDIN_FILENO);
+			line = ft_env_substr(line, 0, ft_strlen(line) - 1, td->gc);
 		}
 		else
 		{
@@ -145,7 +108,7 @@ int	write_heredoc_loop(int fd, t_ast *node, t_token_data *td)
 		}
 		if (!line)
 		{
-			write(2, "heredoc: warning: EOF before delimiter\n", 39);
+			// write(2, "heredoc: warning: EOF before delimiter\n", 39);
 			break ;
 		}
 		if (ft_ministrcmp(line, node->file_name) == 0)

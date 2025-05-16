@@ -6,13 +6,13 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 16:08:07 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/16 02:24:29 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/16 17:17:31 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*ft_strjoin3(t_gc *gc, char *s1, char *s2, char *s3)
+char	*ft_strjoin3(char *s1, char *s2, char *s3)
 {
 	char	*res;
 	int		len1 = ft_strlen(s1);
@@ -20,7 +20,7 @@ char	*ft_strjoin3(t_gc *gc, char *s1, char *s2, char *s3)
 	int		len3 = ft_strlen(s3);
 	int		i = 0, j = 0;
 
-	res = gc_malloc(gc, ENV, len1 + len2 + len3 + 1);
+	res = malloc(len1 + len2 + len3 + 1);
 	if (!res)
 		return (NULL);
 	while (i < len1)
@@ -46,20 +46,21 @@ int	env_list_size(t_env *env)
 	return (count);
 }
 
-char	**convert_to_envp(t_env *env_list, t_gc *gc)
+char	**convert_to_envp(t_env *env_list)
 {
 	char	**envp;
 	char	*joined;
+	char	*temp;
 	int		i = 0;
 
-	envp = gc_malloc(gc, ENV, sizeof(char *) * (env_list_size(env_list) + 1));
-	// printf("here1\n");
+	envp = malloc(sizeof(char *) * (env_list_size(env_list) + 1));
 	if (!envp)
 		return (NULL);
-	// printf("here1\n");
 	while (env_list)
 	{
-		joined = ft_strjoin3(gc, env_list->name, "=", env_list->val);
+		temp = ft_strjoin(env_list->name, "=");
+		joined = ft_strjoin(temp, env_list->val);
+		free(temp);
 		if (!joined)
 		{
 			while (i > 0)
@@ -67,11 +68,12 @@ char	**convert_to_envp(t_env *env_list, t_gc *gc)
 			free(envp);
 			return (NULL);
 		}
-		envp[i++] = joined;
+		envp[i] = joined;
+		// printf("%s\n", envp[i]);
+		i++;
 		env_list = env_list->next;
 	}
 	envp[i] = NULL;
-	// printf("writing to envp: %s=%s\n", env_list->name, env_list->val);
 	return (envp);
 }
 
@@ -102,6 +104,5 @@ int	shell_level(t_token_data *td)
 	}
 	else
 		node->val = ft_env_strdup(ft_itoa(shlvl), td->gc, ENV);
-	// printf("new SHLVL = %s\n", search_name_val(td->env_list, "SHLVL"));
 	return (0);
 }
