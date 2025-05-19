@@ -6,11 +6,20 @@
 /*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:51:05 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/16 20:59:29 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/19 11:34:23 by jwardeng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+int	spaces_helper(char *str, int *c, t_token_data *t)
+{
+	if (str[*c] && (str[*c] == '>' || str[*c] == '<' || str[*c] == '|')
+		&& t->dq == 0 && t->sq == 0)
+		return (1);
+	else
+		return (0);
+}
 
 // adds extra spaces for redirections, heredoc and pipes which
 // if inputted without space as delimiter
@@ -19,10 +28,10 @@ void	edit_spaces(t_token_data *t, char **e, int *c, int *c2)
 	char	*in;
 
 	in = t->input;
-	if (in[*c2] && (in[*c2] == '>' || in[*c2] == '<' || in[*c2] == '|')
-		&& t->dq == 0 && t->sq == 0)
+	if (spaces_helper(in, c2, t) == 1)
 	{
-		if (*c2 > 0 && in[*c2 - 1] && in[*c2 - 1] != '\"' && in[*c2 - 1] != '\'')
+		if (*c2 > 0 && in[*c2 - 1] && in[*c2 - 1] != '\"'
+			&& in[*c2 - 1] != '\'')
 		{
 			(*e)[*c] = ' ';
 			(*c)++;
@@ -35,8 +44,8 @@ void	edit_spaces(t_token_data *t, char **e, int *c, int *c2)
 		}
 	}
 	(*e)[*c] = in[*c2];
-	if (((*e)[*c] == '>' || (*e)[*c] == '<' || (*e)[*c] == '|') && (in[*c2 + 1]
-		!= '\"' && in[*c2 + 1] != '\'') && t->dq == 0 && t->sq == 0)
+	if (spaces_helper(*e, c, t) == 1 && in[*c2 + 1] && (in[*c2 + 1] != '\"'
+			&& in[*c2 + 1] != '\''))
 	{
 		(*c)++;
 		(*e)[*c] = ' ';
@@ -66,7 +75,7 @@ void	trim_quotes(char *input, int *count2, t_token_data **token_data)
 }
 
 // edits input string to pre-handle some cases and simplify tokenization
-// and parsing, cases being handled: 
+// and parsing, cases being handled:
 // missing spaces: eg "miao>>output.txt"
 // quotes to ignore: eg """""" -> ""
 int	modify_input(char *input, char **modified_input, t_gc *gc,

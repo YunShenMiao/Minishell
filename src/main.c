@@ -125,7 +125,7 @@ int	main(int argc, char **argv, char **envp)
 	if (!td)
 		return (1);
 	node = search_name_node(td->env_list, "SHLVL");
-	node->val = ft_env_itoa(gc, ft_atoi(node->val) + 1); //memory
+	node->val = ft_env_itoa(gc, ft_atoi(node->val) + 1);
 	input_loop(prompt, envp, td);
 	le = td->last_exit;
 	gc_free_all(gc, td->heredoc_id);
