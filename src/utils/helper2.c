@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 15:22:37 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/16 19:49:36 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/19 22:21:19 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,8 @@ char	*read_shell_input(char *prompt, t_token_data *td)
 	if (isatty(fileno(stdin)))
 	{
 		if (g_signal != 0)
-		{
-			input = readline(NULL);
 			g_signal = 0;
-		}
-		else
-			input = readline(prompt);
+		input = readline(prompt);
 		if (!input)
 			td->last_exit = 0;
 		return (input);

@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 20:43:58 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/16 18:25:34 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/19 22:18:22 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	handle_sigint(int sig)
 	write(STDOUT_FILENO, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
-	rl_set_prompt(GREEN "minishell" BLUE ">" RESET " ");
 	rl_redisplay();
 }
 

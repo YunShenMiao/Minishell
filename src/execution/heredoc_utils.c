@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:22:54 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/16 21:27:23 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/19 22:16:28 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ int	process_heredoc_line(int fd, char *line, t_ast *node, t_token_data *td)
 		expanded = ft_strdup(line);
 	else
 		expanded = expand_heredoc(line, td->env_list, td->last_exit);
-	// free(line);
 	if (!expanded)
 		return (-1);
 	write(fd, expanded, strlen(expanded));
@@ -100,6 +99,7 @@ int	write_heredoc_interactive(int fd, t_ast *node, t_token_data *td)
 	pid_t	pid;
 	int		status;
 
+	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == -1)
 		return (perror("heredoc: fork"), -1);
@@ -112,6 +112,7 @@ int	write_heredoc_interactive(int fd, t_ast *node, t_token_data *td)
 	}
 	close(fd);
 	waitpid(pid, &status, 0);
+	setup_interactive_signals();
 	if (WIFSIGNALED(status))
 		return (-1);
 	return (0);
