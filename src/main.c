@@ -75,7 +75,7 @@ static t_token_data	*init_and_setup(char **envp, char **prompt, t_gc **gc)
 	handle_empty_envp(envp, gc);
 	td->env_list = init_env(envp, *gc);
 	td->gc = *gc;
-	*prompt = GREEN "minishell" BLUE ">" RESET " ";
+	*prompt = "\001\033[0;32m\002minishell\001\033[0m\002> ";
 	// start_message();
 	if (isatty(STDIN_FILENO))
 	{
@@ -101,7 +101,8 @@ void	input_loop(char *prompt, char **envp, t_token_data *td)
 			free(input);
 			continue ;
 		}
-		add_history(input);
+		if (input)
+			add_history(input);
 		parse_execute(input, envp, &td);
 	}
 }

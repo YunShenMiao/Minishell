@@ -6,7 +6,7 @@
 /*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:22:54 by xueyang           #+#    #+#             */
-/*   Updated: 2025/05/19 22:16:28 by xueyang          ###   ########.fr       */
+/*   Updated: 2025/05/26 13:47:51 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,12 +94,30 @@ void	cleanup_heredoc_tempfiles(int max_id)
 	}
 }
 
+void	handle_sigint_heredoc(int sig)
+{
+	(void)sig;
+	g_signal = SIGINT;
+	write(STDOUT_FILENO, "\n", 1);
+}
+
+void	heredoc_signal(void)
+{
+	struct sigaction	sa_int;
+
+	sa_int.sa_handler = handle_sigint_heredoc;
+	sigemptyset(&sa_int.sa_mask);
+	sa_int.sa_flags = SA_RESTART;
+	sigaction(SIGINT, &sa_int, NULL);
+}
+
 int	write_heredoc_interactive(int fd, t_ast *node, t_token_data *td)
 {
 	pid_t	pid;
 	int		status;
 
-	signal(SIGINT, SIG_IGN);
+	// signal(SIGINT, SIG_IGN);
+	heredoc_signal();
 	pid = fork();
 	if (pid == -1)
 		return (perror("heredoc: fork"), -1);
