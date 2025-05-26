@@ -76,7 +76,7 @@ static t_token_data	*init_and_setup(char **envp, char **prompt, t_gc **gc)
 	td->env_list = init_env(envp, *gc);
 	td->gc = *gc;
 	*prompt = "\001\033[0;32m\002minishell\001\033[0m\002> ";
-	// start_message();
+	start_message();
 	if (isatty(STDIN_FILENO))
 	{
 		disable_echoctl();

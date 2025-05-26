@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_command.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:50:00 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/16 21:02:03 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/26 15:39:05 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ t_ast	*parse_command(t_token_data **token_data, t_token **current)
 	}
 	cmd_node = create_ast_node(token_data, TOK_COMMAND);
 	cmd_node->args = (char **)gc_malloc((*token_data)->gc, PARSING,
-			sizeof(char *) * 1000);
+			sizeof(char *) * 10000);
 	parse_command_args(token_data, current, cmd_node);
 	re_node = parse_redirections(token_data, current, cmd_node);
 	if (re_node)

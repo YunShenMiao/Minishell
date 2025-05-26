@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_ast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwardeng <jwardeng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xueyang <xueyang@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:29:30 by jwardeng          #+#    #+#             */
-/*   Updated: 2025/05/16 21:03:02 by jwardeng         ###   ########.fr       */
+/*   Updated: 2025/05/26 15:38:39 by xueyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	command_args(t_ast *node, int *i, t_token_data **td)
 	char	**args;
 	int		count;
 
-	args = (char **)gc_malloc((*td)->gc, PARSING, 1000 * sizeof(char *));
+	args = (char **)gc_malloc((*td)->gc, PARSING, 10000 * sizeof(char *));
 	count = 0;
 	if (node->args[*i] != NULL && ft_ministrcmp(node->args[*i], "echo") == 0)
 	{
