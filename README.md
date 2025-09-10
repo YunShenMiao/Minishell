@@ -33,4 +33,4 @@ Now you can play around and use the shell, for example:
 ## Authors
 
 - [@Joana Wardenga](https://www.github.com/YunShenMiao) 🐢
-- [@yxuefei] (https://github.com/yxuefei) 🐢
+- [@yxuefei](https://github.com/yxuefei) 🐢
