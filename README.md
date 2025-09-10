@@ -23,9 +23,9 @@ Start the shell:
 ./minishell
 ```
 Now you can play around and use the shell, for example:
-![](1.png)
+![](readme/1.png)
 
-![](2.png)
+![](readme/2.png)
 
 
 
