@@ -23,6 +23,7 @@ Start the shell:
 ./minishell
 ```
 Now you can play around and use the shell, for example:
+
 ![](readme/1.png)
 
 ![](readme/2.png)
@@ -32,4 +33,4 @@ Now you can play around and use the shell, for example:
 ## Authors
 
 - [@Joana Wardenga](https://www.github.com/YunShenMiao) 🐢
-
+- [@yxuefei] (https://github.com/yxuefei) 🐢
